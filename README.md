@@ -47,6 +47,13 @@ student-management/
 │   ├── to_string.go # Utility functions for string formatting
 │   └── validation.go # Input validation functions (Email, Phone, etc.)
 │
+├── preview/
+│   ├── add-student.png # Preview of Add Student functionality
+│   ├── add-student-failed.png # Preview of Add Student failure case
+│   ├── update-student.png # Preview of Update Student functionality
+│   ├── delete-student.png # Preview of Delete Student functionality
+│   └── search-student.png # Preview of Search Student functionality
+│
 ├── go.mod # Go module dependencies
 ├── main.go # Main program execution
 ├── Makefile # Make commands for build/run/test

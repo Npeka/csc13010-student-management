@@ -129,7 +129,7 @@ button {
 
 button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 140, 255, 0.2);
 }
 
 table {
@@ -237,7 +237,7 @@ tr:last-child td {
 }
 
 .update-btn {
-  background-color: #0162b1;
+  background-color: #2196f3;
   color: white;
 }
 

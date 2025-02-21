@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>Student Management</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="student-management-style.css" />
     <script src="manager.jsx" defer></script>
     <script src="category.jsx" defer></script>
     <script src="logging.jsx" defer></script>
@@ -111,7 +111,7 @@
         <div
           style="
             display: flex;
-            justify-content: flex-end;
+            justify-content: flex-start;
             gap: 10px;
             margin-bottom: 10px;
           "
@@ -124,15 +124,12 @@
           />
           <button
             id="importCSVButton"
-            style="background-color: rgb(19, 19, 212)"
+            style="background-color: #2196f3"
             onclick="document.getElementById('importCSVInput').click();"
           >
             Import CSV
           </button>
-          <button
-            id="exportCSVButton"
-            style="background-color: rgb(19, 19, 212)"
-          >
+          <button id="exportCSVButton" style="background-color: #2196f3">
             Export CSV
           </button>
 
@@ -144,15 +141,12 @@
           />
           <button
             id="importJSONButton"
-            style="background-color: rgb(19, 19, 212)"
+            style="background-color: #2196f3"
             onclick="document.getElementById('importJSONInput').click();"
           >
             Import JSON
           </button>
-          <button
-            id="exportJSONButton"
-            style="background-color: rgb(19, 19, 212)"
-          >
+          <button id="exportJSONButton" style="background-color: #2196f3">
             Export JSON
           </button>
         </div>

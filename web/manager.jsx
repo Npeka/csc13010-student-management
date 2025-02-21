@@ -251,6 +251,7 @@ document.getElementById("search").insertAdjacentHTML(
   "afterbegin",
   `
     <div class="filter-container">
+      <div class="form-row">
         <div class="form-group">
             <label>Gender:</label>
             <select id="filterGender">
@@ -266,10 +267,6 @@ document.getElementById("search").insertAdjacentHTML(
             </select>
         </div>
         <div class="form-group">
-            <label>Course:</label>
-            <input type="number" id="filterCourse" placeholder="">
-        </div>
-        <div class="form-group">
             <label>Program:</label>
             <select id="filterProgram">
                 <option value="">All</option>
@@ -280,6 +277,11 @@ document.getElementById("search").insertAdjacentHTML(
             <select id="filterStatus">
                 <option value="">All</option>
             </select>
+        </div>
+      </div>
+        <div class="form-group">
+            <label>Course:</label>
+            <input type="number" id="filterCourse" placeholder="">
         </div>
     </div>
 `
@@ -414,7 +416,7 @@ if (document.getElementById("filterStatus")) {
 
 function exportToCSV() {
   if (studentManager.students.length === 0) {
-    alert("Không có dữ liệu để xuất!");
+    alert("No data to export!");
     return;
   }
 

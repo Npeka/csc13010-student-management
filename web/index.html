@@ -30,8 +30,27 @@
               <input type="text" id="fullname" required />
             </div>
             <div class="form-group">
+              <label>Email:</label>
+              <input type="email" id="email" required />
+            </div>
+
+            <div class="form-group">
+              <label>Address:</label>
+              <input type="text" id="address" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
               <label>Date of Birth:</label>
               <input type="date" id="dob" required />
+            </div>
+            <div class="form-group">
+              <label>Course:</label>
+              <input type="number" id="course" min="2000" max="2099" required />
+            </div>
+            <div class="form-group">
+              <label>Phone Number:</label>
+              <input type="tel" id="phone" pattern="[0-9]{10,11}" required />
             </div>
           </div>
           <div class="form-row">
@@ -53,12 +72,6 @@
                 <option value="French Department">French Department</option>
               </select>
             </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Course:</label>
-              <input type="number" id="course" min="2000" max="2099" required />
-            </div>
             <div class="form-group">
               <label>Program:</label>
               <select id="program" required>
@@ -67,22 +80,6 @@
                 <option value="Talented Bachelor">Talented Bachelor</option>
                 <option value="Advanced Program">Advanced Program</option>
               </select>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Address:</label>
-              <input type="text" id="address" required />
-            </div>
-            <div class="form-group">
-              <label>Email:</label>
-              <input type="email" id="email" required />
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Phone Number:</label>
-              <input type="tel" id="phone" pattern="[0-9]{10,11}" required />
             </div>
             <div class="form-group">
               <label>Status:</label>
@@ -111,7 +108,7 @@
         <div
           style="
             display: flex;
-            justify-content: flex-start;
+            justify-content: center;
             gap: 10px;
             margin-bottom: 10px;
           "

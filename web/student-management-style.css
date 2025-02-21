@@ -2,19 +2,32 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-  background-color: #f0f2f5;
+  background-image: url("./background.jpg");
+  background-size: cover;
+  background-position: center;
+  font-family: "Poppins", sans-serif;
+  color: #1a1a1a;
+  line-height: 1.6;
   padding: 30px;
+}
+
+.app-name {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 30px;
 }
 
 .container {
   max-width: 1600px;
   min-height: 85vh;
   margin: 0 auto;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.65);
+  /* blur */
+  backdrop-filter: blur(10px);
   padding: 30px;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -30,6 +43,7 @@ h1 {
 
 .tabs {
   display: flex;
+  justify-content: center;
   gap: 15px;
   margin-bottom: 30px;
   padding-bottom: 15px;
@@ -38,8 +52,8 @@ h1 {
 
 .tab-button {
   padding: 12px 24px;
-  background-color: transparent;
-  border: 2px solid #eaeaea;
+  background-color: white;
+  border: 2px solid #ffffff;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s;
@@ -48,21 +62,21 @@ h1 {
 }
 
 .tab-button.active {
-  background-color: #2196f3;
+  background-color: #000000;
   color: white;
-  border-color: #2196f3;
+  border-color: #000000;
 }
 
 .tab-button:hover:not(.active) {
   background-color: #f8f9fa;
-  border-color: #2196f3;
-  color: #2196f3;
+  border-color: #000000;
+  color: #000000;
 }
 
 .tab-content {
   display: none;
-  padding: 20px;
-  background-color: #ffffff;
+  /* padding: 20px; */
+  /* background-color: #ffffff; */
   border-radius: 12px;
 }
 
@@ -103,7 +117,7 @@ input,
 select {
   width: 100%;
   padding: 12px;
-  border: 2px solid #eaeaea;
+  border: 1px solid black;
   border-radius: 8px;
   font-size: 15px;
   transition: border-color 0.3s;
@@ -112,11 +126,11 @@ select {
 input:focus,
 select:focus {
   outline: none;
-  border-color: #2196f3;
+  border-color: #000000;
 }
 
 button {
-  background-color: #2196f3;
+  background-color: #000000;
   color: white;
   padding: 12px 24px;
   border: none;
@@ -160,8 +174,8 @@ tr:last-child td {
 }
 
 .search-container {
-  background-color: #f8f9fa;
-  padding: 24px;
+  /* background-color: #f8f9fa; */
+  /* padding: 24px; */
   border-radius: 12px;
   margin-bottom: 30px;
 }
@@ -181,8 +195,6 @@ tr:last-child td {
 }
 
 .category-list {
-  background-color: #f8f9fa;
-  padding: 20px;
   border-radius: 12px;
   margin: 16px 0;
 }
@@ -198,6 +210,13 @@ tr:last-child td {
   color: #dc3545;
   font-size: 14px;
   margin-top: 8px;
+}
+
+.flex-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .category-item {
@@ -237,7 +256,7 @@ tr:last-child td {
 }
 
 .update-btn {
-  background-color: #2196f3;
+  background-color: #000000;
   color: white;
 }
 
@@ -247,12 +266,10 @@ tr:last-child td {
 }
 
 footer {
-  text-align: center;
+  text-align: right;
   padding: 20px;
-  background-color: white;
-  margin-top: 30px;
   border-radius: 12px;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+  color: white;
 }
 
 @media (max-width: 768px) {

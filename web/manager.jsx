@@ -80,11 +80,10 @@ class StudentManager {
     localStorage.setItem("students", JSON.stringify(this.students));
   }
 }
-
 class StudentManagerWithLogging extends StudentManager {
   addStudent(student) {
     const newStudent = super.addStudent(student);
-    logManager.addLog("Thêm sinh viên", {
+    logManager.addLog("Added student", {
       mssv: newStudent.mssv,
     });
     return newStudent;
@@ -93,7 +92,7 @@ class StudentManagerWithLogging extends StudentManager {
   removeStudent(mssv) {
     const student = this.students.find((s) => s.mssv === parseInt(mssv));
     if (student) {
-      logManager.addLog("Xóa sinh viên", {
+      logManager.addLog("Removed student", {
         mssv: student.mssv,
       });
     }
@@ -104,7 +103,7 @@ class StudentManagerWithLogging extends StudentManager {
     const oldData = this.students.find((s) => s.mssv === parseInt(mssv));
     const success = super.updateStudent(mssv, updatedData);
     if (success) {
-      logManager.addLog("Cập nhật sinh viên", {
+      logManager.addLog("Updated student", {
         mssv: mssv,
       });
     }
@@ -207,8 +206,8 @@ function displayStudents() {
             <td>${student.status}</td>
             <td >
                 <div class="btn-group">
-                    <button onclick="editStudent(${student.mssv})" >Sửa</button>
-                    <button onclick="deleteStudent(${student.mssv})" style="background-color: red;">Xóa</button>
+                    <button onclick="editStudent(${student.mssv})" >Edit</button>
+                    <button onclick="deleteStudent(${student.mssv})" style="background-color: red;">Delete</button>
                 </div>
             </td>
         `;
@@ -332,7 +331,7 @@ function displayFilteredStudents(students) {
   resultsDiv.innerHTML = "";
 
   if (students.length === 0) {
-    resultsDiv.innerHTML = "<p>Không tìm thấy sinh viên!</p>";
+    resultsDiv.innerHTML = "<p>No results found</p>";
     return;
   }
 
@@ -341,17 +340,17 @@ function displayFilteredStudents(students) {
   table.innerHTML = `
         <thead>
             <tr>
-                <th>MSSV</th>
-                <th>Họ và tên</th>
-                <th>Ngày sinh</th>
-                <th>Giới tính</th>
-                <th>Khoa</th>
-                <th>Khóa</th>
-                <th>Chương trình</th>
-                <th>Địa chỉ</th>
+                <th>Student ID</th>
+                <th>Full Name</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                <th>Department</th>
+                <th>Course</th>
+                <th>Program</th>
+                <th>Address</th>
                 <th>Email</th>
-                <th>Điện thoại</th>
-                <th>Trạng thái</th>
+                <th>Phone</th>
+                <th>Status</th>
             </tr>
         </thead>
     `;

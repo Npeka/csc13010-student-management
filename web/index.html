@@ -10,7 +10,7 @@
   </head>
   <body>
     <div class="container">
-      <h1>Student Management</h1>
+      <h1 class="app-name">Student Management</h1>
 
       <div class="tabs">
         <button class="tab-button active" data-tab="add">Add Student</button>
@@ -118,35 +118,18 @@
         >
           <input
             type="file"
-            id="importCSVInput"
-            accept=".csv"
-            style="display: none"
-          />
-          <button
-            id="importCSVButton"
-            style="background-color: #2196f3"
-            onclick="document.getElementById('importCSVInput').click();"
-          >
-            Import CSV
-          </button>
-          <button id="exportCSVButton" style="background-color: #2196f3">
-            Export CSV
-          </button>
-
-          <input
-            type="file"
             id="importJSONInput"
             accept=".json"
             style="display: none"
           />
           <button
             id="importJSONButton"
-            style="background-color: #2196f3"
+            style="background-color: #000000"
             onclick="document.getElementById('importJSONInput').click();"
           >
             Import JSON
           </button>
-          <button id="exportJSONButton" style="background-color: #2196f3">
+          <button id="exportJSONButton" style="background-color: #000000">
             Export JSON
           </button>
         </div>
@@ -183,38 +166,46 @@
       </div>
 
       <div id="categories" class="tab-content">
-        <div class="category-container">
-          <h3>Department</h3>
-          <div class="category-list" id="departments-list"></div>
-          <div class="add-category">
-            <input
-              type="text"
-              id="new-department"
-              placeholder="New Department Name"
-            />
-            <button onclick="addCategory('department')">Add Department</button>
+        <div class="flex-container">
+          <div class="category-container" style="flex: 1">
+            <h3>Department</h3>
+            <div class="add-category">
+              <input
+                type="text"
+                id="new-department"
+                placeholder="New Department Name"
+              />
+              <button onclick="addCategory('department')">
+                Add Department
+              </button>
+            </div>
+            <div class="category-list" id="departments-list"></div>
           </div>
-        </div>
 
-        <div class="category-container">
-          <h3>Program</h3>
-          <div class="category-list" id="programs-list"></div>
-          <div class="add-category">
-            <input
-              type="text"
-              id="new-program"
-              placeholder="New Program Name"
-            />
-            <button onclick="addCategory('program')">Add Program</button>
+          <div class="category-container" style="flex: 1">
+            <h3>Program</h3>
+            <div class="add-category">
+              <input
+                type="text"
+                id="new-program"
+                placeholder="New Program Name"
+              />
+              <button onclick="addCategory('program')">Add Program</button>
+            </div>
+            <div class="category-list" id="programs-list"></div>
           </div>
-        </div>
 
-        <div class="category-container">
-          <h3>Status</h3>
-          <div class="category-list" id="statuses-list"></div>
-          <div class="add-category">
-            <input type="text" id="new-status" placeholder="New Status Name" />
-            <button onclick="addCategory('status')">Add Status</button>
+          <div class="category-container" style="flex: 1">
+            <h3>Status</h3>
+            <div class="add-category">
+              <input
+                type="text"
+                id="new-status"
+                placeholder="New Status Name"
+              />
+              <button onclick="addCategory('status')">Add Status</button>
+            </div>
+            <div class="category-list" id="statuses-list"></div>
           </div>
         </div>
       </div>
@@ -232,14 +223,7 @@
       </div>
     </div>
 
-    <footer
-      style="
-        text-align: right;
-        padding: 10px;
-        background-color: #f1f1f1;
-        margin-top: 20px;
-      "
-    >
+    <footer>
       <p>@ 2025 Student Management | Version 2.0</p>
     </footer>
   </body>

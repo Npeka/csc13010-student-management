@@ -1,0 +1,274 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f0f2f5;
+  padding: 30px;
+}
+
+.container {
+  max-width: 1600px;
+  min-height: 85vh;
+  margin: 0 auto;
+  background-color: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+h1 {
+  text-align: left;
+  color: #1a1a1a;
+  margin-bottom: 30px;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.tabs {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.tab-button {
+  padding: 12px 24px;
+  background-color: transparent;
+  border: 2px solid #eaeaea;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #666;
+  font-weight: 500;
+}
+
+.tab-button.active {
+  background-color: #2196f3;
+  color: white;
+  border-color: #2196f3;
+}
+
+.tab-button:hover:not(.active) {
+  background-color: #f8f9fa;
+  border-color: #2196f3;
+  color: #2196f3;
+}
+
+.tab-content {
+  display: none;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+}
+
+.tab-content.active {
+  display: block;
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #4a4a4a;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #eaeaea;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: border-color 0.3s;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #2196f3;
+}
+
+button {
+  background-color: #2196f3;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 24px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+th,
+td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #eaeaea;
+}
+
+th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #4a4a4a;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+.search-container {
+  background-color: #f8f9fa;
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+.category-container {
+  background-color: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.category-container h3 {
+  color: #1a1a1a;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.category-list {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
+  margin: 16px 0;
+}
+
+.add-category {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: white;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid #eaeaea;
+  margin-bottom: 12px;
+  transition: all 0.3s;
+}
+
+.category-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.category-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.btn-group {
+  display: flex;
+  gap: 12px;
+}
+
+.update-btn,
+.delete-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.update-btn {
+  background-color: #0162b1;
+  color: white;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  background-color: white;
+  margin-top: 30px;
+  border-radius: 12px;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 768px) {
+  .tabs {
+    flex-wrap: wrap;
+  }
+
+  .tab-button {
+    flex: 1 1 calc(50% - 8px);
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .add-category {
+    grid-template-columns: 1fr;
+  }
+}

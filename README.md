@@ -39,37 +39,45 @@ Each student record contains the following details:
 student-management/
 │
 ├── models/
-│   └── student.go            # Student struct definition
+│   └── student.go              # Student struct definition
 │
 ├── services/
-│   └── student.service.go    # Student service functions (Add, Delete, Update, Search)
+│   └── student.service.go      # Student service functions (Add, Delete, Update, Search)
 │
 ├── tests/
-│   └── student_test.go       # Unit tests for student services
+│   └── student_test.go         # Unit tests for student services
 │
 ├── utils/
-│   ├── to_string.go         # Utility functions for string formatting
-│   └── validation.go        # Input validation functions (Email, Phone, etc.)
+│   ├── to_string.go            # Utility functions for string formatting
+│   └── validation.go           # Input validation functions (Email, Phone, etc.)
 │
-├── previews/
-│   ├── add-student.png      # Preview of Add Student functionality
-│   ├── logging.png          # Preview of system logs
-│   ├── manage-categories.png # Preview of category management
-│   ├── search.png           # Preview of Search Student functionality
-│   ├── student-list.png     # Preview of student list page
+├── preview/ v1.0
+│   ├── add-student.png         # Preview of Add Student functionality
+│   ├── add-student-failed.png  # Preview of Add Student failure case
+│   ├── update-student.png      # Preview of Update Student functionality
+│   ├── delete-student.png      # Preview of Delete Student functionality
+│   └── search-student.png      # Preview of Search Student functionality
+│
+├── screenshots/ v2.0
+│   ├── add-student.png         # Preview of Add Student functionality
+│   ├── logging.png             # Preview of system logs
+│   ├── manage-categories.png   # Preview of category management
+│   ├── search.png              # Preview of Search Student functionality
+│   ├── student-list.png        # Preview of student list page
+│   ├── import-json.png         # Preview of importing json to create list student
 │
 ├── web/
-│   ├── index.html           # Main HTML file for the web interface
-│   ├── logging.jsx          # JSX component for logging
-│   ├── category.jsx         # JSX component for category management
-│   ├── manager.jsx          # JSX component for student management
+│   ├── index.html              # Main HTML file for the web interface
+│   ├── logging.jsx             # JSX component for logging
+│   ├── category.jsx            # JSX component for category management
+│   ├── manager.jsx             # JSX component for student management
 │   ├── student-management-style.css # CSS file for styling
 │
-├── go.mod                   # Go module dependencies
-├── main.go                  # Main program execution
-├── Makefile                 # Make commands for build/run/test
-├── README.md                # Documentation
-└── student-management.exe   # Compiled executable (optional)
+├── go.mod                      # Go module dependencies
+├── main.go                     # Main program execution
+├── Makefile                    # Make commands for build/run/test
+├── README.md                   # Documentation
+└── student-management.exe   #   Compiled executable (optional)
 ```
 
 ## Installation
@@ -134,8 +142,8 @@ Below are some screenshots of the Student Management System:
 | ------------------------------------------------------- | --------------------------------- |
 | ![Manage Categories](screenshots/manage-categories.png) | ![Search](screenshots/search.png) |
 
-| Student List                                  | Import json                        |
-| --------------------------------------------- | ---------------------------------- |
+| Student List                                  | Import json                                 |
+| --------------------------------------------- | ------------------------------------------- |
 | ![Student List](screenshots/student-list.png) | ![Import json](screenshots/import-json.png) |
 
 ---

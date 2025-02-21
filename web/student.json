@@ -1,0 +1,80 @@
+[
+  {
+    "student_id": 1,
+    "full_name": "John Doe",
+    "date_of_birth": "2000-01-01",
+    "gender": "Male",
+    "department": "Law Department",
+    "course": "2022",
+    "program": "High Quality",
+    "address": "District B",
+    "email": "john.doe@example.com",
+    "phone": "1234567890",
+    "status": "Graduated"
+  },
+  {
+    "student_id": 2,
+    "full_name": "Jane Smith",
+    "date_of_birth": "2001-02-02",
+    "gender": "Female",
+    "department": "Law Department",
+    "course": "2023",
+    "program": "Regular",
+    "address": "District A",
+    "email": "jane.smith@example.com",
+    "phone": "0987654321",
+    "status": "Studying"
+  },
+  {
+    "student_id": 3,
+    "full_name": "Alice Johnson",
+    "date_of_birth": "1999-03-03",
+    "gender": "Female",
+    "department": "Law Department",
+    "course": "2021",
+    "program": "High Quality",
+    "address": "District C",
+    "email": "alice.johnson@example.com",
+    "phone": "1122334455",
+    "status": "Graduated"
+  },
+  {
+    "student_id": 4,
+    "full_name": "Bob Brown",
+    "date_of_birth": "2002-04-04",
+    "gender": "Male",
+    "department": "Law Department",
+    "course": "2024",
+    "program": "Regular",
+    "address": "District D",
+    "email": "bob.brown@example.com",
+    "phone": "2233445566",
+    "status": "Studying"
+  },
+  {
+    "student_id": 5,
+    "full_name": "Charlie Davis",
+    "date_of_birth": "2003-05-05",
+    "gender": "Male",
+    "department": "Law Department",
+    "course": "2025",
+    "program": "Regular",
+    "address": "District E",
+    "email": "charlie.davis@example.com",
+    "phone": "3344556677",
+    "status": "Studying"
+  },
+  {
+    "student_id": 6,
+    "full_name": "Diana Evans",
+    "date_of_birth": "2004-06-06",
+    "gender": "Female",
+    "department": "Law Department",
+    "course": "2026",
+    "program": "High Quality",
+    "address": "District F",
+    "email": "diana.evans@example.com",
+    "phone": "4455667788",
+    "status": "Studying"
+  }
+]

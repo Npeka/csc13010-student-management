@@ -1,28 +1,36 @@
 package server
 
 import (
+	alHttp "github.com/csc13010-student-management/internal/auditlog/delivery/http"
+	alRepository "github.com/csc13010-student-management/internal/auditlog/repository"
+	alUsecase "github.com/csc13010-student-management/internal/auditlog/usecase"
 	stHttp "github.com/csc13010-student-management/internal/student/delivery/http"
-	"github.com/csc13010-student-management/internal/student/repository"
-	"github.com/csc13010-student-management/internal/student/usecase"
+	stRepository "github.com/csc13010-student-management/internal/student/repository"
+	stUsecase "github.com/csc13010-student-management/internal/student/usecase"
 	"github.com/gin-gonic/gin"
 )
 
 func (s *Server) MapHandlers(r *gin.Engine) error {
 	// repository
-	stRepo := repository.NewStudentRepository(s.pg)
+	stRepo := stRepository.NewStudentRepository(s.pg)
+	alRepo := alRepository.NewAuditLogRepository(s.pg)
 
 	// usecase
-	stUsecase := usecase.NewStudentUsecase(stRepo, s.lg)
+	stUsecase := stUsecase.NewStudentUsecase(stRepo, s.lg)
+	alUsecase := alUsecase.NewAuditLogUsecase(alRepo, s.lg)
 
 	// handler
-	stHandler := stHttp.NewStudentHandler(stUsecase, s.lg)
+	stHandler := stHttp.NewStudentHandlers(stUsecase, s.lg)
+	alHandler := alHttp.NewAuditLogHandlers(alUsecase, s.lg)
 
 	// router group
 	v1 := r.Group("/api/v1")
 	stGroup := v1.Group("/students")
+	alGroup := v1.Group("/auditlogs")
 
 	// router
 	stHttp.MapStudentHandlers(stGroup, stHandler)
+	alHttp.MapAuditLogHandlers(alGroup, alHandler)
 
 	return nil
 }

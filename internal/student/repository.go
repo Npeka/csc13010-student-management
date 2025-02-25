@@ -12,8 +12,5 @@ type IStudentRepository interface {
 	CreateStudent(ctx context.Context, student *models.Student) error
 	UpdateStudent(ctx context.Context, student *models.Student) error
 	DeleteStudent(ctx context.Context, student_id string) error
-	SearchStudents(ctx context.Context, query string) ([]*models.Student, error)
-
-	// optional
 	GetOptions(ctx context.Context) (*dtos.OptionDTO, error)
 }

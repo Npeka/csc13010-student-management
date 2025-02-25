@@ -8,100 +8,53 @@ import (
 	"gorm.io/gorm"
 )
 
-func autoMigrateProgram(db *gorm.DB) {
-	programs := []models.Program{
-		{Name: "High Quality"},
-		{Name: "Regular"},
-		{Name: "Talented Bachelor"},
-		{Name: "Advanced Program"},
-	}
-
-	for _, record := range programs {
-		var count int64
-		db.Table("programs").Where("name = ?", record.Name).Count(&count)
-		if count == 0 {
-			db.Create(&record)
-		}
-	}
-}
-
-func autoMigrateFaculty(db *gorm.DB) {
-	faculties := []models.Faculty{
-		{Name: "Law"},
-		{Name: "Business English"},
-		{Name: "Japanese"},
-		{Name: "French"},
-	}
-
-	for _, record := range faculties {
-		var count int64
-		db.Table("faculties").Where("name = ?", record.Name).Count(&count)
-		if count == 0 {
-			db.Create(&record)
-		}
-	}
-}
-
-func autoMigrateCourse(db *gorm.DB) {
-	courses := []models.Course{
-		{Name: "CSC13010 - Software Engineering"},
-		{Name: "CSC13011 - Database Management System"},
-		{Name: "CSC13012 - Data Structure and Algorithms"},
-		{Name: "CSC13013 - Computer Network"},
-	}
-
-	for _, record := range courses {
-		var count int64
-		db.Table("courses").Where("name = ?", record.Name).Count(&count)
-		if count == 0 {
-			db.Create(&record)
-		}
-	}
-}
-
-func autoMigrateStatus(db *gorm.DB) {
-	statuses := []models.Status{
-		{Name: "Studying"},
-		{Name: "Graduated"},
-		{Name: "Dropped Out"},
-		{Name: "Paused"},
-	}
-
-	for _, record := range statuses {
-		var count int64
-		db.Table("statuses").Where("name = ?", record.Name).Count(&count)
-		if count == 0 {
-			db.Create(&record)
-		}
-	}
-}
-
 func autoMigrateStudent(db *gorm.DB) {
 	var wg sync.WaitGroup
 	wg.Add(4)
 
 	go func() {
 		defer wg.Done()
-		autoMigrateProgram(db)
+		autoMigrateTable(db, "programs", []models.Program{
+			{Name: "High Quality"},
+			{Name: "Regular"},
+			{Name: "Talented Bachelor"},
+			{Name: "Advanced Program"},
+		}, "name", func(p models.Program) interface{} { return p.Name })
 	}()
 
 	go func() {
 		defer wg.Done()
-		autoMigrateFaculty(db)
+		autoMigrateTable(db, "faculties", []models.Faculty{
+			{Name: "Law"},
+			{Name: "Business English"},
+			{Name: "Japanese"},
+			{Name: "French"},
+		}, "name", func(f models.Faculty) interface{} { return f.Name })
 	}()
 
 	go func() {
 		defer wg.Done()
-		autoMigrateCourse(db)
+		autoMigrateTable(db, "courses", []models.Course{
+			{Name: "CSC13010 - Software Engineering"},
+			{Name: "CSC13011 - Database Management System"},
+			{Name: "CSC13012 - Data Structure and Algorithms"},
+			{Name: "CSC13013 - Computer Network"},
+		}, "name", func(c models.Course) interface{} { return c.Name })
 	}()
 
 	go func() {
 		defer wg.Done()
-		autoMigrateStatus(db)
+		autoMigrateTable(db, "statuses", []models.Status{
+			{Name: "Studying"},
+			{Name: "Graduated"},
+			{Name: "Dropped Out"},
+			{Name: "Paused"},
+		}, "name", func(s models.Status) interface{} { return s.Name })
 	}()
 
 	wg.Wait()
-	seedTable(db, "students", []models.Student{
+
+	autoMigrateTable(db, "students", []models.Student{
 		{
 			ID:        22127180,
 			FullName:  "Nguyen Phuc Khang",
@@ -115,5 +68,5 @@ func autoMigrateStudent(db *gorm.DB) {
 			Phone:     "0123456789",
 			StatusID:  1,
 		},
-	}, "id = ?", "22127180")
+	}, "id = ?", func(s models.Student) interface{} { return s.ID })
 }

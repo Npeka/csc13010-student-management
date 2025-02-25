@@ -31,10 +31,12 @@ func Migrate(db *gorm.DB) {
 	log.Println("Migration completed")
 }
 
-func seedTable[T any](db *gorm.DB, tableName string, data []T, condition string, value string) {
+func autoMigrateTable[T any](db *gorm.DB, tableName string, data []T, condition string, getValue func(T) interface{}) {
 	for _, record := range data {
 		var count int64
-		db.Table(tableName).Where(condition, value).Count(&count)
+		value := getValue(record)
+		db.Table(tableName).Where(condition+" = ?", value).Count(&count)
+
 		if count == 0 {
 			db.Create(&record)
 		}

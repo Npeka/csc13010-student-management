@@ -1,0 +1,35 @@
+server:
+  port: 8080
+  mode: dev
+
+logger:
+  log_level: debug
+  file_log_name: "./storages/logs/goecommerce.001.log"
+  max_size: 500
+  max_backups: 3
+  max_age: 28
+  compress: true
+
+security:
+  jwt:
+    secret: mysecretkey
+    expiration: 3600000
+
+postgres:
+  port: 5432
+  host: localhost
+  dbname: student_management
+  username: postgres
+  password: postgres
+
+redis:
+  # host: go-ecommerce-redis
+  host: localhost
+  port: 6379
+  password: ""
+  db: 0
+  poolSize: 10
+
+kafka:
+  bootstrap.servers: localhost:9092
+  group.id: mygroup

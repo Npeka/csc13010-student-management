@@ -7,29 +7,14 @@ import (
 	"gorm.io/gorm"
 )
 
-type Gender int
 
-const (
-	GenderMale Gender = iota
-	GenderFemale
-)
-
-const (
-	GenderMaleString   string = "male"
-	GenderFemaleString string = "female"
-)
-
-var GenderMap = map[string]Gender{
-	GenderMaleString:   GenderMale,
-	GenderFemaleString: GenderFemale,
-}
 
 type Student struct {
 	ID        int       `gorm:"primaryKey;not null" json:"id"`
 	StudentID string    `gorm:"type:varchar(255);uniqueIndex;not null" json:"student_id"`
 	FullName  string    `gorm:"type:varchar(255);not null" json:"full_name"`
 	BirthDate time.Time `gorm:"type:date;not null" json:"birth_date"`
-	Gender    Gender    `gorm:"not null" json:"gender"`
+	GenderID  int       `gorm:"not null" json:"gender_id"`
 	FacultyID int       `gorm:"not null" json:"faculty_id"`
 	CourseID  int       `gorm:"not null" json:"course_id"`
 	ProgramID int       `gorm:"not null" json:"program_id"`

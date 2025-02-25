@@ -19,7 +19,7 @@ func autoMigrateStudent(db *gorm.DB) {
 			{Name: "Regular"},
 			{Name: "Talented Bachelor"},
 			{Name: "Advanced Program"},
-		}, "name", func(p models.Program) interface{} { return p.Name })
+		})
 	}()
 
 	go func() {
@@ -29,7 +29,7 @@ func autoMigrateStudent(db *gorm.DB) {
 			{Name: "Business English"},
 			{Name: "Japanese"},
 			{Name: "French"},
-		}, "name", func(f models.Faculty) interface{} { return f.Name })
+		})
 	}()
 
 	go func() {
@@ -39,7 +39,7 @@ func autoMigrateStudent(db *gorm.DB) {
 			{Name: "CSC13011 - Database Management System"},
 			{Name: "CSC13012 - Data Structure and Algorithms"},
 			{Name: "CSC13013 - Computer Network"},
-		}, "name", func(c models.Course) interface{} { return c.Name })
+		})
 	}()
 
 	go func() {
@@ -49,14 +49,14 @@ func autoMigrateStudent(db *gorm.DB) {
 			{Name: "Graduated"},
 			{Name: "Dropped Out"},
 			{Name: "Paused"},
-		}, "name", func(s models.Status) interface{} { return s.Name })
+		})
 	}()
 
 	wg.Wait()
 
 	autoMigrateTable(db, "students", []models.Student{
 		{
-			ID:        22127180,
+			StudentID: "22127180",
 			FullName:  "Nguyen Phuc Khang",
 			BirthDate: time.Date(2004, 8, 27, 0, 0, 0, 0, time.UTC),
 			Gender:    models.GenderMap[models.GenderMaleString],
@@ -68,5 +68,31 @@ func autoMigrateStudent(db *gorm.DB) {
 			Phone:     "0123456789",
 			StatusID:  1,
 		},
-	}, "id = ?", func(s models.Student) interface{} { return s.ID })
+		{
+			StudentID: "22127108",
+			FullName:  "Huynh Yen Ngoc",
+			BirthDate: time.Date(2004, 10, 19, 0, 0, 0, 0, time.UTC),
+			Gender:    models.GenderMap[models.GenderMaleString],
+			FacultyID: 1,
+			CourseID:  1,
+			ProgramID: 1,
+			Address:   "HCM",
+			Email:     "huynhyenngoc@gmail.com",
+			Phone:     "0123456789",
+			StatusID:  1,
+		},
+		{
+			StudentID: "22127419",
+			FullName:  "Nguyen Minh Toan",
+			BirthDate: time.Date(2004, 1, 8, 0, 0, 0, 0, time.UTC),
+			Gender:    models.GenderMap[models.GenderMaleString],
+			FacultyID: 1,
+			CourseID:  1,
+			ProgramID: 1,
+			Address:   "HCM",
+			Email:     "minhtoan@gmail.com",
+			Phone:     "0123456789",
+			StatusID:  1,
+		},
+	})
 }

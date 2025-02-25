@@ -31,14 +31,28 @@ func Migrate(db *gorm.DB) {
 	log.Println("Migration completed")
 }
 
-func autoMigrateTable[T any](db *gorm.DB, tableName string, data []T, condition string, getValue func(T) interface{}) {
-	for _, record := range data {
-		var count int64
-		value := getValue(record)
-		db.Table(tableName).Where(condition+" = ?", value).Count(&count)
+// func autoMigrateTable[T any](db *gorm.DB, tableName string, data []T, conditions []string, getValues []func(T) interface{}) {
+// 	for _, record := range data {
+// 		var count int64
+// 		query := ""
+// 		args := []interface{}{}
 
-		if count == 0 {
-			db.Create(&record)
-		}
-	}
+// 		for i, condition := range conditions {
+// 			if i > 0 {
+// 				query += " AND "
+// 			}
+// 			query += condition + " = ?"
+// 			args = append(args, getValues[i](record))
+// 		}
+
+// 		db.Table(tableName).Where(query, args...).Count(&count)
+
+// 		if count == 0 {
+// 			db.Create(&record)
+// 		}
+// 	}
+// }
+
+func autoMigrateTable[T any](db *gorm.DB, tableName string, data []T) {
+	db.Table(tableName).Create(&data)
 }

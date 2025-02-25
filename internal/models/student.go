@@ -26,6 +26,7 @@ var GenderMap = map[string]Gender{
 
 type Student struct {
 	ID        int       `gorm:"primaryKey;not null" json:"id"`
+	StudentID string    `gorm:"type:varchar(255);uniqueIndex;not null" json:"student_id"`
 	FullName  string    `gorm:"type:varchar(255);not null" json:"full_name"`
 	BirthDate time.Time `gorm:"type:date;not null" json:"birth_date"`
 	Gender    Gender    `gorm:"not null" json:"gender"`
@@ -33,8 +34,8 @@ type Student struct {
 	CourseID  int       `gorm:"not null" json:"course_id"`
 	ProgramID int       `gorm:"not null" json:"program_id"`
 	Address   string    `gorm:"type:text" json:"address,omitempty"`
-	Email     string    `gorm:"type:varchar(255);unique;not null" json:"email"`
-	Phone     string    `gorm:"type:varchar(20);unique;not null" json:"phone"`
+	Email     string    `gorm:"type:varchar(255);uniqueIndex;not null" json:"email"`
+	Phone     string    `gorm:"type:varchar(20);not null" json:"phone"`
 	StatusID  int       `gorm:"not null" json:"status_id"`
 	CreatedAt time.Time `gorm:"type:timestamp;default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt time.Time `gorm:"type:timestamp;default:CURRENT_TIMESTAMP" json:"updated_at"`

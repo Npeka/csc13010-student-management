@@ -5,6 +5,7 @@ import (
 
 	"github.com/csc13010-student-management/internal/models"
 	"github.com/csc13010-student-management/internal/student"
+	"github.com/csc13010-student-management/internal/student/dtos"
 	"github.com/csc13010-student-management/pkg/logger"
 )
 
@@ -66,4 +67,12 @@ func (s *studentUsecase) SearchStudent(ctx context.Context, query string) ([]*mo
 // SearchStudents implements student.IStudentUsecase.
 func (s *studentUsecase) SearchStudents(ctx context.Context, query string) ([]*models.Student, error) {
 	panic("unimplemented")
+}
+
+func (s *studentUsecase) GetOptions(ctx context.Context) (*dtos.OptionDTO, error) {
+	options, err := s.sr.GetOptions(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return options, nil
 }

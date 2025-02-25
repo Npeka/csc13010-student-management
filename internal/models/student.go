@@ -7,10 +7,8 @@ import (
 	"gorm.io/gorm"
 )
 
-
-
 type Student struct {
-	ID        int       `gorm:"primaryKey;not null" json:"id"`
+	ID        int       `gorm:"primaryKey;autoIncrement;not null" json:"id"`
 	StudentID string    `gorm:"type:varchar(255);uniqueIndex;not null" json:"student_id"`
 	FullName  string    `gorm:"type:varchar(255);not null" json:"full_name"`
 	BirthDate time.Time `gorm:"type:date;not null" json:"birth_date"`
@@ -30,7 +28,7 @@ func (Student) TableName() string {
 	return "students"
 }
 
-func (s *Student) BeforeCreate(tx *gorm.DB) (err error) {
+func (s *Student) AfterCreate(tx *gorm.DB) (err error) {
 	newJSON, err := json.Marshal(s)
 	if err != nil {
 		return err
@@ -52,7 +50,7 @@ func (s *Student) BeforeCreate(tx *gorm.DB) (err error) {
 	return nil
 }
 
-func (s *Student) BeforeUpdate(tx *gorm.DB) (err error) {
+func (s *Student) AfterUpdate(tx *gorm.DB) (err error) {
 	changedJSON, err := json.Marshal(s)
 	if err != nil {
 		return err

@@ -10,23 +10,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type studentHandler struct {
+type studentHandlers struct {
 	su student.IStudentUsecase
 	lg *logger.LoggerZap
 }
 
-func NewStudentHandler(
+func NewStudentHandlers(
 	su student.IStudentUsecase,
 	lg *logger.LoggerZap,
-) student.IStudentHandler {
-	return &studentHandler{
+) student.IStudentHandlers {
+	return &studentHandlers{
 		su: su,
 		lg: lg,
 	}
 }
 
-// GetStudents implements student.IStudentHandler.
-func (s *studentHandler) GetStudents() gin.HandlerFunc {
+// GetStudents implements student.IStudentHandlers.
+func (s *studentHandlers) GetStudents() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		students, err := s.su.GetStudents(c)
 		if err != nil {
@@ -37,8 +37,8 @@ func (s *studentHandler) GetStudents() gin.HandlerFunc {
 	}
 }
 
-// CreateStudent implements student.IStudentHandler.
-func (s *studentHandler) CreateStudent() gin.HandlerFunc {
+// CreateStudent implements student.IStudentHandlers.
+func (s *studentHandlers) CreateStudent() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var student models.Student
 		if err := c.ShouldBindJSON(&student); err != nil {
@@ -56,8 +56,8 @@ func (s *studentHandler) CreateStudent() gin.HandlerFunc {
 	}
 }
 
-// UpdateStudent implements student.IStudentHandler.
-func (s *studentHandler) UpdateStudent() gin.HandlerFunc {
+// UpdateStudent implements student.IStudentHandlers.
+func (s *studentHandlers) UpdateStudent() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 		if err != nil {
@@ -81,8 +81,8 @@ func (s *studentHandler) UpdateStudent() gin.HandlerFunc {
 	}
 }
 
-// DeleteStudent implements student.IStudentHandler.
-func (s *studentHandler) DeleteStudent() gin.HandlerFunc {
+// DeleteStudent implements student.IStudentHandlers.
+func (s *studentHandlers) DeleteStudent() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param("id")
 
@@ -96,7 +96,7 @@ func (s *studentHandler) DeleteStudent() gin.HandlerFunc {
 	}
 }
 
-func (s *studentHandler) SearchStudents() gin.HandlerFunc {
+func (s *studentHandlers) SearchStudents() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		query := c.Query("q")
 
@@ -115,7 +115,7 @@ func (s *studentHandler) SearchStudents() gin.HandlerFunc {
 	}
 }
 
-func (s *studentHandler) GetOptions() gin.HandlerFunc {
+func (s *studentHandlers) GetOptions() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		options, err := s.su.GetOptions(c)
 		if err != nil {

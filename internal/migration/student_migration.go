@@ -10,7 +10,16 @@ import (
 
 func autoMigrateStudent(db *gorm.DB) {
 	var wg sync.WaitGroup
-	wg.Add(4)
+	wg.Add(5)
+
+	go func() {
+		defer wg.Done()
+		autoMigrateTable(db, "genders", []models.Gender{
+			{Name: "Male"},
+			{Name: "Female"},
+			{Name: "Other"},
+		})
+	}()
 
 	go func() {
 		defer wg.Done()
@@ -59,7 +68,7 @@ func autoMigrateStudent(db *gorm.DB) {
 			StudentID: "22127180",
 			FullName:  "Nguyen Phuc Khang",
 			BirthDate: time.Date(2004, 8, 27, 0, 0, 0, 0, time.UTC),
-			Gender:    models.GenderMap[models.GenderMaleString],
+			GenderID:  0,
 			FacultyID: 1,
 			CourseID:  1,
 			ProgramID: 1,
@@ -72,7 +81,7 @@ func autoMigrateStudent(db *gorm.DB) {
 			StudentID: "22127108",
 			FullName:  "Huynh Yen Ngoc",
 			BirthDate: time.Date(2004, 10, 19, 0, 0, 0, 0, time.UTC),
-			Gender:    models.GenderMap[models.GenderMaleString],
+			GenderID:  1,
 			FacultyID: 1,
 			CourseID:  1,
 			ProgramID: 1,
@@ -85,7 +94,7 @@ func autoMigrateStudent(db *gorm.DB) {
 			StudentID: "22127419",
 			FullName:  "Nguyen Minh Toan",
 			BirthDate: time.Date(2004, 1, 8, 0, 0, 0, 0, time.UTC),
-			Gender:    models.GenderMap[models.GenderMaleString],
+			GenderID:  0,
 			FacultyID: 1,
 			CourseID:  1,
 			ProgramID: 1,

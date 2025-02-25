@@ -10,6 +10,7 @@ import (
 var allModels = []interface{}{
 	// student management models
 	&models.Student{},
+	&models.Gender{},
 	&models.Program{},
 	&models.Faculty{},
 	&models.Course{},

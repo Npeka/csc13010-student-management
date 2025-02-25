@@ -114,3 +114,15 @@ func (s *studentHandler) SearchStudents() gin.HandlerFunc {
 		c.JSON(http.StatusOK, students)
 	}
 }
+
+func (s *studentHandler) GetOptions() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		options, err := s.su.GetOptions(c)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, options)
+	}
+}

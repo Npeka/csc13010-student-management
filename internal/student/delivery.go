@@ -8,4 +8,5 @@ type IStudentHandler interface {
 	UpdateStudent() gin.HandlerFunc
 	DeleteStudent() gin.HandlerFunc
 	SearchStudents() gin.HandlerFunc
+	GetOptions() gin.HandlerFunc
 }

@@ -11,4 +11,6 @@ func MapStudentHandlers(stGroup *gin.RouterGroup, h student.IStudentHandler) {
 	stGroup.PATCH("/:student_id", h.UpdateStudent())
 	stGroup.DELETE("/:student_id", h.DeleteStudent())
 	stGroup.GET("/search", h.SearchStudents())
+
+	stGroup.GET("/options", h.GetOptions())
 }

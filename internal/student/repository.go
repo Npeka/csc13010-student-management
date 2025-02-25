@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/csc13010-student-management/internal/models"
+	"github.com/csc13010-student-management/internal/student/dtos"
 )
 
 type IStudentRepository interface {
@@ -12,4 +13,7 @@ type IStudentRepository interface {
 	UpdateStudent(ctx context.Context, student *models.Student) error
 	DeleteStudent(ctx context.Context, student_id string) error
 	SearchStudents(ctx context.Context, query string) ([]*models.Student, error)
+
+	// optional
+	GetOptions(ctx context.Context) (*dtos.OptionDTO, error)
 }

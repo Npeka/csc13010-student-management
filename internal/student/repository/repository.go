@@ -5,6 +5,7 @@ import (
 
 	"github.com/csc13010-student-management/internal/models"
 	"github.com/csc13010-student-management/internal/student"
+	"github.com/csc13010-student-management/internal/student/dtos"
 	"gorm.io/gorm"
 )
 
@@ -21,6 +22,9 @@ func NewStudentRepository(db *gorm.DB) student.IStudentRepository {
 func (s *studentRepository) GetStudents(ctx context.Context) ([]*models.Student, error) {
 	var students []*models.Student
 	err := s.db.WithContext(ctx).Find(&students).Error
+	if err != nil {
+		return nil, err
+	}
 	return students, err
 }
 
@@ -46,4 +50,37 @@ func (s *studentRepository) SearchStudents(ctx context.Context, query string) ([
 		Where("LOWER(full_name) LIKE LOWER(?) OR LOWER(email) LIKE LOWER(?)", "%"+query+"%", "%"+query+"%").
 		Find(&students).Error
 	return students, err
+}
+
+func (s *studentRepository) GetOptions(ctx context.Context) (*dtos.OptionDTO, error) {
+	type Option struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+	}
+
+	optionDTO := &dtos.OptionDTO{}
+
+	optionMap := map[string]*[]*dtos.Option{
+		"genders":   &optionDTO.Genders,
+		"faculties": &optionDTO.Faculties,
+		"courses":   &optionDTO.Courses,
+		"programs":  &optionDTO.Programs,
+		"statuses":  &optionDTO.Statuses,
+	}
+
+	modelMap := map[string]interface{}{
+		"genders":   &models.Gender{},
+		"faculties": &models.Faculty{},
+		"courses":   &models.Course{},
+		"programs":  &models.Program{},
+		"statuses":  &models.Status{},
+	}
+
+	for key, model := range modelMap {
+		if err := s.db.Model(model).Select("id, name").Find(optionMap[key]).Error; err != nil {
+			return nil, err
+		}
+	}
+
+	return optionDTO, nil
 }

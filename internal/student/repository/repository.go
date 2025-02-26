@@ -43,21 +43,7 @@ func (s *studentRepository) DeleteStudent(ctx context.Context, student_id string
 	return s.db.WithContext(ctx).Where("id = ?", student_id).Delete(&models.Student{}).Error
 }
 
-// SearchStudents tìm kiếm sinh viên theo tên hoặc email
-func (s *studentRepository) SearchStudents(ctx context.Context, query string) ([]*models.Student, error) {
-	var students []*models.Student
-	err := s.db.WithContext(ctx).
-		Where("LOWER(full_name) LIKE LOWER(?) OR LOWER(email) LIKE LOWER(?)", "%"+query+"%", "%"+query+"%").
-		Find(&students).Error
-	return students, err
-}
-
 func (s *studentRepository) GetOptions(ctx context.Context) (*dtos.OptionDTO, error) {
-	type Option struct {
-		ID   int    `json:"id"`
-		Name string `json:"name"`
-	}
-
 	optionDTO := &dtos.OptionDTO{}
 
 	optionMap := map[string]*[]*dtos.Option{

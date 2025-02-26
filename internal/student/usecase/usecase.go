@@ -6,6 +6,7 @@ import (
 	"github.com/csc13010-student-management/internal/models"
 	"github.com/csc13010-student-management/internal/student"
 	"github.com/csc13010-student-management/internal/student/dtos"
+	"github.com/csc13010-student-management/internal/student/strategies"
 	"github.com/csc13010-student-management/pkg/logger"
 	"go.uber.org/zap"
 )
@@ -33,6 +34,16 @@ func (s *studentUsecase) GetStudents(ctx context.Context) ([]*models.Student, er
 	}
 	s.lg.Info("Successfully fetched students")
 	return students, nil
+}
+
+func (s *studentUsecase) GetStudentByStudentID(ctx context.Context, student_id string) (*models.Student, error) {
+	student, err := s.sr.GetStudentByStudentID(ctx, student_id)
+	if err != nil {
+		s.lg.Error("Failed to get student", zap.Error(err))
+		return nil, err
+	}
+	s.lg.Info("Successfully fetched student", zap.String("id", student_id))
+	return student, nil
 }
 
 func (s *studentUsecase) CreateStudent(ctx context.Context, student *models.Student) error {
@@ -73,4 +84,42 @@ func (s *studentUsecase) GetOptions(ctx context.Context) (*dtos.OptionDTO, error
 	}
 	s.lg.Info("Successfully fetched student options")
 	return options, nil
+}
+
+func (s *studentUsecase) ExportStudents(ctx context.Context, format string) (string, error) {
+	var students []models.Student
+	if err := s.sr.GetAllStudents(ctx, &students); err != nil {
+		return "", err
+	}
+
+	// Xác định đường dẫn file export
+	filePath := "exports/students." + format
+
+	exportCtx, err := strategies.NewExportContext(filePath)
+	if err != nil {
+		return "", err
+	}
+
+	err = exportCtx.ExecuteExport(ctx, students, filePath)
+	if err != nil {
+		return "", err
+	}
+
+	return filePath, nil
+}
+
+
+func (s *studentUsecase) ImportStudents(ctx context.Context, filePath string) error {
+	importCtx, err := strategies.NewImportContext(filePath)
+	if err != nil {
+		return err
+	}
+
+	students, err := importCtx.ExecuteImport(ctx, filePath)
+	if err != nil {
+		return err
+	}
+
+	// Lưu vào database
+	return s.sr.BatchInsertStudents(ctx, students)
 }

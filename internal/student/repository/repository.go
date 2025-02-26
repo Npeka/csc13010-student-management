@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"encoding/csv"
+	"errors"
 	"fmt"
 	"os"
 	"reflect"
@@ -49,12 +50,12 @@ func (s *studentRepository) CreateStudent(ctx context.Context, student *models.S
 
 // UpdateStudent cập nhật thông tin sinh viên
 func (s *studentRepository) UpdateStudent(ctx context.Context, student *models.Student) error {
-	return s.db.WithContext(ctx).Where("id = ?", student.ID).Updates(&student).Error
+	return s.db.WithContext(ctx).Where("student_id = ?", student.StudentID).Updates(&student).Error
 }
 
 // DeleteStudent xóa sinh viên khỏi database theo ID
 func (s *studentRepository) DeleteStudent(ctx context.Context, student_id string) error {
-	return s.db.WithContext(ctx).Where("id = ?", student_id).Delete(&models.Student{}).Error
+	return s.db.WithContext(ctx).Where("student_id = ?", student_id).Delete(&models.Student{}).Error
 }
 
 func (s *studentRepository) GetOptions(ctx context.Context) (*dtos.OptionDTO, error) {
@@ -151,4 +152,70 @@ func (s *studentRepository) GetAllStudents(ctx context.Context, students *[]mode
 
 func (s *studentRepository) BatchInsertStudents(ctx context.Context, students []models.Student) error {
 	return s.db.Create(&students).Error
+}
+
+func (s *studentRepository) GetFaculties(ctx context.Context) ([]*models.Faculty, error) {
+	var faculties []*models.Faculty
+	err := s.db.WithContext(ctx).Find(&faculties).Error
+	if err != nil {
+		return nil, err
+	}
+	return faculties, err
+
+}
+
+func (s *studentRepository) GetPrograms(ctx context.Context) ([]*models.Program, error) {
+	var programs []*models.Program
+	err := s.db.WithContext(ctx).Find(&programs).Error
+	if err != nil {
+		return nil, err
+	}
+	return programs, err
+
+}
+
+func (s *studentRepository) GetStatuses(ctx context.Context) ([]*models.Status, error) {
+	var statuses []*models.Status
+	err := s.db.WithContext(ctx).Find(&statuses).Error
+	if err != nil {
+		return nil, err
+	}
+	return statuses, err
+
+}
+
+func (s *studentRepository) CreateFaculty(ctx context.Context, faculty *models.Faculty) error {
+	var existing models.Faculty
+	if err := s.db.WithContext(ctx).Where("name = ?", faculty.Name).First(&existing).Error; err == nil {
+		return errors.New("faculty already exists")
+	}
+	return s.db.WithContext(ctx).Create(&faculty).Error
+}
+
+func (s *studentRepository) CreateProgram(ctx context.Context, program *models.Program) error {
+	var existing models.Program
+	if err := s.db.WithContext(ctx).Where("name = ?", program.Name).First(&existing).Error; err == nil {
+		return errors.New("program already exists")
+	}
+	return s.db.WithContext(ctx).Create(&program).Error
+}
+
+func (s *studentRepository) CreateStatus(ctx context.Context, status *models.Status) error {
+	var existing models.Status
+	if err := s.db.WithContext(ctx).Where("name = ?", status.Name).First(&existing).Error; err == nil {
+		return errors.New("status already exists")
+	}
+	return s.db.WithContext(ctx).Create(&status).Error
+}
+
+func (s *studentRepository) DeleteFaculty(ctx context.Context, faculty_id int) error {
+	return s.db.WithContext(ctx).Where("id = ?", faculty_id).Delete(&models.Faculty{}).Error
+}
+
+func (s *studentRepository) DeleteProgram(ctx context.Context, program_id int) error {
+	return s.db.WithContext(ctx).Where("id = ?", program_id).Delete(&models.Program{}).Error
+
+}
+func (s *studentRepository) DeleteStatus(ctx context.Context, status_id int) error {
+	return s.db.WithContext(ctx).Where("id = ?", status_id).Delete(&models.Status{}).Error
 }

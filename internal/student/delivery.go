@@ -4,8 +4,11 @@ import "github.com/gin-gonic/gin"
 
 type IStudentHandlers interface {
 	GetStudents() gin.HandlerFunc
+	GetStudentByStudentID() gin.HandlerFunc
 	CreateStudent() gin.HandlerFunc
 	UpdateStudent() gin.HandlerFunc
 	DeleteStudent() gin.HandlerFunc
 	GetOptions() gin.HandlerFunc
+	ImportStudents() gin.HandlerFunc
+	ExportStudents() gin.HandlerFunc
 }

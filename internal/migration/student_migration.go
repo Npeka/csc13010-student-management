@@ -58,6 +58,9 @@ func autoMigrateStudent(db *gorm.DB) {
 			{Name: "Graduated"},
 			{Name: "Dropped Out"},
 			{Name: "Paused"},
+			{Name: "Completed, Awaiting Graduation"},
+			{Name: "Suspended"},
+			{Name: "Other"},
 		})
 	}()
 
@@ -68,39 +71,39 @@ func autoMigrateStudent(db *gorm.DB) {
 			StudentID: "22127180",
 			FullName:  "Nguyen Phuc Khang",
 			BirthDate: time.Date(2004, 8, 27, 0, 0, 0, 0, time.UTC),
-			GenderID:  0,
+			GenderID:  1,
 			FacultyID: 1,
 			CourseID:  1,
 			ProgramID: 1,
 			Address:   "HCM",
-			Email:     "npkhang287@gmail.com",
-			Phone:     "0123456789",
+			Email:     "npkhang287@student.university.edu.vn",
+			Phone:     "0789123456",
 			StatusID:  1,
 		},
 		{
 			StudentID: "22127108",
 			FullName:  "Huynh Yen Ngoc",
 			BirthDate: time.Date(2004, 10, 19, 0, 0, 0, 0, time.UTC),
-			GenderID:  1,
+			GenderID:  2, // Female
 			FacultyID: 1,
 			CourseID:  1,
 			ProgramID: 1,
 			Address:   "HCM",
-			Email:     "huynhyenngoc@gmail.com",
-			Phone:     "0123456789",
+			Email:     "huynhyenngoc@student.university.edu.vn", // Sửa email hợp lệ
+			Phone:     "0903123456",                             // Số hợp lệ VN
 			StatusID:  1,
 		},
 		{
 			StudentID: "22127419",
 			FullName:  "Nguyen Minh Toan",
 			BirthDate: time.Date(2004, 1, 8, 0, 0, 0, 0, time.UTC),
-			GenderID:  0,
+			GenderID:  1, // Male
 			FacultyID: 1,
 			CourseID:  1,
 			ProgramID: 1,
 			Address:   "HCM",
-			Email:     "minhtoan@gmail.com",
-			Phone:     "0123456789",
+			Email:     "minhtoan@student.university.edu.vn", // Sửa lại email đúng format
+			Phone:     "0356123456",                         // Số hợp lệ VN
 			StatusID:  1,
 		},
 	})

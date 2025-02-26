@@ -64,6 +64,21 @@ func (mr *MockIStudentUsecaseMockRecorder) DeleteStudent(ctx, student_id interfa
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteStudent", reflect.TypeOf((*MockIStudentUsecase)(nil).DeleteStudent), ctx, student_id)
 }
 
+// ExportStudents mocks base method.
+func (m *MockIStudentUsecase) ExportStudents(ctx context.Context, format string) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ExportStudents", ctx, format)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ExportStudents indicates an expected call of ExportStudents.
+func (mr *MockIStudentUsecaseMockRecorder) ExportStudents(ctx, format interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ExportStudents", reflect.TypeOf((*MockIStudentUsecase)(nil).ExportStudents), ctx, format)
+}
+
 // GetOptions mocks base method.
 func (m *MockIStudentUsecase) GetOptions(ctx context.Context) (*dtos.OptionDTO, error) {
 	m.ctrl.T.Helper()
@@ -79,6 +94,21 @@ func (mr *MockIStudentUsecaseMockRecorder) GetOptions(ctx interface{}) *gomock.C
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOptions", reflect.TypeOf((*MockIStudentUsecase)(nil).GetOptions), ctx)
 }
 
+// GetStudentByStudentID mocks base method.
+func (m *MockIStudentUsecase) GetStudentByStudentID(ctx context.Context, student_id string) (*models.Student, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetStudentByStudentID", ctx, student_id)
+	ret0, _ := ret[0].(*models.Student)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetStudentByStudentID indicates an expected call of GetStudentByStudentID.
+func (mr *MockIStudentUsecaseMockRecorder) GetStudentByStudentID(ctx, student_id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetStudentByStudentID", reflect.TypeOf((*MockIStudentUsecase)(nil).GetStudentByStudentID), ctx, student_id)
+}
+
 // GetStudents mocks base method.
 func (m *MockIStudentUsecase) GetStudents(ctx context.Context) ([]*models.Student, error) {
 	m.ctrl.T.Helper()
@@ -92,6 +122,20 @@ func (m *MockIStudentUsecase) GetStudents(ctx context.Context) ([]*models.Studen
 func (mr *MockIStudentUsecaseMockRecorder) GetStudents(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetStudents", reflect.TypeOf((*MockIStudentUsecase)(nil).GetStudents), ctx)
+}
+
+// ImportStudents mocks base method.
+func (m *MockIStudentUsecase) ImportStudents(ctx context.Context, filePath string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ImportStudents", ctx, filePath)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// ImportStudents indicates an expected call of ImportStudents.
+func (mr *MockIStudentUsecaseMockRecorder) ImportStudents(ctx, filePath interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ImportStudents", reflect.TypeOf((*MockIStudentUsecase)(nil).ImportStudents), ctx, filePath)
 }
 
 // UpdateStudent mocks base method.

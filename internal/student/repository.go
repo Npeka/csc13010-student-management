@@ -9,8 +9,11 @@ import (
 
 type IStudentRepository interface {
 	GetStudents(ctx context.Context) ([]*models.Student, error)
+	GetStudentByStudentID(ctx context.Context, student_id string) (*models.Student, error)
 	CreateStudent(ctx context.Context, student *models.Student) error
 	UpdateStudent(ctx context.Context, student *models.Student) error
 	DeleteStudent(ctx context.Context, student_id string) error
 	GetOptions(ctx context.Context) (*dtos.OptionDTO, error)
+	BatchInsertStudents(ctx context.Context, students []models.Student) error
+	GetAllStudents(ctx context.Context, students *[]models.Student) error
 }

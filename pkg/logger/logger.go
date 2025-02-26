@@ -13,6 +13,15 @@ type LoggerZap struct {
 	*zap.Logger
 }
 
+func NewLoggerTest() *LoggerZap {
+	core := zapcore.NewCore(
+		GetEncoderLog(),
+		zapcore.AddSync(os.Stdout),
+		zapcore.DebugLevel,
+	)
+	return &LoggerZap{zap.New(core, zap.AddCaller())}
+}
+
 func NewLogger(cfg config.LoggerConfig) *LoggerZap {
 	// debug -> info -> warn -> error -> fatal -> panic
 	logLevel := cfg.Log_level

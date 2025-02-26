@@ -32,7 +32,7 @@ class StudentManager {
     this.nextId = Math.max(...this.students.map((s) => s.mssv), 0) + 1;
   }
 
-  addStudent(student) {
+  CreateStudent(student) {
     student.mssv = this.nextId++;
     this.students.push(student);
     this.saveToStorage();
@@ -81,8 +81,8 @@ class StudentManager {
   }
 }
 class StudentManagerWithLogging extends StudentManager {
-  addStudent(student) {
-    const newStudent = super.addStudent(student);
+  CreateStudent(student) {
+    const newStudent = super.CreateStudent(student);
     logManager.addLog("Added student", {
       mssv: newStudent.mssv,
     });
@@ -179,7 +179,7 @@ document.getElementById("studentForm").addEventListener("submit", (e) => {
       studentData.phone,
       studentData.status
     );
-    studentManager.addStudent(student);
+    studentManager.CreateStudent(student);
     form.reset();
     alert("Thêm sinh viên thành công!");
     document.getElementById("cancelEdit").style.display = "none";
@@ -481,7 +481,7 @@ function importFromCSV(event) {
       newStudents.push(student);
     });
 
-    newStudents.forEach((student) => studentManager.addStudent(student));
+    newStudents.forEach((student) => studentManager.CreateStudent(student));
     displayStudents();
     alert("Nhập sinh viên từ CSV thành công!");
   };
@@ -542,7 +542,7 @@ if (document.getElementById("importJSONInput")) {
           const data = JSON.parse(e.target.result);
           if (Array.isArray(data)) {
             data.forEach((student) =>
-              studentManager.addStudent(
+              studentManager.CreateStudent(
                 new Student(
                   student.mssv,
                   student.fullname,

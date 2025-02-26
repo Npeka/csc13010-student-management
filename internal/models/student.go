@@ -60,7 +60,7 @@ func (s *Student) BeforeSave(tx *gorm.DB) (err error) {
 	}
 
 	// Validate valid status transition
-	if !isValidStatusTransition(tx, s.ID, s.StatusID) {
+	if !isValidStatusTransition(tx, s.ID, s.StudentID, s.StatusID) {
 		return errors.New("invalid student status transition")
 	}
 
@@ -96,23 +96,23 @@ func isValidPhone(phone string) bool {
 }
 
 // Function to check valid status transition
-func isValidStatusTransition(tx *gorm.DB, studentID int, newStatusID int) bool {
-	if studentID == 0 {
+func isValidStatusTransition(tx *gorm.DB, id int, studentID string, newStatusID int) bool {
+	if id == 0 {
 		// If new student, no need to check
 		return true
 	}
 
 	var currentStudent Student
-	if err := tx.First(&currentStudent, studentID).Error; err != nil {
+	if err := tx.Where("student_id = ?", studentID).First(&currentStudent).Error; err != nil {
 		return false
 	}
 
 	// Valid status transition rules
 	validTransitions := map[int][]int{
-		1: {2, 3, 4}, // Studying -> Graduated, Dropped Out, Suspended
-		2: {1},       // Graduated -> Studying
-		3: {},        // Dropped Out (cannot change)
-		4: {},        // Suspended (cannot change)
+		1: {1, 2, 3, 4}, // "Đang học" -> "Tốt nghiệp", "Bỏ học", "Đình chỉ"
+		2: {2},          // "Đã tốt nghiệp" -> KHÔNG thể thay đổi
+		3: {3},          // "Đã bỏ học" -> KHÔNG thể thay đổi
+		4: {4},          // "Bị đình chỉ" -> KHÔNG thể thay đổi
 	}
 
 	// Check if new status is valid

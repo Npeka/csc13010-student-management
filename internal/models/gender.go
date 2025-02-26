@@ -1,8 +1,8 @@
 package models
 
 type Gender struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+	ID   int    `gorm:"primaryKey;autoIncrement;" json:"id"`
+	Name string `gorm:"type:varchar(255);uniqueIndex;not null" json:"name"`
 }
 
 func (Gender) TableName() string {

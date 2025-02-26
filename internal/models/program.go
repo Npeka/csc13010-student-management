@@ -1,7 +1,7 @@
 package models
 
 type Program struct {
-	Id   int    `gorm:"primaryKey;autoIncrement;not null" json:"id"`
+	Id   int    `gorm:"primaryKey;autoIncrement;" json:"id"`
 	Name string `gorm:"type:varchar(255);uniqueIndex;not null" json:"name"`
 }
 

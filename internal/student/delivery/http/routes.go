@@ -6,13 +6,24 @@ import (
 )
 
 func MapStudentHandlers(stGroup *gin.RouterGroup, h student.IStudentHandlers) {
-	stGroup.GET("", h.GetStudents())
+	stGroup.GET("/", h.GetStudents())
 	stGroup.GET("/:student_id", h.GetStudentByStudentID())
-	stGroup.POST("", h.CreateStudent())
+	stGroup.POST("/", h.CreateStudent())
 	stGroup.PATCH("/:student_id", h.UpdateStudent())
 	stGroup.DELETE("/:student_id", h.DeleteStudent())
 	stGroup.GET("/options", h.GetOptions())
 	stGroup.POST("/import", h.ImportStudents())
-	// /api/students/export?format=csv
 	stGroup.GET("/export", h.ExportStudents())
+
+	stGroup.GET("/faculties", h.GetFaculties())
+	stGroup.GET("/programs", h.GetPrograms())
+	stGroup.GET("/statuses", h.GetStatuses())
+
+	stGroup.POST("/faculties", h.CreateFaculty())
+	stGroup.POST("/programs", h.CreateProgram())
+	stGroup.POST("/statuses", h.CreateStatus())
+
+	stGroup.DELETE("/faculties/:faculty_id", h.DeleteFaculty())
+	stGroup.DELETE("/programs/:program_id", h.DeleteProgram())
+	stGroup.DELETE("/statuses/:status_id", h.DeleteStatus())
 }

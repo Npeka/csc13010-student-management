@@ -6,5 +6,6 @@ import (
 )
 
 func MapAuditLogHandlers(alGroup *gin.RouterGroup, alHandler auditlog.IAuditLogHandlers) {
+	alGroup.GET("/", alHandler.GetAuditLogs())
 	alGroup.GET("/:table_name/:record_id", alHandler.GetModelAuditLogs())
 }

@@ -24,6 +24,20 @@ func NewAuditLogHandlers(
 	}
 }
 
+func (h *auditLogHandlers) GetAuditLogs() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ctx := context.Background()
+
+		auditLogs, err := h.au.GetAuditLogs(ctx)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, auditLogs)
+	}
+}
+
 func (h *auditLogHandlers) GetModelAuditLogs() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := context.Background()

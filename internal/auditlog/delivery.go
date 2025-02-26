@@ -5,5 +5,6 @@ import (
 )
 
 type IAuditLogHandlers interface {
+	GetAuditLogs() gin.HandlerFunc
 	GetModelAuditLogs() gin.HandlerFunc
 }

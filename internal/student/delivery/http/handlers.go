@@ -68,7 +68,7 @@ func (s *studentHandlers) CreateStudent() gin.HandlerFunc {
 func (s *studentHandlers) UpdateStudent() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		s.lg.Info("UpdateStudent called")
-		id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+		id, err := strconv.ParseInt(c.Param("student_id"), 10, 64)
 		if err != nil {
 			s.lg.Error("Invalid student ID", zap.Error(err))
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid student ID"})
@@ -98,9 +98,9 @@ func (s *studentHandlers) UpdateStudent() gin.HandlerFunc {
 func (s *studentHandlers) DeleteStudent() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		s.lg.Info("DeleteStudent called")
-		id := c.Param("id")
+		student_id := c.Param("student_id")
 
-		err := s.su.DeleteStudent(c, id)
+		err := s.su.DeleteStudent(c, student_id)
 		if err != nil {
 			s.lg.Error("Error deleting student", zap.Error(err))
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

@@ -16,6 +16,15 @@ func NewAuditLogRepository(db *gorm.DB) auditlog.IAuditLogRepository {
 	return &auditLogRepository{db: db}
 }
 
+// GetAuditLogs implements auditlog.IAuditLogRepository.
+func (a *auditLogRepository) GetAuditLogs(ctx context.Context) ([]*models.AuditLog, error) {
+	var auditLogs []*models.AuditLog
+	if err := a.db.Find(&auditLogs).Error; err != nil {
+		return nil, err
+	}
+	return auditLogs, nil
+}
+
 // GetModelAuditLogs implements auditlog.IAuditLogRepository.
 func (a *auditLogRepository) GetModelAuditLogs(ctx context.Context, table_name string, record_id string) ([]*models.AuditLog, error) {
 	var auditLogs []*models.AuditLog

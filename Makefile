@@ -19,8 +19,9 @@ d-down:
 d-down-v:
 	docker-compose down -v
 
-mockgen:
-	mockgen -source='internal/repository/student_repository.go' -destination='internal/repository/mock/student_repository_mock.go' -package=mock
+mockgen-student:
+	mockgen -source='internal/student/repository.go' -destination='internal/student/mocks/repository_mock.go' -package=mocks
+	mockgen -source='internal/student/usecase.go' -destination='internal/student/mocks/usecase_mock.go' -package=mocks
 
 test-student:
 	go test ./internal/student/repository

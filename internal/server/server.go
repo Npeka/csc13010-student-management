@@ -5,6 +5,7 @@ import (
 
 	"github.com/csc13010-student-management/config"
 	"github.com/csc13010-student-management/pkg/logger"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
@@ -37,11 +38,21 @@ func newGinServer(cfg config.ServerConfig) *gin.Engine {
 	if cfg.Mode == "dev" {
 		gin.SetMode(gin.DebugMode)
 		gin.ForceConsoleColor()
-		return gin.Default()
 	}
 
-	gin.SetMode(gin.ReleaseMode)
-	return gin.New()
+	r := gin.Default()
+
+	// Thêm CORS middleware
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000", "https://example.com"},     // Các domain được phép
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"}, // Các phương thức HTTP được phép
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},          // Các header được phép
+		ExposeHeaders:    []string{"Content-Length"},                                   // Header được expose
+		AllowCredentials: true,                                                         // Cho phép gửi cookie
+		// MaxAge:           12 * time.Hour,                                          // Cache CORS trong bao lâu
+	}))
+
+	return r
 }
 
 func (s *Server) Run() error {

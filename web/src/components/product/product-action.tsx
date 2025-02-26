@@ -191,7 +191,6 @@ export const UpdateProduct = ({
   });
 
   const onSubmit = async (values: z.infer<typeof updateProductSchema>) => {
-    console.log("values", values);
     setLoading(true);
     await updateProduct({ ...product, ...values });
     setLoading(false);

@@ -6,11 +6,8 @@ import {
   Package,
   Search,
   Settings,
-  ShoppingBag,
-  Store,
 } from "lucide-react";
 import Link from "next/link";
-
 import {
   Sidebar,
   SidebarContent,
@@ -21,6 +18,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import Image from "next/image";
+import hcmusLogo from "@/public/hcmus-logo.jpg";
 
 // Menu items.
 const userItems = [
@@ -54,17 +53,17 @@ const userItems = [
 const adminItems = [
   {
     title: "Students",
-    url: "/admin/students",
+    url: "/",
     icon: Home,
   },
   {
     title: "Categories",
-    url: "/admin/categories",
+    url: "/categories",
     icon: Package,
   },
   {
     title: "Logs",
-    url: "/admin/logs",
+    url: "/logs",
     icon: CreditCard,
   },
 ];
@@ -80,23 +79,18 @@ export function AppSidebar({ role }: AppSidebarProps) {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Student Management</SidebarGroupLabel>
+          <SidebarGroupLabel>
+            <div className="flex items-center gap-3 w-full">
+              <Image src={hcmusLogo} alt="HCMUS Logo" width={35} height={35} />
+              <p>Student Management</p>
+            </div>
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <Link
-                      href={{
-                        pathname: item.url,
-                        query: isAdmin
-                          ? {
-                              page: "1",
-                              page_size: "5",
-                            }
-                          : {},
-                      }}
-                    >
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
                     </Link>

@@ -74,7 +74,7 @@ func autoMigrateStudent(db *gorm.DB) {
 			GenderID:  1,
 			FacultyID: 1,
 			CourseID:  1,
-			ProgramID: 1,
+			ProgramID: 2,
 			Address:   "HCM",
 			Email:     "npkhang287@student.university.edu.vn",
 			Phone:     "0789123456",
@@ -85,8 +85,8 @@ func autoMigrateStudent(db *gorm.DB) {
 			FullName:  "Huynh Yen Ngoc",
 			BirthDate: time.Date(2004, 10, 19, 0, 0, 0, 0, time.UTC),
 			GenderID:  2, // Female
-			FacultyID: 1,
-			CourseID:  1,
+			FacultyID: 2,
+			CourseID:  3,
 			ProgramID: 1,
 			Address:   "HCM",
 			Email:     "huynhyenngoc@student.university.edu.vn", // Sửa email hợp lệ
@@ -98,13 +98,13 @@ func autoMigrateStudent(db *gorm.DB) {
 			FullName:  "Nguyen Minh Toan",
 			BirthDate: time.Date(2004, 1, 8, 0, 0, 0, 0, time.UTC),
 			GenderID:  1, // Male
-			FacultyID: 1,
-			CourseID:  1,
-			ProgramID: 1,
+			FacultyID: 3,
+			CourseID:  2,
+			ProgramID: 3,
 			Address:   "HCM",
 			Email:     "minhtoan@student.university.edu.vn", // Sửa lại email đúng format
 			Phone:     "0356123456",                         // Số hợp lệ VN
-			StatusID:  1,
+			StatusID:  3,
 		},
 	})
 }

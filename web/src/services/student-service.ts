@@ -8,7 +8,6 @@ import {
   Program,
   Status,
 } from "@/types/student";
-import { fetchBaseQuery } from "@reduxjs/toolkit/query";
 
 const studentApi = appApi.injectEndpoints({
   overrideExisting: true,
@@ -65,81 +64,6 @@ const studentApi = appApi.injectEndpoints({
       }),
       providesTags: ["Student"],
     }),
-
-    getFaculties: builder.query<Faculty[], void>({
-      query: () => ({
-        url: "/api/v1/students/faculties",
-        method: "GET",
-      }),
-      providesTags: ["Faculty"],
-    }),
-
-    getPrograms: builder.query<Program[], void>({
-      query: () => ({
-        url: "/api/v1/students/programs",
-        method: "GET",
-      }),
-      providesTags: ["Program"],
-    }),
-
-    getStatuses: builder.query<Status[], void>({
-      query: () => ({
-        url: "/api/v1/students/statuses",
-        method: "GET",
-      }),
-      providesTags: ["Status"],
-    }),
-
-    createFaculty: builder.mutation<Faculty, Faculty>({
-      query: (faculty) => ({
-        url: "/api/v1/students/faculties",
-        method: "POST",
-        body: faculty,
-      }),
-      invalidatesTags: ["Faculty"],
-    }),
-
-    createProgram: builder.mutation<Program, Program>({
-      query: (program) => ({
-        url: "/api/v1/students/programs",
-        method: "POST",
-        body: program,
-      }),
-      invalidatesTags: ["Program"],
-    }),
-
-    createStatus: builder.mutation<Status, Status>({
-      query: (status) => ({
-        url: "/api/v1/students/statuses",
-        method: "POST",
-        body: status,
-      }),
-      invalidatesTags: ["Status"],
-    }),
-
-    deleteFaculty: builder.mutation<void, string>({
-      query: (faculty_id) => ({
-        url: `/api/v1/students/faculties/${faculty_id}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: ["Faculty"],
-    }),
-
-    deleteProgram: builder.mutation<void, string>({
-      query: (program_id) => ({
-        url: `/api/v1/students/programs/${program_id}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: ["Program"],
-    }),
-
-    deleteStatus: builder.mutation<void, string>({
-      query: (status_id) => ({
-        url: `/api/v1/students/statuses/${status_id}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: ["Status"],
-    }),
   }),
 });
 
@@ -150,16 +74,4 @@ export const {
   useUpdateStudentMutation,
   useDeleteStudentMutation,
   useGetStudentOptionsQuery,
-
-  useGetFacultiesQuery,
-  useGetProgramsQuery,
-  useGetStatusesQuery,
-
-  useCreateFacultyMutation,
-  useCreateProgramMutation,
-  useCreateStatusMutation,
-
-  useDeleteFacultyMutation,
-  useDeleteProgramMutation,
-  useDeleteStatusMutation,
 } = studentApi;

@@ -64,21 +64,6 @@ func (mr *MockIStudentUsecaseMockRecorder) DeleteStudent(ctx, student_id interfa
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteStudent", reflect.TypeOf((*MockIStudentUsecase)(nil).DeleteStudent), ctx, student_id)
 }
 
-// ExportStudents mocks base method.
-func (m *MockIStudentUsecase) ExportStudents(ctx context.Context, format string) (string, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ExportStudents", ctx, format)
-	ret0, _ := ret[0].(string)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// ExportStudents indicates an expected call of ExportStudents.
-func (mr *MockIStudentUsecaseMockRecorder) ExportStudents(ctx, format interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ExportStudents", reflect.TypeOf((*MockIStudentUsecase)(nil).ExportStudents), ctx, format)
-}
-
 // GetFullInfoStudentByStudentID mocks base method.
 func (m *MockIStudentUsecase) GetFullInfoStudentByStudentID(ctx context.Context, student_id string) (*dtos.StudentDTO, error) {
 	m.ctrl.T.Helper()
@@ -137,20 +122,6 @@ func (m *MockIStudentUsecase) GetStudents(ctx context.Context) ([]*models.Studen
 func (mr *MockIStudentUsecaseMockRecorder) GetStudents(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetStudents", reflect.TypeOf((*MockIStudentUsecase)(nil).GetStudents), ctx)
-}
-
-// ImportStudents mocks base method.
-func (m *MockIStudentUsecase) ImportStudents(ctx context.Context, filePath string) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ImportStudents", ctx, filePath)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// ImportStudents indicates an expected call of ImportStudents.
-func (mr *MockIStudentUsecaseMockRecorder) ImportStudents(ctx, filePath interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ImportStudents", reflect.TypeOf((*MockIStudentUsecase)(nil).ImportStudents), ctx, filePath)
 }
 
 // UpdateStudent mocks base method.

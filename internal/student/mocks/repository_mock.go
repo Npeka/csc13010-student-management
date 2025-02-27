@@ -36,20 +36,6 @@ func (m *MockIStudentRepository) EXPECT() *MockIStudentRepositoryMockRecorder {
 	return m.recorder
 }
 
-// BatchInsertStudents mocks base method.
-func (m *MockIStudentRepository) BatchInsertStudents(ctx context.Context, students []models.Student) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "BatchInsertStudents", ctx, students)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// BatchInsertStudents indicates an expected call of BatchInsertStudents.
-func (mr *MockIStudentRepositoryMockRecorder) BatchInsertStudents(ctx, students interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BatchInsertStudents", reflect.TypeOf((*MockIStudentRepository)(nil).BatchInsertStudents), ctx, students)
-}
-
 // CreateStudent mocks base method.
 func (m *MockIStudentRepository) CreateStudent(ctx context.Context, student *models.Student) error {
 	m.ctrl.T.Helper()
@@ -64,6 +50,20 @@ func (mr *MockIStudentRepositoryMockRecorder) CreateStudent(ctx, student interfa
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateStudent", reflect.TypeOf((*MockIStudentRepository)(nil).CreateStudent), ctx, student)
 }
 
+// CreateStudents mocks base method.
+func (m *MockIStudentRepository) CreateStudents(ctx context.Context, students []models.Student) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateStudents", ctx, students)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateStudents indicates an expected call of CreateStudents.
+func (mr *MockIStudentRepositoryMockRecorder) CreateStudents(ctx, students interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateStudents", reflect.TypeOf((*MockIStudentRepository)(nil).CreateStudents), ctx, students)
+}
+
 // DeleteStudent mocks base method.
 func (m *MockIStudentRepository) DeleteStudent(ctx context.Context, student_id string) error {
 	m.ctrl.T.Helper()
@@ -76,20 +76,6 @@ func (m *MockIStudentRepository) DeleteStudent(ctx context.Context, student_id s
 func (mr *MockIStudentRepositoryMockRecorder) DeleteStudent(ctx, student_id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteStudent", reflect.TypeOf((*MockIStudentRepository)(nil).DeleteStudent), ctx, student_id)
-}
-
-// GetAllStudents mocks base method.
-func (m *MockIStudentRepository) GetAllStudents(ctx context.Context, students *[]models.Student) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetAllStudents", ctx, students)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// GetAllStudents indicates an expected call of GetAllStudents.
-func (mr *MockIStudentRepositoryMockRecorder) GetAllStudents(ctx, students interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllStudents", reflect.TypeOf((*MockIStudentRepository)(nil).GetAllStudents), ctx, students)
 }
 
 // GetFullInfoStudentByStudentID mocks base method.

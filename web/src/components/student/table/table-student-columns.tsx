@@ -1,6 +1,4 @@
 "use client";
-
-import { useEffect } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
 import {
   Select,
@@ -20,7 +18,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useDeleteStudentMutation } from "@/services/student-service";

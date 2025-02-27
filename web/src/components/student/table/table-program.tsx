@@ -8,7 +8,7 @@ import {
 import {
   useGetProgramsQuery,
   useDeleteProgramMutation,
-} from "@/services/student-service";
+} from "@/services/program-service";
 import { Program } from "@/types/student";
 import {
   DropdownMenu,
@@ -30,12 +30,16 @@ export const TableProgram = () => {
 
 const TableDataProgram = ({ data }: { data: Program[] }) => {
   const columns: ColumnDef<Program>[] = [
-    { header: "ID", accessorKey: "id" },
+    // { header: "ID", accessorKey: "id" },
     { header: "Name", accessorKey: "name" },
     {
-      header: "Action",
+      header: () => <div className="text-right mr-2">Action</div>,
       accessorKey: "action",
-      cell: ({ row }) => <ActionCell program={row.original} />,
+      cell: ({ row }) => (
+        <div className="float-right mr-2">
+          <ActionCell program={row.original} />,
+        </div>
+      ),
     },
   ];
 

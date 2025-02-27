@@ -8,7 +8,7 @@ import {
 import {
   useGetFacultiesQuery,
   useDeleteFacultyMutation,
-} from "@/services/student-service";
+} from "@/services/faculty-service";
 import { Faculty } from "@/types/student";
 import {
   DropdownMenu,
@@ -30,12 +30,16 @@ export const TableFaculty = () => {
 
 const TableDataFaculty = ({ data }: { data: Faculty[] }) => {
   const columns: ColumnDef<Faculty>[] = [
-    { header: "ID", accessorKey: "id" },
+    // { header: "ID", accessorKey: "id" },
     { header: "Name", accessorKey: "name" },
     {
-      header: "Action",
+      header: () => <div className="text-right mr-2">Action</div>,
       accessorKey: "action",
-      cell: ({ row }) => <ActionCell faculty={row.original} />,
+      cell: ({ row }) => (
+        <div className="float-right mr-2">
+          <ActionCell faculty={row.original} />,
+        </div>
+      ),
     },
   ];
 

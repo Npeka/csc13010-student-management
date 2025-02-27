@@ -8,7 +8,7 @@ import {
 import {
   useGetStatusesQuery,
   useDeleteStatusMutation,
-} from "@/services/student-service";
+} from "@/services/status-service";
 import { Status } from "@/types/student";
 import {
   DropdownMenu,
@@ -30,12 +30,16 @@ export const TableStatus = () => {
 
 const TableDataStatus = ({ data }: { data: Status[] }) => {
   const columns: ColumnDef<Status>[] = [
-    { header: "ID", accessorKey: "id" },
+    // { header: "ID", accessorKey: "id" },
     { header: "Name", accessorKey: "name" },
     {
-      header: "Action",
+      header: () => <div className="text-right mr-2">Action</div>,
       accessorKey: "action",
-      cell: ({ row }) => <ActionCell status={row.original} />,
+      cell: ({ row }) => (
+        <div className="float-right mr-2">
+          <ActionCell status={row.original} />,
+        </div>
+      ),
     },
   ];
 

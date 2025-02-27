@@ -29,7 +29,7 @@ func NewFacultyHandlers(
 func (fh *facultyHandlers) GetFaculties() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		fh.lg.Info("GetFaculties called")
-		faculties, err := fh.fu.GetFaculties(c)
+		faculties, err := fh.fu.GetFaculties(c.Request.Context())
 		if err != nil {
 			fh.lg.Error("Error getting faculties", zap.Error(err))
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -51,7 +51,7 @@ func (fh *facultyHandlers) CreateFaculty() gin.HandlerFunc {
 			return
 		}
 
-		err := fh.fu.CreateFaculty(c, &faculty)
+		err := fh.fu.CreateFaculty(c.Request.Context(), &faculty)
 		if err != nil {
 			fh.lg.Error("Error creating faculty", zap.Error(err))
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -73,7 +73,7 @@ func (s *facultyHandlers) DeleteFaculty() gin.HandlerFunc {
 			return
 		}
 
-		err = s.fu.DeleteFaculty(c, faculty_id)
+		err = s.fu.DeleteFaculty(c.Request.Context(), faculty_id)
 		if err != nil {
 			s.lg.Error("Error deleting faculty", zap.Error(err))
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

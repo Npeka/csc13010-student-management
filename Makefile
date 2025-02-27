@@ -24,22 +24,28 @@ d-down:
 d-down-v:
 	docker-compose down -v
 
-mockgen-student:
+mockgen:
 # student
 	mockgen -source='internal/student/repository.go' -destination='internal/student/mocks/repository_mock.go' -package=mocks
 	mockgen -source='internal/student/usecase.go' -destination='internal/student/mocks/usecase_mock.go' -package=mocks
-# 
+# faculty
+	mockgen -source='internal/faculty/repository.go' -destination='internal/faculty/mocks/repository_mock.go' -package=mocks
+	mockgen -source='internal/faculty/usecase.go' -destination='internal/faculty/mocks/usecase_mock.go' -package=mocks
+# program
+	mockgen -source='internal/program/repository.go' -destination='internal/program/mocks/repository_mock.go' -package=mocks
+	mockgen -source='internal/program/usecase.go' -destination='internal/program/mocks/usecase_mock.go' -package=mocks
+# status
+	mockgen -source='internal/status/repository.go' -destination='internal/status/mocks/repository_mock.go' -package=mocks
+	mockgen -source='internal/status/usecase.go' -destination='internal/status/mocks/usecase_mock.go' -package=mocks
+# notification
+	mockgen -source='internal/notification/repository.go' -destination='internal/notification/mocks/repository_mock.go' -package=mocks
+	mockgen -source='internal/notification/usecase.go' -destination='internal/notification/mocks/usecase_mock.go' -package=mocks
+
 
 test-student:
 	go test ./internal/student/repository
 	go test ./internal/student/usecase
 	go test ./internal/student/delivery/http
-
-PROJECT_NAME=github.com/csc13010-student-management
-
-PROJECT_NAME=github.com/csc13010-student-management
-MODULE_NAME=$(name)
-MODULE_DIR=internal\$(PROJECT_NAME)\$(MODULE_NAME)
 
 generate:
 	@if not exist internal\$(name) mkdir internal\$(name)

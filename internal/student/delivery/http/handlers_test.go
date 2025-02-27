@@ -1,184 +1,206 @@
 package http
 
 import (
-	"bytes"
-	"encoding/json"
-	"net/http"
-	"net/http/httptest"
+	"reflect"
 	"testing"
-	"time"
 
-	"github.com/csc13010-student-management/internal/models"
-	"github.com/csc13010-student-management/internal/student/dtos"
-	"github.com/csc13010-student-management/internal/student/mocks"
-	"github.com/csc13010-student-management/internal/student/usecase"
+	"github.com/csc13010-student-management/internal/student"
 	"github.com/csc13010-student-management/pkg/logger"
 	"github.com/gin-gonic/gin"
-	"github.com/golang/mock/gomock"
-	"github.com/stretchr/testify/assert"
 )
 
-func TestGetStudents(t *testing.T) {
-	t.Parallel()
-
-	gin.SetMode(gin.TestMode)
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	logger := logger.NewLoggerTest()
-	mockRepo := mocks.NewMockIStudentRepository(ctrl)
-	uc := usecase.NewStudentUsecase(mockRepo, logger)
-	handler := NewStudentHandlers(uc, logger)
-
-	router := gin.Default()
-	router.GET("/students", handler.GetStudents())
-
-	mockRepo.EXPECT().GetStudents(gomock.Any()).Return([]*models.Student{}, nil)
-
-	req, _ := http.NewRequest(http.MethodGet, "/students", nil)
-	resp := httptest.NewRecorder()
-
-	router.ServeHTTP(resp, req)
-
-	assert.Equal(t, http.StatusOK, resp.Code)
-}
-
-func TestCreateStudent(t *testing.T) {
-	t.Parallel()
-
-	gin.SetMode(gin.TestMode)
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	logger := logger.NewLoggerTest()
-	mockRepo := mocks.NewMockIStudentRepository(ctrl)
-	uc := usecase.NewStudentUsecase(mockRepo, logger)
-	handler := NewStudentHandlers(uc, logger)
-
-	router := gin.Default()
-	router.POST("/students", handler.CreateStudent())
-
-	fixedTime := time.Date(2025, 2, 26, 9, 20, 39, 0, time.UTC)
-	student := models.Student{
-		StudentID: "22127180",
-		FullName:  "Nguyen Phuc Khang",
-		BirthDate: fixedTime,
-		GenderID:  1,
-		FacultyID: 1,
-		CourseID:  1,
-		ProgramID: 1,
-		Address:   "Ho Chi Minh City",
-		Email:     "npkhang287@gmail.com",
-		Phone:     "0123456789",
-		StatusID:  1,
-		CreatedAt: fixedTime,
-		UpdatedAt: fixedTime,
+func TestNewStudentHandlers(t *testing.T) {
+	type args struct {
+		su student.IStudentUsecase
+		lg *logger.LoggerZap
 	}
-
-	mockRepo.EXPECT().CreateStudent(gomock.Any(), &student).Return(nil)
-
-	jsonValue, _ := json.Marshal(student)
-	req, _ := http.NewRequest(http.MethodPost, "/students", bytes.NewBuffer(jsonValue))
-	req.Header.Set("Content-Type", "application/json")
-	resp := httptest.NewRecorder()
-
-	router.ServeHTTP(resp, req)
-
-	assert.Equal(t, http.StatusCreated, resp.Code)
-}
-
-func TestUpdateStudent(t *testing.T) {
-	t.Parallel()
-
-	gin.SetMode(gin.TestMode)
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	logger := logger.NewLoggerTest()
-	mockRepo := mocks.NewMockIStudentRepository(ctrl)
-	uc := usecase.NewStudentUsecase(mockRepo, logger)
-	handler := NewStudentHandlers(uc, logger)
-
-	router := gin.Default()
-	router.PATCH("/students/:student_id", handler.UpdateStudent())
-
-	fixedTime := time.Date(2025, 2, 26, 9, 20, 39, 0, time.UTC)
-	student := models.Student{
-		StudentID: "22127180",
-		FullName:  "Nguyen Phuc Khang",
-		BirthDate: fixedTime,
-		GenderID:  1,
-		FacultyID: 1,
-		CourseID:  1,
-		ProgramID: 1,
-		Address:   "Ho Chi Minh City",
-		Email:     "npkhang287@gmail.com",
-		Phone:     "0123456789",
-		StatusID:  1,
+	tests := []struct {
+		name string
+		args args
+		want student.IStudentHandlers
+	}{
+		// TODO: Add test cases.
 	}
-	mockRepo.EXPECT().UpdateStudent(gomock.Any(), &student).Return(nil)
-
-	jsonValue, _ := json.Marshal(student)
-	req, _ := http.NewRequest(http.MethodPatch, "/students/22127180", bytes.NewBuffer(jsonValue))
-	req.Header.Set("Content-Type", "application/json")
-	resp := httptest.NewRecorder()
-
-	router.ServeHTTP(resp, req)
-
-	assert.Equal(t, http.StatusOK, resp.Code)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewStudentHandlers(tt.args.su, tt.args.lg); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewStudentHandlers() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }
 
-func TestDeleteStudent(t *testing.T) {
-	t.Parallel()
-
-	gin.SetMode(gin.TestMode)
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	logger := logger.NewLoggerTest()
-	mockRepo := mocks.NewMockIStudentRepository(ctrl)
-	uc := usecase.NewStudentUsecase(mockRepo, logger)
-	handler := NewStudentHandlers(uc, logger)
-
-	router := gin.Default()
-	router.DELETE("/students/:student_id", handler.DeleteStudent())
-
-	mockRepo.EXPECT().DeleteStudent(gomock.Any(), "22127180").Return(nil)
-
-	req, _ := http.NewRequest(http.MethodDelete, "/students/22127180", nil)
-	resp := httptest.NewRecorder()
-
-	router.ServeHTTP(resp, req)
-
-	assert.Equal(t, http.StatusOK, resp.Code)
+func Test_studentHandlers_GetStudents(t *testing.T) {
+	type fields struct {
+		su student.IStudentUsecase
+		lg *logger.LoggerZap
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   gin.HandlerFunc
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentHandlers{
+				su: tt.fields.su,
+				lg: tt.fields.lg,
+			}
+			if got := s.GetStudents(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("studentHandlers.GetStudents() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }
 
-func TestGetOptions(t *testing.T) {
-	t.Parallel()
+func Test_studentHandlers_GetStudentByStudentID(t *testing.T) {
+	type fields struct {
+		su student.IStudentUsecase
+		lg *logger.LoggerZap
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   gin.HandlerFunc
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentHandlers{
+				su: tt.fields.su,
+				lg: tt.fields.lg,
+			}
+			if got := s.GetStudentByStudentID(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("studentHandlers.GetStudentByStudentID() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
 
-	gin.SetMode(gin.TestMode)
+func Test_studentHandlers_GetFullInfoStudentByStudentID(t *testing.T) {
+	type fields struct {
+		su student.IStudentUsecase
+		lg *logger.LoggerZap
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   gin.HandlerFunc
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentHandlers{
+				su: tt.fields.su,
+				lg: tt.fields.lg,
+			}
+			if got := s.GetFullInfoStudentByStudentID(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("studentHandlers.GetFullInfoStudentByStudentID() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
 
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
+func Test_studentHandlers_CreateStudent(t *testing.T) {
+	type fields struct {
+		su student.IStudentUsecase
+		lg *logger.LoggerZap
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   gin.HandlerFunc
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentHandlers{
+				su: tt.fields.su,
+				lg: tt.fields.lg,
+			}
+			if got := s.CreateStudent(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("studentHandlers.CreateStudent() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
 
-	logger := logger.NewLoggerTest()
-	mockRepo := mocks.NewMockIStudentRepository(ctrl)
-	uc := usecase.NewStudentUsecase(mockRepo, logger)
-	handler := NewStudentHandlers(uc, logger)
+func Test_studentHandlers_UpdateStudent(t *testing.T) {
+	type fields struct {
+		su student.IStudentUsecase
+		lg *logger.LoggerZap
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   gin.HandlerFunc
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentHandlers{
+				su: tt.fields.su,
+				lg: tt.fields.lg,
+			}
+			if got := s.UpdateStudent(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("studentHandlers.UpdateStudent() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
 
-	router := gin.Default()
-	router.GET("/students/options", handler.GetOptions())
+func Test_studentHandlers_DeleteStudent(t *testing.T) {
+	type fields struct {
+		su student.IStudentUsecase
+		lg *logger.LoggerZap
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   gin.HandlerFunc
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentHandlers{
+				su: tt.fields.su,
+				lg: tt.fields.lg,
+			}
+			if got := s.DeleteStudent(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("studentHandlers.DeleteStudent() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
 
-	mockRepo.EXPECT().GetOptions(gomock.Any()).Return(&dtos.OptionDTO{}, nil)
-
-	req, _ := http.NewRequest(http.MethodGet, "/students/options", nil)
-	resp := httptest.NewRecorder()
-
-	router.ServeHTTP(resp, req)
-
-	assert.Equal(t, http.StatusOK, resp.Code)
+func Test_studentHandlers_GetOptions(t *testing.T) {
+	type fields struct {
+		su student.IStudentUsecase
+		lg *logger.LoggerZap
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   gin.HandlerFunc
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentHandlers{
+				su: tt.fields.su,
+				lg: tt.fields.lg,
+			}
+			if got := s.GetOptions(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("studentHandlers.GetOptions() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }

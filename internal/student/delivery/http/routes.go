@@ -12,7 +12,5 @@ func MapStudentHandlers(stGroup *gin.RouterGroup, h student.IStudentHandlers) {
 	stGroup.PATCH("/:student_id", h.UpdateStudent())
 	stGroup.DELETE("/:student_id", h.DeleteStudent())
 	stGroup.GET("/options", h.GetOptions())
-	stGroup.POST("/import", h.ImportStudents())
-	stGroup.GET("/export", h.ExportStudents())
-	stGroup.GET("/certificate/:student_id", h.ExportStudentCertificate())
+	
 }

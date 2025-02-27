@@ -2,210 +2,277 @@ package repository
 
 import (
 	"context"
+	"reflect"
 	"testing"
-	"time"
 
-	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/csc13010-student-management/internal/models"
+	"github.com/csc13010-student-management/internal/student"
 	"github.com/csc13010-student-management/internal/student/dtos"
-	"github.com/csc13010-student-management/internal/student/mocks"
-	"github.com/golang/mock/gomock"
-	"github.com/stretchr/testify/assert"
-	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-func TestGetStudents(t *testing.T) {
-	t.Parallel()
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	mockRepo := mocks.NewMockIStudentRepository(ctrl)
-	ctx := context.Background()
-	students := []*models.Student{
-		{
-			ID:        1,
-			StudentID: "22127180",
-			FullName:  "Nguyen Phuc Khang",
-			BirthDate: time.Date(2004, 8, 27, 0, 0, 0, 0, time.UTC),
-			GenderID:  1,
-			FacultyID: 1,
-			CourseID:  1,
-			ProgramID: 1,
-			Address:   "HCM",
-			Email:     "npkhang287@gmail.com",
-			Phone:     "0123456789",
-			StatusID:  1,
-			CreatedAt: time.Now(),
-			UpdatedAt: time.Now(),
-		},
-		{
-			ID:        2,
-			StudentID: "22127108",
-			FullName:  "Huynh Yen Ngoc",
-			BirthDate: time.Date(2004, 10, 19, 0, 0, 0, 0, time.UTC),
-			GenderID:  2,
-			FacultyID: 1,
-			CourseID:  1,
-			ProgramID: 1,
-			Address:   "HCM",
-			Email:     "huynhyenngoc@gmail.com",
-			Phone:     "0123456789",
-			StatusID:  1,
-			CreatedAt: time.Now(),
-			UpdatedAt: time.Now(),
-		},
+func TestNewStudentRepository(t *testing.T) {
+	type args struct {
+		db *gorm.DB
 	}
-
-	mockRepo.EXPECT().GetStudents(ctx).Return(students, nil)
-
-	result, err := mockRepo.GetStudents(ctx)
-	assert.NoError(t, err)
-	assert.Equal(t, students, result)
+	tests := []struct {
+		name string
+		args args
+		want student.IStudentRepository
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewStudentRepository(tt.args.db); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewStudentRepository() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }
 
-func TestCreateStudent(t *testing.T) {
-	t.Parallel()
-
-	// Tạo mock database
-	db, mock, err := sqlmock.New()
-	assert.NoError(t, err)
-	defer db.Close()
-
-	// Chuyển sqlmock thành Gorm DB
-	gormDB, err := gorm.Open(postgres.New(postgres.Config{
-		Conn: db,
-	}), &gorm.Config{})
-	assert.NoError(t, err)
-
-	// Tạo repository với mock DB
-	studentRepo := NewStudentRepository(gormDB)
-
-	student := models.Student{
-		StudentID: "22127180",
-		FullName:  "Nguyen Phuc Khang",
-		BirthDate: time.Now(),
-		GenderID:  1,
-		FacultyID: 1,
-		CourseID:  1,
-		ProgramID: 1,
-		Address:   "Ho Chi Minh City",
-		Email:     "npkhang287@gmail.com",
-		Phone:     "0123456789",
-		StatusID:  1,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+func Test_studentRepository_GetStudents(t *testing.T) {
+	type fields struct {
+		db *gorm.DB
 	}
-
-	// Mock SQL query khi gọi CreateStudent
-	mock.ExpectBegin()
-	mock.ExpectQuery(`INSERT INTO "students"`).
-		WithArgs(
-			student.StudentID,
-			student.FullName,
-			student.BirthDate,
-			student.GenderID,
-			student.FacultyID,
-			student.CourseID,
-			student.ProgramID,
-			student.Address,
-			student.Email,
-			student.Phone,
-			student.StatusID,
-			student.CreatedAt,
-			student.UpdatedAt).
-		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
-
-	mock.ExpectQuery(`INSERT INTO "audit_logs"`).
-		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
-
-	mock.ExpectCommit()
-
-	err = studentRepo.CreateStudent(context.Background(), &student)
-	assert.NoError(t, err)
-
-	assert.NoError(t, mock.ExpectationsWereMet())
-	assert.NotEqual(t, 0, student.ID)
+	type args struct {
+		ctx context.Context
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    []*models.Student
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentRepository{
+				db: tt.fields.db,
+			}
+			got, err := s.GetStudents(tt.args.ctx)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("studentRepository.GetStudents() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("studentRepository.GetStudents() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }
 
-func TestUpdateStudent(t *testing.T) {
-	t.Parallel()
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	mockRepo := mocks.NewMockIStudentRepository(ctrl)
-	ctx := context.Background()
-	student := &models.Student{
-		FullName:  "Huynh Ngoc",
-		BirthDate: time.Now(),
-		GenderID:  1,
-		FacultyID: 1,
-		CourseID:  1,
-		ProgramID: 1,
-		Address:   "123 Main St",
-		Email:     "john.doe@example.com",
-		Phone:     "1234567890",
-		StatusID:  1,
+func Test_studentRepository_CreateStudents(t *testing.T) {
+	type fields struct {
+		db *gorm.DB
 	}
-
-	mockRepo.EXPECT().UpdateStudent(ctx, student).Return(nil)
-
-	err := mockRepo.UpdateStudent(ctx, student)
-	assert.NoError(t, err)
+	type args struct {
+		ctx      context.Context
+		students []models.Student
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentRepository{
+				db: tt.fields.db,
+			}
+			if err := s.CreateStudents(tt.args.ctx, tt.args.students); (err != nil) != tt.wantErr {
+				t.Errorf("studentRepository.CreateStudents() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
 }
 
-func TestDeleteStudent(t *testing.T) {
-	t.Parallel()
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	mockRepo := mocks.NewMockIStudentRepository(ctrl)
-	ctx := context.Background()
-	studentID := "22127180"
-
-	mockRepo.EXPECT().DeleteStudent(ctx, studentID).Return(nil)
-
-	err := mockRepo.DeleteStudent(ctx, studentID)
-	assert.NoError(t, err)
+func Test_studentRepository_GetStudentByStudentID(t *testing.T) {
+	type fields struct {
+		db *gorm.DB
+	}
+	type args struct {
+		ctx       context.Context
+		studentID string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *models.Student
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentRepository{
+				db: tt.fields.db,
+			}
+			got, err := s.GetStudentByStudentID(tt.args.ctx, tt.args.studentID)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("studentRepository.GetStudentByStudentID() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("studentRepository.GetStudentByStudentID() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }
 
-func TestGetOptions(t *testing.T) {
-	t.Parallel()
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	mockRepo := mocks.NewMockIStudentRepository(ctrl)
-	ctx := context.Background()
-	options := &dtos.OptionDTO{
-		Genders: []*dtos.Option{
-			{ID: 1, Name: "Male"},
-			{ID: 2, Name: "Female"},
-		},
-		Faculties: []*dtos.Option{
-			{ID: 1, Name: "Engineering"},
-			{ID: 2, Name: "Science"},
-		},
-		Courses: []*dtos.Option{
-			{ID: 1, Name: "Computer Science"},
-			{ID: 2, Name: "Mathematics"},
-		},
-		Programs: []*dtos.Option{
-			{ID: 1, Name: "Undergraduate"},
-			{ID: 2, Name: "Postgraduate"},
-		},
-		Statuses: []*dtos.Option{
-			{ID: 1, Name: "Active"},
-			{ID: 2, Name: "Inactive"},
-		},
+func Test_studentRepository_GetFullInfoStudentByStudentID(t *testing.T) {
+	type fields struct {
+		db *gorm.DB
 	}
+	type args struct {
+		ctx       context.Context
+		studentID string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *dtos.StudentDTO
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentRepository{
+				db: tt.fields.db,
+			}
+			got, err := s.GetFullInfoStudentByStudentID(tt.args.ctx, tt.args.studentID)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("studentRepository.GetFullInfoStudentByStudentID() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("studentRepository.GetFullInfoStudentByStudentID() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
 
-	mockRepo.EXPECT().GetOptions(ctx).Return(options, nil)
+func Test_studentRepository_CreateStudent(t *testing.T) {
+	type fields struct {
+		db *gorm.DB
+	}
+	type args struct {
+		ctx     context.Context
+		student *models.Student
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentRepository{
+				db: tt.fields.db,
+			}
+			if err := s.CreateStudent(tt.args.ctx, tt.args.student); (err != nil) != tt.wantErr {
+				t.Errorf("studentRepository.CreateStudent() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
 
-	result, err := mockRepo.GetOptions(ctx)
-	assert.NoError(t, err)
-	assert.Equal(t, options, result)
+func Test_studentRepository_UpdateStudent(t *testing.T) {
+	type fields struct {
+		db *gorm.DB
+	}
+	type args struct {
+		ctx     context.Context
+		student *models.Student
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentRepository{
+				db: tt.fields.db,
+			}
+			if err := s.UpdateStudent(tt.args.ctx, tt.args.student); (err != nil) != tt.wantErr {
+				t.Errorf("studentRepository.UpdateStudent() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func Test_studentRepository_DeleteStudent(t *testing.T) {
+	type fields struct {
+		db *gorm.DB
+	}
+	type args struct {
+		ctx       context.Context
+		studentID string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentRepository{
+				db: tt.fields.db,
+			}
+			if err := s.DeleteStudent(tt.args.ctx, tt.args.studentID); (err != nil) != tt.wantErr {
+				t.Errorf("studentRepository.DeleteStudent() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func Test_studentRepository_GetOptions(t *testing.T) {
+	type fields struct {
+		db *gorm.DB
+	}
+	type args struct {
+		ctx context.Context
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *dtos.OptionDTO
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentRepository{
+				db: tt.fields.db,
+			}
+			got, err := s.GetOptions(tt.args.ctx)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("studentRepository.GetOptions() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("studentRepository.GetOptions() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }

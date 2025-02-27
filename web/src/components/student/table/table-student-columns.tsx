@@ -130,6 +130,16 @@ export const StudentColumns = ({ options }: { options?: OptionDTO }) => {
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <ActionEditDropdown student_id={student.student_id} />
               <ActionDeleteDropdown student_id={student.student_id} />
+              <ActionExportCertificateDropdown
+                student_id={student.student_id}
+                format="pdf"
+                text="PDF Cert"
+              />
+              <ActionExportCertificateDropdown
+                student_id={student.student_id}
+                format="docx"
+                text="DOCX Cert"
+              />
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -138,6 +148,46 @@ export const StudentColumns = ({ options }: { options?: OptionDTO }) => {
   ];
 
   return columns;
+};
+
+const ActionExportCertificateDropdown = ({
+  student_id,
+  format,
+  text,
+}: {
+  student_id: string;
+  format: "pdf" | "docx";
+  text?: string;
+}) => {
+  const handleExport = async (format: "pdf" | "docx") => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/v1/students/certificate/${student_id}?format=${format}`
+      );
+
+      if (!response.ok) throw new Error("Failed to fetch file");
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `certificate_${student_id}.${format}`;
+      document.body.appendChild(a);
+      a.click();
+
+      URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error("Download error:", error);
+    }
+  };
+
+  return (
+    <DropdownMenuItem onClick={() => handleExport(format)}>
+      {text || `Download as ${format.toUpperCase()}`}
+    </DropdownMenuItem>
+  );
 };
 
 import { useRouter } from "next/navigation";

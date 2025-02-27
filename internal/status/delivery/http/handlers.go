@@ -6,18 +6,19 @@ import (
 
 	"github.com/csc13010-student-management/internal/models"
 	"github.com/csc13010-student-management/internal/status"
+	"github.com/csc13010-student-management/pkg/logger"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
 type statusHandlers struct {
 	su status.IStatusUsecase
-	lg *zap.Logger
+	lg *logger.LoggerZap
 }
 
 func NewStatusHandlers(
 	su status.IStatusUsecase,
-	lg *zap.Logger,
+	lg *logger.LoggerZap,
 ) status.IStatusHandlers {
 	return &statusHandlers{
 		su: su,

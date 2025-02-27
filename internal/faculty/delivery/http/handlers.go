@@ -66,14 +66,14 @@ func (fh *facultyHandlers) CreateFaculty() gin.HandlerFunc {
 func (s *facultyHandlers) DeleteFaculty() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		s.lg.Info("DeleteFaculty called")
-		faculty_id, err := strconv.Atoi(c.Param("faculty_id"))
+		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
 			s.lg.Error("Invalid faculty ID", zap.Error(err))
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid faculty ID"})
 			return
 		}
 
-		err = s.fu.DeleteFaculty(c.Request.Context(), faculty_id)
+		err = s.fu.DeleteFaculty(c.Request.Context(), id)
 		if err != nil {
 			s.lg.Error("Error deleting faculty", zap.Error(err))
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

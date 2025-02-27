@@ -206,7 +206,7 @@ func Test_facultyHandlers_DeleteFaculty(t *testing.T) {
 	}
 
 	r := gin.Default()
-	r.DELETE("/faculties/:faculty_id", fh.DeleteFaculty())
+	r.DELETE("/faculties/:id", fh.DeleteFaculty())
 
 	tests := []struct {
 		name           string

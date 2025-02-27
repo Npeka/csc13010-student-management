@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func MapfacultyHandlers(ftGroup *gin.RouterGroup, h faculty.IFacultyHandlers) {
+func MapFacultyHandlers(ftGroup *gin.RouterGroup, h faculty.IFacultyHandlers) {
 	ftGroup.GET("/", h.GetFaculties())
 	ftGroup.POST("/", h.CreateFaculty())
 	ftGroup.DELETE("/:id", h.DeleteFaculty())

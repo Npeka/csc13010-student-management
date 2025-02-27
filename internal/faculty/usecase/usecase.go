@@ -14,7 +14,7 @@ type facultyUsecase struct {
 	lg *logger.LoggerZap
 }
 
-func NewfacultyUsecase(
+func NewFacultyUsecase(
 	fr faculty.IFacultyRepository,
 	lg *logger.LoggerZap,
 ) faculty.IFacultyUsecase {

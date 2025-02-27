@@ -16,7 +16,7 @@ type facultyHandlers struct {
 	lg *logger.LoggerZap
 }
 
-func NewfacultyHandlers(
+func NewFacultyHandlers(
 	fu faculty.IFacultyUsecase,
 	lg *logger.LoggerZap,
 ) faculty.IFacultyHandlers {

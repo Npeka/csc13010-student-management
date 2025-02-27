@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useCreateStatusMutation } from "@/services/student-service";
+import { useCreateStatusMutation } from "@/services/status-service";
 import { Status } from "@/types/student";
 
 const formSchema = z.object({

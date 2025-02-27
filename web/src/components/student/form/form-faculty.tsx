@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useCreateFacultyMutation } from "@/services/student-service";
+import { useCreateFacultyMutation } from "@/services/faculty-service";
 import { Faculty } from "@/types/student";
 
 const formSchema = z.object({

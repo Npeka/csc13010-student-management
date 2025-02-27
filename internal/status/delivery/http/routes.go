@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func MapstatusHandlers(ftGroup *gin.RouterGroup, h status.IStatusHandlers) {
+func MapStatusHandlers(ftGroup *gin.RouterGroup, h status.IStatusHandlers) {
 	ftGroup.GET("/", h.GetStatuses())
 	ftGroup.POST("/", h.CreateStatus())
 	ftGroup.DELETE("/:id", h.DeleteStatus())

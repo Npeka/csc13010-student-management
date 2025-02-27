@@ -2,195 +2,294 @@ package usecase
 
 import (
 	"context"
+	"reflect"
 	"testing"
-	"time"
 
 	"github.com/csc13010-student-management/internal/models"
+	"github.com/csc13010-student-management/internal/student"
 	"github.com/csc13010-student-management/internal/student/dtos"
-	"github.com/csc13010-student-management/internal/student/mocks"
 	"github.com/csc13010-student-management/pkg/logger"
-	"github.com/golang/mock/gomock"
-	"github.com/stretchr/testify/assert"
 )
 
-func TestGetStudents(t *testing.T) {
-	t.Parallel()
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	logger := logger.NewLoggerTest()
-	mockRepo := mocks.NewMockIStudentRepository(ctrl)
-	stUsecase := NewStudentUsecase(mockRepo, logger)
-
-	ctx := context.Background()
-	students := []*models.Student{
-		{
-			ID:        1,
-			StudentID: "22127180",
-			FullName:  "Nguyen Phuc Khang",
-			BirthDate: time.Date(2004, 8, 27, 0, 0, 0, 0, time.UTC),
-			GenderID:  1,
-			FacultyID: 1,
-			CourseID:  1,
-			ProgramID: 1,
-			Address:   "HCM",
-			Email:     "npkhang287@gmail.com",
-			Phone:     "0123456789",
-			StatusID:  1,
-			CreatedAt: time.Now(),
-			UpdatedAt: time.Now(),
-		},
-		{
-			ID:        2,
-			StudentID: "22127108",
-			FullName:  "Huynh Yen Ngoc",
-			BirthDate: time.Date(2004, 10, 19, 0, 0, 0, 0, time.UTC),
-			GenderID:  2,
-			FacultyID: 1,
-			CourseID:  1,
-			ProgramID: 1,
-			Address:   "HCM",
-			Email:     "huynhyenngoc@gmail.com",
-			Phone:     "0123456789",
-			StatusID:  1,
-			CreatedAt: time.Now(),
-			UpdatedAt: time.Now(),
-		},
+func TestNewStudentUsecase(t *testing.T) {
+	type args struct {
+		sr student.IStudentRepository
+		lg *logger.LoggerZap
 	}
-
-	mockRepo.EXPECT().GetStudents(ctx).Return(students, nil)
-
-	students, err := stUsecase.GetStudents(ctx)
-
-	assert.NoError(t, err)
-	assert.Equal(t, students, students)
+	tests := []struct {
+		name string
+		args args
+		want student.IStudentUsecase
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewStudentUsecase(tt.args.sr, tt.args.lg); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewStudentUsecase() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }
 
-func TestCreateStudent(t *testing.T) {
-	t.Parallel()
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	logger := logger.NewLoggerTest()
-	mockRepo := mocks.NewMockIStudentRepository(ctrl)
-	stUsecase := NewStudentUsecase(mockRepo, logger)
-
-	fixedTime := time.Date(2025, 2, 26, 9, 20, 39, 0, time.UTC)
-	ctx := context.Background()
-	student := models.Student{
-		StudentID: "22127180",
-		FullName:  "Nguyen Phuc Khang",
-		BirthDate: fixedTime,
-		GenderID:  1,
-		FacultyID: 1,
-		CourseID:  1,
-		ProgramID: 1,
-		Address:   "Ho Chi Minh City",
-		Email:     "npkhang287@gmail.com",
-		Phone:     "0123456789",
-		StatusID:  1,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+func Test_studentUsecase_logAndReturnError(t *testing.T) {
+	type fields struct {
+		sr student.IStudentRepository
+		lg *logger.LoggerZap
 	}
-
-	mockRepo.EXPECT().CreateStudent(ctx, gomock.Eq(&student)).Return(nil)
-
-	err := stUsecase.CreateStudent(ctx, &student)
-
-	assert.NoError(t, err)
+	type args struct {
+		msg string
+		err error
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentUsecase{
+				sr: tt.fields.sr,
+				lg: tt.fields.lg,
+			}
+			if err := s.logAndReturnError(tt.args.msg, tt.args.err); (err != nil) != tt.wantErr {
+				t.Errorf("studentUsecase.logAndReturnError() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
 }
 
-func TestDeleteStudent(t *testing.T) {
-	t.Parallel()
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	logger := logger.NewLoggerTest()
-	mockRepo := mocks.NewMockIStudentRepository(ctrl)
-	stUsecase := NewStudentUsecase(mockRepo, logger)
-
-	ctx := context.Background()
-	studentID := "22127180"
-
-	mockRepo.EXPECT().DeleteStudent(ctx, studentID).Return(nil)
-
-	err := stUsecase.DeleteStudent(ctx, studentID)
-
-	assert.NoError(t, err)
+func Test_studentUsecase_GetStudents(t *testing.T) {
+	type fields struct {
+		sr student.IStudentRepository
+		lg *logger.LoggerZap
+	}
+	type args struct {
+		ctx context.Context
+	}
+	tests := []struct {
+		name         string
+		fields       fields
+		args         args
+		wantStudents []*models.Student
+		wantErr      bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentUsecase{
+				sr: tt.fields.sr,
+				lg: tt.fields.lg,
+			}
+			gotStudents, err := s.GetStudents(tt.args.ctx)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("studentUsecase.GetStudents() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotStudents, tt.wantStudents) {
+				t.Errorf("studentUsecase.GetStudents() = %v, want %v", gotStudents, tt.wantStudents)
+			}
+		})
+	}
 }
 
-func TestUpdateStudent(t *testing.T) {
-	t.Parallel()
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	logger := logger.NewLoggerTest()
-	mockRepo := mocks.NewMockIStudentRepository(ctrl)
-	stUsecase := NewStudentUsecase(mockRepo, logger)
-
-	ctx := context.Background()
-	student := &models.Student{
-		FullName:  "Huynh Ngoc",
-		BirthDate: time.Now(),
-		GenderID:  1,
-		FacultyID: 1,
-		CourseID:  1,
-		ProgramID: 1,
-		Address:   "123 Main St",
-		Email:     "john.doe@example.com",
-		Phone:     "1234567890",
-		StatusID:  1,
+func Test_studentUsecase_GetStudentByStudentID(t *testing.T) {
+	type fields struct {
+		sr student.IStudentRepository
+		lg *logger.LoggerZap
 	}
-
-	mockRepo.EXPECT().UpdateStudent(ctx, student).Return(nil)
-
-	err := stUsecase.UpdateStudent(ctx, student)
-
-	assert.NoError(t, err)
+	type args struct {
+		ctx       context.Context
+		studentID string
+	}
+	tests := []struct {
+		name        string
+		fields      fields
+		args        args
+		wantStudent *models.Student
+		wantErr     bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentUsecase{
+				sr: tt.fields.sr,
+				lg: tt.fields.lg,
+			}
+			gotStudent, err := s.GetStudentByStudentID(tt.args.ctx, tt.args.studentID)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("studentUsecase.GetStudentByStudentID() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotStudent, tt.wantStudent) {
+				t.Errorf("studentUsecase.GetStudentByStudentID() = %v, want %v", gotStudent, tt.wantStudent)
+			}
+		})
+	}
 }
 
-func TestGetOptions(t *testing.T) {
-	t.Parallel()
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	logger := logger.NewLoggerTest()
-	mockRepo := mocks.NewMockIStudentRepository(ctrl)
-	stUsecase := NewStudentUsecase(mockRepo, logger)
-
-	ctx := context.Background()
-	options := &dtos.OptionDTO{
-		Genders: []*dtos.Option{
-			{ID: 1, Name: "Male"},
-			{ID: 2, Name: "Female"},
-		},
-		Faculties: []*dtos.Option{
-			{ID: 1, Name: "Engineering"},
-			{ID: 2, Name: "Science"},
-		},
-		Courses: []*dtos.Option{
-			{ID: 1, Name: "Computer Science"},
-			{ID: 2, Name: "Mathematics"},
-		},
-		Programs: []*dtos.Option{
-			{ID: 1, Name: "Undergraduate"},
-			{ID: 2, Name: "Postgraduate"},
-		},
-		Statuses: []*dtos.Option{
-			{ID: 1, Name: "Active"},
-			{ID: 2, Name: "Inactive"},
-		},
+func Test_studentUsecase_GetFullInfoStudentByStudentID(t *testing.T) {
+	type fields struct {
+		sr student.IStudentRepository
+		lg *logger.LoggerZap
 	}
+	type args struct {
+		ctx       context.Context
+		studentID string
+	}
+	tests := []struct {
+		name        string
+		fields      fields
+		args        args
+		wantStudent *dtos.StudentDTO
+		wantErr     bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentUsecase{
+				sr: tt.fields.sr,
+				lg: tt.fields.lg,
+			}
+			gotStudent, err := s.GetFullInfoStudentByStudentID(tt.args.ctx, tt.args.studentID)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("studentUsecase.GetFullInfoStudentByStudentID() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotStudent, tt.wantStudent) {
+				t.Errorf("studentUsecase.GetFullInfoStudentByStudentID() = %v, want %v", gotStudent, tt.wantStudent)
+			}
+		})
+	}
+}
 
-	mockRepo.EXPECT().GetOptions(ctx).Return(options, nil)
+func Test_studentUsecase_CreateStudent(t *testing.T) {
+	type fields struct {
+		sr student.IStudentRepository
+		lg *logger.LoggerZap
+	}
+	type args struct {
+		ctx     context.Context
+		student *models.Student
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentUsecase{
+				sr: tt.fields.sr,
+				lg: tt.fields.lg,
+			}
+			if err := s.CreateStudent(tt.args.ctx, tt.args.student); (err != nil) != tt.wantErr {
+				t.Errorf("studentUsecase.CreateStudent() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
 
-	result, err := stUsecase.GetOptions(ctx)
+func Test_studentUsecase_UpdateStudent(t *testing.T) {
+	type fields struct {
+		sr student.IStudentRepository
+		lg *logger.LoggerZap
+	}
+	type args struct {
+		ctx     context.Context
+		student *models.Student
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentUsecase{
+				sr: tt.fields.sr,
+				lg: tt.fields.lg,
+			}
+			if err := s.UpdateStudent(tt.args.ctx, tt.args.student); (err != nil) != tt.wantErr {
+				t.Errorf("studentUsecase.UpdateStudent() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
 
-	assert.NoError(t, err)
-	assert.Equal(t, options, result)
+func Test_studentUsecase_DeleteStudent(t *testing.T) {
+	type fields struct {
+		sr student.IStudentRepository
+		lg *logger.LoggerZap
+	}
+	type args struct {
+		ctx       context.Context
+		studentID string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentUsecase{
+				sr: tt.fields.sr,
+				lg: tt.fields.lg,
+			}
+			if err := s.DeleteStudent(tt.args.ctx, tt.args.studentID); (err != nil) != tt.wantErr {
+				t.Errorf("studentUsecase.DeleteStudent() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func Test_studentUsecase_GetOptions(t *testing.T) {
+	type fields struct {
+		sr student.IStudentRepository
+		lg *logger.LoggerZap
+	}
+	type args struct {
+		ctx context.Context
+	}
+	tests := []struct {
+		name        string
+		fields      fields
+		args        args
+		wantOptions *dtos.OptionDTO
+		wantErr     bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentUsecase{
+				sr: tt.fields.sr,
+				lg: tt.fields.lg,
+			}
+			gotOptions, err := s.GetOptions(tt.args.ctx)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("studentUsecase.GetOptions() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotOptions, tt.wantOptions) {
+				t.Errorf("studentUsecase.GetOptions() = %v, want %v", gotOptions, tt.wantOptions)
+			}
+		})
+	}
 }

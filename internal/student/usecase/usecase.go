@@ -6,7 +6,6 @@ import (
 	"github.com/csc13010-student-management/internal/models"
 	"github.com/csc13010-student-management/internal/student"
 	"github.com/csc13010-student-management/internal/student/dtos"
-	"github.com/csc13010-student-management/internal/student/strategies"
 	"github.com/csc13010-student-management/pkg/logger"
 	"go.uber.org/zap"
 )
@@ -26,111 +25,66 @@ func NewStudentUsecase(
 	}
 }
 
-func (s *studentUsecase) GetStudents(ctx context.Context) ([]*models.Student, error) {
-	students, err := s.sr.GetStudents(ctx)
+func (s *studentUsecase) logAndReturnError(msg string, err error) error {
+	s.lg.Error(msg, zap.Error(err))
+	return err
+}
+
+func (s *studentUsecase) GetStudents(ctx context.Context) (students []*models.Student, err error) {
+	students, err = s.sr.GetStudents(ctx)
 	if err != nil {
-		s.lg.Error("Failed to get students", zap.Error(err))
-		return nil, err
+		return nil, s.logAndReturnError("Failed to get students", err)
 	}
 	s.lg.Info("Successfully fetched students")
 	return students, nil
 }
 
-func (s *studentUsecase) GetStudentByStudentID(ctx context.Context, student_id string) (*models.Student, error) {
-	student, err := s.sr.GetStudentByStudentID(ctx, student_id)
+func (s *studentUsecase) GetStudentByStudentID(ctx context.Context, studentID string) (student *models.Student, err error) {
+	student, err = s.sr.GetStudentByStudentID(ctx, studentID)
 	if err != nil {
-		s.lg.Error("Failed to get student", zap.Error(err))
-		return nil, err
+		return nil, s.logAndReturnError("Failed to get student", err)
 	}
-	s.lg.Info("Successfully fetched student", zap.String("id", student_id))
+	s.lg.Info("Successfully fetched student", zap.String("id", studentID))
 	return student, nil
 }
 
-func (s *studentUsecase) GetFullInfoStudentByStudentID(ctx context.Context, student_id string) (*dtos.StudentDTO, error) {
-	student, err := s.sr.GetFullInfoStudentByStudentID(ctx, student_id)
+func (s *studentUsecase) GetFullInfoStudentByStudentID(ctx context.Context, studentID string) (student *dtos.StudentDTO, err error) {
+	student, err = s.sr.GetFullInfoStudentByStudentID(ctx, studentID)
 	if err != nil {
-		s.lg.Error("Failed to get full info student", zap.Error(err))
-		return nil, err
+		return nil, s.logAndReturnError("Failed to get full info student", err)
 	}
-
 	return student, nil
 }
 
 func (s *studentUsecase) CreateStudent(ctx context.Context, student *models.Student) error {
-	err := s.sr.CreateStudent(ctx, student)
-	if err != nil {
-		s.lg.Error("Failed to create student", zap.Error(err))
-		return err
+	if err := s.sr.CreateStudent(ctx, student); err != nil {
+		return s.logAndReturnError("Failed to create student", err)
 	}
 	s.lg.Info("Successfully created student", zap.Int("id", student.ID))
 	return nil
 }
 
 func (s *studentUsecase) UpdateStudent(ctx context.Context, student *models.Student) error {
-	err := s.sr.UpdateStudent(ctx, student)
-	if err != nil {
-		s.lg.Error("Failed to update student", zap.Error(err))
-		return err
+	if err := s.sr.UpdateStudent(ctx, student); err != nil {
+		return s.logAndReturnError("Failed to update student", err)
 	}
 	s.lg.Info("Successfully updated student", zap.Int("id", student.ID))
 	return nil
 }
 
-func (s *studentUsecase) DeleteStudent(ctx context.Context, student_id string) error {
-	err := s.sr.DeleteStudent(ctx, student_id)
-	if err != nil {
-		s.lg.Error("Failed to delete student", zap.Error(err))
-		return err
+func (s *studentUsecase) DeleteStudent(ctx context.Context, studentID string) error {
+	if err := s.sr.DeleteStudent(ctx, studentID); err != nil {
+		return s.logAndReturnError("Failed to delete student", err)
 	}
-	s.lg.Info("Successfully deleted student", zap.String("id", student_id))
+	s.lg.Info("Successfully deleted student", zap.String("id", studentID))
 	return nil
 }
 
-func (s *studentUsecase) GetOptions(ctx context.Context) (*dtos.OptionDTO, error) {
-	options, err := s.sr.GetOptions(ctx)
+func (s *studentUsecase) GetOptions(ctx context.Context) (options *dtos.OptionDTO, err error) {
+	options, err = s.sr.GetOptions(ctx)
 	if err != nil {
-		s.lg.Error("Failed to get student options", zap.Error(err))
-		return nil, err
+		return nil, s.logAndReturnError("Failed to get student options", err)
 	}
 	s.lg.Info("Successfully fetched student options")
 	return options, nil
 }
-
-func (s *studentUsecase) ExportStudents(ctx context.Context, format string) (string, error) {
-	var students []models.Student
-	if err := s.sr.GetAllStudents(ctx, &students); err != nil {
-		return "", err
-	}
-
-	// Xác định đường dẫn file export
-	filePath := "exports/students." + format
-
-	exportCtx, err := strategies.NewExportContext(filePath)
-	if err != nil {
-		return "", err
-	}
-
-	err = exportCtx.ExecuteExport(ctx, students, filePath)
-	if err != nil {
-		return "", err
-	}
-
-	return filePath, nil
-}
-
-func (s *studentUsecase) ImportStudents(ctx context.Context, filePath string) error {
-	importCtx, err := strategies.NewImportContext(filePath)
-	if err != nil {
-		return err
-	}
-
-	students, err := importCtx.ExecuteImport(ctx, filePath)
-	if err != nil {
-		return err
-	}
-
-	// Lưu vào database
-	return s.sr.BatchInsertStudents(ctx, students)
-}
-
-

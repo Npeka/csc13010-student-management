@@ -14,7 +14,5 @@ type IStudentUsecase interface {
 	CreateStudent(ctx context.Context, student *models.Student) error
 	UpdateStudent(ctx context.Context, student *models.Student) error
 	DeleteStudent(ctx context.Context, student_id string) error
-	ImportStudents(ctx context.Context, filePath string) error
-	ExportStudents(ctx context.Context, format string) (string, error)
 	GetOptions(ctx context.Context) (*dtos.OptionDTO, error)
 }

@@ -10,44 +10,52 @@ import (
 	pgHttp "github.com/csc13010-student-management/internal/program/delivery/http"
 	pgRepository "github.com/csc13010-student-management/internal/program/repository"
 	pgUsecase "github.com/csc13010-student-management/internal/program/usecase"
-	stHttp "github.com/csc13010-student-management/internal/student/delivery/http"
-	stRepository "github.com/csc13010-student-management/internal/student/repository"
-	stUsecase "github.com/csc13010-student-management/internal/student/usecase"
+	stuHttp "github.com/csc13010-student-management/internal/status/delivery/http"
+	stuRepository "github.com/csc13010-student-management/internal/status/repository"
+	stuUsecase "github.com/csc13010-student-management/internal/status/usecase"
+	stdHttp "github.com/csc13010-student-management/internal/student/delivery/http"
+	stdRepository "github.com/csc13010-student-management/internal/student/repository"
+	stdUsecase "github.com/csc13010-student-management/internal/student/usecase"
 
 	"github.com/gin-gonic/gin"
 )
 
 func (s *Server) MapHandlers(r *gin.Engine) error {
 	// repository
-	stRepo := stRepository.NewStudentRepository(s.pg)
-	alRepo := alRepository.NewAuditLogRepository(s.pg)
+	stRepo := stdRepository.NewStudentRepository(s.pg)
+	stuRepo := stuRepository.NewStatusRepository(s.pg)
 	pgRepo := pgRepository.NewProgramRepository(s.pg)
 	ftRepo := ftRepository.NewFacultyRepository(s.pg)
+	alRepo := alRepository.NewAuditLogRepository(s.pg)
 
 	// usecase
-	stUc := stUsecase.NewStudentUsecase(stRepo, s.lg)
-	alUc := alUsecase.NewAuditLogUsecase(alRepo, s.lg)
+	stUc := stdUsecase.NewStudentUsecase(stRepo, s.lg)
+	stuUc := stuUsecase.NewStatusUsecase(stuRepo, s.lg)
 	pgUc := pgUsecase.NewProgramUsecase(pgRepo, s.lg)
 	ftUc := ftUsecase.NewFacultyUsecase(ftRepo, s.lg)
+	alUc := alUsecase.NewAuditLogUsecase(alRepo, s.lg)
 
 	// handler
-	stHandler := stHttp.NewStudentHandlers(stUc, s.lg)
-	alHandler := alHttp.NewAuditLogHandlers(alUc, s.lg)
+	stHandler := stdHttp.NewStudentHandlers(stUc, s.lg)
+	stuHandler := stuHttp.NewStatusHandlers(stuUc, s.lg)
 	pgHandler := pgHttp.NewProgramHandlers(pgUc, s.lg)
 	ftHandler := ftHttp.NewFacultyHandlers(ftUc, s.lg)
+	alHandler := alHttp.NewAuditLogHandlers(alUc, s.lg)
 
 	// router group
 	v1 := r.Group("/api/v1")
-	stGroup := v1.Group("/students")
-	alGroup := v1.Group("/auditlogs")
+	stdGroup := v1.Group("/students")
+	stuGroup := v1.Group("/statuses")
 	pgGroup := v1.Group("/programs")
 	ftGroup := v1.Group("/faculties")
+	alGroup := v1.Group("/auditlogs")
 
 	// router
-	stHttp.MapStudentHandlers(stGroup, stHandler)
-	alHttp.MapAuditLogHandlers(alGroup, alHandler)
+	stdHttp.MapStudentHandlers(stdGroup, stHandler)
+	stuHttp.MapStatusHandlers(stuGroup, stuHandler)
 	pgHttp.MapProgramHandlers(pgGroup, pgHandler)
 	ftHttp.MapFacultyHandlers(ftGroup, ftHandler)
+	alHttp.MapAuditLogHandlers(alGroup, alHandler)
 
 	return nil
 }

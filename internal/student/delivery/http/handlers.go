@@ -1,16 +1,21 @@
 package http
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
+	"time"
 
 	"github.com/csc13010-student-management/internal/models"
 	"github.com/csc13010-student-management/internal/student"
+	"github.com/csc13010-student-management/internal/student/dtos"
 	"github.com/csc13010-student-management/pkg/logger"
 	"github.com/gin-gonic/gin"
+	"github.com/jung-kurt/gofpdf"
+	"github.com/unidoc/unioffice/document"
 	"go.uber.org/zap"
 )
 
@@ -115,13 +120,39 @@ func (s *studentHandlers) UpdateStudent() gin.HandlerFunc {
 	}
 }
 
+const defaultDeleteTimeLimit = 30 * time.Minute
+
 // DeleteStudent implements student.IStudentHandlers.
 func (s *studentHandlers) DeleteStudent() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		if os.Getenv("ALLOW_DELETE_ANYTIME") == "false" {
+			c.JSON(http.StatusForbidden, gin.H{"error": "DeleteStudent is disabled"})
+			return
+		}
+
 		s.lg.Info("DeleteStudent called")
 		student_id := c.Param("student_id")
 
-		err := s.su.DeleteStudent(c, student_id)
+		student, err := s.su.GetStudentByStudentID(c, student_id)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Student not found"})
+			return
+		}
+
+		deleteTimeLimit := defaultDeleteTimeLimit
+		if envLimit, exists := os.LookupEnv("DELETE_TIME_LIMIT"); exists {
+			parsedLimit, err := time.ParseDuration(envLimit)
+			if err == nil {
+				deleteTimeLimit = parsedLimit
+			}
+		}
+
+		if time.Since(student.CreatedAt) > deleteTimeLimit {
+			c.JSON(http.StatusForbidden, gin.H{"error": "Student cannot be deleted after the allowed time"})
+			return
+		}
+
+		err = s.su.DeleteStudent(c, student_id)
 		if err != nil {
 			s.lg.Error("Error deleting student", zap.Error(err))
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -225,178 +256,153 @@ func (s *studentHandlers) ExportStudents() gin.HandlerFunc {
 	}
 }
 
-func (s *studentHandlers) GetFaculties() gin.HandlerFunc {
+
+
+func (s *studentHandlers) GetFullInfoStudentByStudentID() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		s.lg.Info("GetFaculties called")
-		faculties, err := s.su.GetFaculties(c)
+		s.lg.Info("GetFullInfoStudentByStudentID called")
+		student_id := c.Param("student_id")
+
+		student, err := s.su.GetFullInfoStudentByStudentID(c, student_id)
 		if err != nil {
-			s.lg.Error("Error getting faculties", zap.Error(err))
+			s.lg.Error("Error getting student", zap.Error(err))
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 
-		s.lg.Info("GetFaculties successful")
-		c.JSON(http.StatusOK, faculties)
+		s.lg.Info("GetFullInfoStudentByStudentID successful")
+		c.JSON(http.StatusOK, student)
 	}
 }
 
-func (s *studentHandlers) GetPrograms() gin.HandlerFunc {
+func (s *studentHandlers) ExportStudentCertificate() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		s.lg.Info("GetPrograms called")
-		programs, err := s.su.GetPrograms(c)
+		studentID := c.Param("student_id")
+		format := c.Query("format") // "pdf" hoặc "docx"
+
+		student, err := s.su.GetFullInfoStudentByStudentID(c, studentID)
 		if err != nil {
-			s.lg.Error("Error getting programs", zap.Error(err))
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusNotFound, gin.H{"error": "Student not found"})
 			return
 		}
 
-		s.lg.Info("GetPrograms successful")
-		c.JSON(http.StatusOK, programs)
+		var filePath string
+		if format == "pdf" {
+			filePath = generatePDF(student)
+		} else if format == "docx" {
+			filePath = generateDOCX(student)
+		} else {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid format"})
+			return
+		}
+
+		c.File(filePath)
 	}
 }
 
-func (s *studentHandlers) GetStatuses() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		s.lg.Info("GetFaculties called")
-		statuses, err := s.su.GetStatuses(c)
-		if err != nil {
-			s.lg.Error("Error getting statuses", zap.Error(err))
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
+func generatePDF(student *dtos.StudentDTO) string {
+	pdf := gofpdf.New("P", "mm", "A4", "")
+	pdf.AddPage()
+	pdf.SetFont("Arial", "B", 14)
 
-		s.lg.Info("GetStatuses successful")
-		c.JSON(http.StatusOK, statuses)
-	}
+	// Tiêu đề trường
+	pdf.Cell(190, 10, "TRUONG DAI HOC [TEN TRUONG]")
+	pdf.Ln(6)
+	pdf.SetFont("Arial", "", 12)
+	pdf.Cell(190, 10, "PHONG CONG TAC SINH VIEN")
+	pdf.Ln(10)
+
+	// Tiêu đề chính
+	pdf.SetFont("Arial", "B", 16)
+	pdf.Cell(190, 10, "GIAY XAC NHAN TINH TRANG SINH VIEN")
+	pdf.Ln(12)
+
+	// Thông tin sinh viên
+	pdf.SetFont("Arial", "", 12)
+	pdf.Cell(190, 10, fmt.Sprintf("Ho ten: %s", student.FullName))
+	pdf.Ln(6)
+	pdf.Cell(190, 10, fmt.Sprintf("MSSV: %s", student.StudentID))
+	pdf.Ln(6)
+	pdf.Cell(190, 10, fmt.Sprintf("Ngay sinh: %s", student.BirthDate))
+	pdf.Ln(6)
+	pdf.Cell(190, 10, fmt.Sprintf("Gioi tinh: %s", student.Gender))
+	pdf.Ln(6)
+	pdf.Cell(190, 10, fmt.Sprintf("Khoa: %s", student.Faculty))
+	pdf.Ln(6)
+	pdf.Cell(190, 10, fmt.Sprintf("Chuong trinh dao tao: %s", student.Program))
+	pdf.Ln(6)
+
+	// Tình trạng sinh viên
+	pdf.SetFont("Arial", "B", 12)
+	pdf.Cell(190, 10, "Tinh trang sinh vien:")
+	pdf.Ln(6)
+	pdf.SetFont("Arial", "", 12)
+	pdf.Cell(190, 10, strconv.Itoa(student.Status))
+	pdf.Ln(6)
+
+	// Mục đích xác nhận
+	pdf.SetFont("Arial", "B", 12)
+	pdf.Cell(190, 10, "Muc dich xac nhan:")
+	pdf.Ln(6)
+	pdf.SetFont("Arial", "", 12)
+	// pdf.MultiCell(190, 6, student.Purpose, "", "L", false)
+	pdf.Ln(6)
+
+	// Thời gian hiệu lực
+	// pdf.Cell(190, 10, fmt.Sprintf("Giay xac nhan co hieu luc den ngay: %s", student.ValidUntil))
+	pdf.Ln(12)
+
+	// Ký tên xác nhận
+	pdf.SetFont("Arial", "B", 12)
+	pdf.Cell(190, 10, "Xac nhan cua Truong Dai Hoc Khoa Hoc Tu Nhien")
+	pdf.Ln(12)
+	pdf.Cell(190, 10, "Ngay cap: "+time.Now().Format("02/01/2006"))
+	pdf.Ln(18)
+	pdf.Cell(190, 10, "Truong Phong Dao Tao")
+	pdf.Ln(6)
+	pdf.Cell(190, 10, "(Ky, ghi ro ho ten, dong dau)")
+
+	// Xuất file
+	filePath := fmt.Sprintf("exports/student_%s.pdf", student.StudentID)
+	pdf.OutputFileAndClose(filePath)
+	return filePath
 }
 
-func (s *studentHandlers) CreateFaculty() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		s.lg.Info("GetFaculties called")
-		var faculty models.Faculty
-		if err := c.ShouldBindJSON(&faculty); err != nil {
-			s.lg.Error("Error binding JSON", zap.Error(err))
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
+func generateDOCX(student *dtos.StudentDTO) string {
+	doc := document.New()
 
-		err := s.su.CreateFaculty(c, &faculty)
-		if err != nil {
-			s.lg.Error("Error creating faculty", zap.Error(err))
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
+	p := doc.AddParagraph()
+	r := p.AddRun()
+	r.AddText("TRUONG DAI HOC [TEN TRUONG]")
+	r.Properties().SetBold(true)
+	r.Properties().SetSize(28)
 
-		s.lg.Info("CreateFaculty successful")
-		c.JSON(http.StatusOK, faculty)
-	}
-}
+	p = doc.AddParagraph()
+	r = p.AddRun()
+	r.AddText("PHONG CONG TAC SINH VIEN")
+	r.Properties().SetSize(12)
 
-func (s *studentHandlers) CreateProgram() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		s.lg.Info("GetFaculties called")
-		var program models.Program
-		if err := c.ShouldBindJSON(&program); err != nil {
-			s.lg.Error("Error binding JSON", zap.Error(err))
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
+	p = doc.AddParagraph()
+	r = p.AddRun()
+	r.AddText("GIAY XAC NHAN TINH TRANG SINH VIEN")
+	r.Properties().SetBold(true)
+	r.Properties().SetSize(28)
 
-		err := s.su.CreateProgram(c, &program)
-		if err != nil {
-			s.lg.Error("Error creating program", zap.Error(err))
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
+	p = doc.AddParagraph()
+	r = p.AddRun()
+	r.AddText(fmt.Sprintf("Ho ten: %s", student.FullName))
 
-		s.lg.Info("CreateProgram successful")
-		c.JSON(http.StatusOK, program)
-	}
-}
-func (s *studentHandlers) CreateStatus() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		s.lg.Info("GetFaculties called")
-		var status models.Status
-		if err := c.ShouldBindJSON(&status); err != nil {
-			s.lg.Error("Error binding JSON", zap.Error(err))
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
+	doc.AddParagraph().AddRun().AddText(fmt.Sprintf("MSSV: %s", student.StudentID))
+	doc.AddParagraph().AddRun().AddText(fmt.Sprintf("Ngay sinh: %s", student.BirthDate))
+	doc.AddParagraph().AddRun().AddText(fmt.Sprintf("Gioi tinh: %s", student.Gender))
+	doc.AddParagraph().AddRun().AddText(fmt.Sprintf("Khoa: %s", student.Faculty))
+	doc.AddParagraph().AddRun().AddText(fmt.Sprintf("Chuong trinh dao tao: %s", student.Program))
 
-		err := s.su.CreateStatus(c, &status)
-		if err != nil {
-			s.lg.Error("Error creating status", zap.Error(err))
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
+	doc.AddParagraph().AddRun().AddText(fmt.Sprintf("Tinh trang sinh vien: %d", student.Status))
+	// doc.AddParagraph().AddRun().AddText(fmt.Sprintf("Muc dich xac nhan: %s", student.Purpose))
+	// doc.AddParagraph().AddRun().AddText(fmt.Sprintf("Giay xac nhan co hieu luc den ngay: %s", student.ValidUntil))
 
-		s.lg.Info("GetFaculties successful")
-		c.JSON(http.StatusOK, status)
-	}
-}
-
-func (s *studentHandlers) DeleteFaculty() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		s.lg.Info("DeleteFaculty called")
-		faculty_id, err := strconv.Atoi(c.Param("faculty_id"))
-		if err != nil {
-			s.lg.Error("Invalid faculty ID", zap.Error(err))
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid faculty ID"})
-			return
-		}
-
-		err = s.su.DeleteFaculty(c, faculty_id)
-		if err != nil {
-			s.lg.Error("Error deleting faculty", zap.Error(err))
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-
-		s.lg.Info("DeleteFaculty successful")
-		c.JSON(http.StatusOK, gin.H{"message": "Faculty deleted successfully"})
-	}
-}
-
-func (s *studentHandlers) DeleteProgram() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		s.lg.Info("DeleteProgram called")
-		program_id, err := strconv.Atoi(c.Param("program_id"))
-		if err != nil {
-			s.lg.Error("Invalid program ID", zap.Error(err))
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid program ID"})
-			return
-		}
-
-		err = s.su.DeleteProgram(c, program_id)
-		if err != nil {
-			s.lg.Error("Error deleting program", zap.Error(err))
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-
-		s.lg.Info("DeleteProgram successful")
-		c.JSON(http.StatusOK, gin.H{"message": "Program deleted successfully"})
-	}
-}
-
-func (s *studentHandlers) DeleteStatus() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		s.lg.Info("DeleteStatus called")
-		status_id, err := strconv.Atoi(c.Param("status_id"))
-		if err != nil {
-			s.lg.Error("Invalid status ID", zap.Error(err))
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid status ID"})
-			return
-		}
-
-		err = s.su.DeleteStatus(c, status_id)
-		if err != nil {
-			s.lg.Error("Error deleting status", zap.Error(err))
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-
-		s.lg.Info("DeleteStatus successful")
-		c.JSON(http.StatusOK, gin.H{"message": "Status deleted successfully"})
-	}
+	filePath := fmt.Sprintf("exports/student_%s.docx", student.StudentID)
+	doc.SaveToFile(filePath)
+	return filePath
 }

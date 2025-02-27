@@ -46,6 +46,16 @@ func (s *studentUsecase) GetStudentByStudentID(ctx context.Context, student_id s
 	return student, nil
 }
 
+func (s *studentUsecase) GetFullInfoStudentByStudentID(ctx context.Context, student_id string) (*dtos.StudentDTO, error) {
+	student, err := s.sr.GetFullInfoStudentByStudentID(ctx, student_id)
+	if err != nil {
+		s.lg.Error("Failed to get full info student", zap.Error(err))
+		return nil, err
+	}
+
+	return student, nil
+}
+
 func (s *studentUsecase) CreateStudent(ctx context.Context, student *models.Student) error {
 	err := s.sr.CreateStudent(ctx, student)
 	if err != nil {
@@ -123,92 +133,4 @@ func (s *studentUsecase) ImportStudents(ctx context.Context, filePath string) er
 	return s.sr.BatchInsertStudents(ctx, students)
 }
 
-func (s *studentUsecase) GetFaculties(ctx context.Context) ([]*models.Faculty, error) {
-	faculties, err := s.sr.GetFaculties(ctx)
-	if err != nil {
-		s.lg.Error("Failed to get faculties", zap.Error(err))
-		return nil, err
-	}
-	s.lg.Info("Successfully fetched faculties")
-	return faculties, nil
-}
 
-func (s *studentUsecase) GetPrograms(ctx context.Context) ([]*models.Program, error) {
-	programs, err := s.sr.GetPrograms(ctx)
-	if err != nil {
-		s.lg.Error("Failed to get programs", zap.Error(err))
-		return nil, err
-	}
-	s.lg.Info("Successfully fetched programs")
-	return programs, nil
-}
-
-func (s *studentUsecase) GetStatuses(ctx context.Context) ([]*models.Status, error) {
-	statuses, err := s.sr.GetStatuses(ctx)
-	if err != nil {
-		s.lg.Error("Failed to get statuses", zap.Error(err))
-		return nil, err
-	}
-	s.lg.Info("Successfully fetched statuses")
-	return statuses, nil
-}
-
-func (s *studentUsecase) CreateFaculty(ctx context.Context, faculty *models.Faculty) error {
-	err := s.sr.CreateFaculty(ctx, faculty)
-	if err != nil {
-		s.lg.Error("Failed to create faculty", zap.Error(err))
-		return err
-	}
-	s.lg.Info("Successfully created faculty")
-	return nil
-}
-
-func (s *studentUsecase) CreateProgram(ctx context.Context, program *models.Program) error {
-	err := s.sr.CreateProgram(ctx, program)
-	if err != nil {
-		s.lg.Error("Failed to create program", zap.Error(err))
-		return err
-	}
-	s.lg.Info("Successfully created program")
-	return nil
-}
-
-func (s *studentUsecase) CreateStatus(ctx context.Context, status *models.Status) error {
-	err := s.sr.CreateStatus(ctx, status)
-	if err != nil {
-		s.lg.Error("Failed to create status", zap.Error(err))
-		return err
-	}
-	s.lg.Info("Successfully created status")
-	return nil
-}
-
-func (s *studentUsecase) DeleteFaculty(ctx context.Context, faculty_id int) error {
-	err := s.sr.DeleteFaculty(ctx, faculty_id)
-	if err != nil {
-		s.lg.Error("Failed to delete faculty", zap.Error(err))
-		return err
-	}
-	s.lg.Info("Successfully deleted faculty")
-	return nil
-}
-
-func (s *studentUsecase) DeleteProgram(ctx context.Context, program_id int) error {
-	err := s.sr.DeleteProgram(ctx, program_id)
-	if err != nil {
-		s.lg.Error("Failed to delete program", zap.Error(err))
-		return err
-	}
-	s.lg.Info("Successfully deleted program")
-	return nil
-}
-
-func (s *studentUsecase) DeleteStatus(ctx context.Context, status_id int) error {
-	err := s.sr.DeleteStatus(ctx, status_id)
-	if err != nil {
-		s.lg.Error("Failed to delete status", zap.Error(err))
-		return err
-	}
-	s.lg.Info("Successfully deleted status")
-	return nil
-}

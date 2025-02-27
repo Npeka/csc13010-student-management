@@ -5,6 +5,8 @@ import "github.com/gin-gonic/gin"
 type IStudentHandlers interface {
 	GetStudents() gin.HandlerFunc
 	GetStudentByStudentID() gin.HandlerFunc
+	GetFullInfoStudentByStudentID() gin.HandlerFunc
+
 	CreateStudent() gin.HandlerFunc
 	UpdateStudent() gin.HandlerFunc
 	DeleteStudent() gin.HandlerFunc
@@ -13,15 +15,5 @@ type IStudentHandlers interface {
 
 	GetOptions() gin.HandlerFunc
 
-	GetFaculties() gin.HandlerFunc
-	GetPrograms() gin.HandlerFunc
-	GetStatuses() gin.HandlerFunc
-
-	CreateFaculty() gin.HandlerFunc
-	CreateProgram() gin.HandlerFunc
-	CreateStatus() gin.HandlerFunc
-
-	DeleteFaculty() gin.HandlerFunc
-	DeleteProgram() gin.HandlerFunc
-	DeleteStatus() gin.HandlerFunc
+	ExportStudentCertificate() gin.HandlerFunc
 }

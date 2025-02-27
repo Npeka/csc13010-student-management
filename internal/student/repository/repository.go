@@ -150,28 +150,27 @@ func (s *studentRepository) GetAllStudents(ctx context.Context, students *[]mode
 	return s.db.Find(students).Error
 }
 
+// BatchInsertStudents inserts multiple students into the database
+func (s *studentRepository) GetFullInfoStudentByStudentID(ctx context.Context, student_id string) (*dtos.StudentDTO, error) {
+	studentDTO := &dtos.StudentDTO{}
+	err := s.db.WithContext(ctx).
+		Table("students").
+		Select("students.id, students.student_id, students.full_name, students.birth_date, students.gender_id, genders.name as gender_name, students.faculty_id, faculties.name as faculty_name, students.course_id, courses.name as course_name, students.program_id, programs.name as program_name, students.status_id, statuses.name as status_name").
+		Joins("left join genders on students.gender_id = genders.id").
+		Joins("left join faculties on students.faculty_id = faculties.id").
+		Joins("left join courses on students.course_id = courses.id").
+		Joins("left join programs on students.program_id = programs.id").
+		Joins("left join statuses on students.status_id = statuses.id").
+		Where("students.student_id = ?", student_id).
+		First(&studentDTO).Error
+	if err != nil {
+		return nil, err
+	}
+	return studentDTO, nil
+}
+
 func (s *studentRepository) BatchInsertStudents(ctx context.Context, students []models.Student) error {
 	return s.db.Create(&students).Error
-}
-
-func (s *studentRepository) GetFaculties(ctx context.Context) ([]*models.Faculty, error) {
-	var faculties []*models.Faculty
-	err := s.db.WithContext(ctx).Find(&faculties).Error
-	if err != nil {
-		return nil, err
-	}
-	return faculties, err
-
-}
-
-func (s *studentRepository) GetPrograms(ctx context.Context) ([]*models.Program, error) {
-	var programs []*models.Program
-	err := s.db.WithContext(ctx).Find(&programs).Error
-	if err != nil {
-		return nil, err
-	}
-	return programs, err
-
 }
 
 func (s *studentRepository) GetStatuses(ctx context.Context) ([]*models.Status, error) {
@@ -184,22 +183,6 @@ func (s *studentRepository) GetStatuses(ctx context.Context) ([]*models.Status, 
 
 }
 
-func (s *studentRepository) CreateFaculty(ctx context.Context, faculty *models.Faculty) error {
-	var existing models.Faculty
-	if err := s.db.WithContext(ctx).Where("name = ?", faculty.Name).First(&existing).Error; err == nil {
-		return errors.New("faculty already exists")
-	}
-	return s.db.WithContext(ctx).Create(&faculty).Error
-}
-
-func (s *studentRepository) CreateProgram(ctx context.Context, program *models.Program) error {
-	var existing models.Program
-	if err := s.db.WithContext(ctx).Where("name = ?", program.Name).First(&existing).Error; err == nil {
-		return errors.New("program already exists")
-	}
-	return s.db.WithContext(ctx).Create(&program).Error
-}
-
 func (s *studentRepository) CreateStatus(ctx context.Context, status *models.Status) error {
 	var existing models.Status
 	if err := s.db.WithContext(ctx).Where("name = ?", status.Name).First(&existing).Error; err == nil {
@@ -208,14 +191,6 @@ func (s *studentRepository) CreateStatus(ctx context.Context, status *models.Sta
 	return s.db.WithContext(ctx).Create(&status).Error
 }
 
-func (s *studentRepository) DeleteFaculty(ctx context.Context, faculty_id int) error {
-	return s.db.WithContext(ctx).Where("id = ?", faculty_id).Delete(&models.Faculty{}).Error
-}
-
-func (s *studentRepository) DeleteProgram(ctx context.Context, program_id int) error {
-	return s.db.WithContext(ctx).Where("id = ?", program_id).Delete(&models.Program{}).Error
-
-}
 func (s *studentRepository) DeleteStatus(ctx context.Context, status_id int) error {
 	return s.db.WithContext(ctx).Where("id = ?", status_id).Delete(&models.Status{}).Error
 }

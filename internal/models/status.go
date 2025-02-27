@@ -1,7 +1,7 @@
 package models
 
 type Status struct {
-	Id   int    `gorm:"primaryKey;autoIncrement;" json:"id"`
+	ID   int    `gorm:"primaryKey;autoIncrement;" json:"id"`
 	Name string `gorm:"type:varchar(255);uniqueIndex;not null" json:"name"`
 }
 

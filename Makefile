@@ -24,28 +24,79 @@ d-down:
 d-down-v:
 	docker-compose down -v
 
+# -------------------------------------------------------------------------------------
+testgen-package:
+	gotests -all -w internal/$(name)/repository/repository.go
+	gotests -all -w internal/$(name)/usecase/usecase.go
+	gotests -all -w internal/$(name)/delivery/http/handlers.go
+
+testgen:
+	make testgen-package name=student
+	make testgen-package name=faculty
+	make testgen-package name=program
+	make testgen-package name=status
+	make testgen-package name=fileprocessing
+	make testgen-package name=notification
+	
+# -------------------------------------------------------------------------------------
+mockgen-package:
+	mockgen -source='internal/$(name)/repository.go' -destination='internal/$(name)/mocks/repository_mock.go' -package=mocks
+	mockgen -source='internal/$(name)/usecase.go' -destination='internal/$(name)/mocks/usecase_mock.go' -package=mocks
+	
 mockgen:
-# student
-	mockgen -source='internal/student/repository.go' -destination='internal/student/mocks/repository_mock.go' -package=mocks
-	mockgen -source='internal/student/usecase.go' -destination='internal/student/mocks/usecase_mock.go' -package=mocks
-# faculty
-	mockgen -source='internal/faculty/repository.go' -destination='internal/faculty/mocks/repository_mock.go' -package=mocks
-	mockgen -source='internal/faculty/usecase.go' -destination='internal/faculty/mocks/usecase_mock.go' -package=mocks
-# program
-	mockgen -source='internal/program/repository.go' -destination='internal/program/mocks/repository_mock.go' -package=mocks
-	mockgen -source='internal/program/usecase.go' -destination='internal/program/mocks/usecase_mock.go' -package=mocks
-# status
-	mockgen -source='internal/status/repository.go' -destination='internal/status/mocks/repository_mock.go' -package=mocks
-	mockgen -source='internal/status/usecase.go' -destination='internal/status/mocks/usecase_mock.go' -package=mocks
-# notification
-	mockgen -source='internal/notification/repository.go' -destination='internal/notification/mocks/repository_mock.go' -package=mocks
-	mockgen -source='internal/notification/usecase.go' -destination='internal/notification/mocks/usecase_mock.go' -package=mocks
+	make mockgen-package name=student
+	make mockgen-package name=faculty
+	make mockgen-package name=program
+	make mockgen-package name=status
+	make mockgen-package name=fileprocessing
+	make mockgen-package name=notification
 
+test:
+	go test -cover ./...
 
-test-student:
+test-summary:
+	gotestsum --junitfile report.xml ./...
+
+lint:
+	golangci-lint run ./...
+
+ci-check:
+	@echo "Running lint..."
+	$(MAKE) lint
+	@echo "Running tests..."
+	$(MAKE) test-summary
+
+unit-test-student:
 	go test ./internal/student/repository
 	go test ./internal/student/usecase
 	go test ./internal/student/delivery/http
+
+unit-test-faculty:
+	go test ./internal/faculty/repository
+	go test ./internal/faculty/usecase
+	go test ./internal/faculty/delivery/http
+
+unit-test-program:
+	go test ./internal/program/repository
+	go test ./internal/program/usecase
+	go test ./internal/program/delivery/http
+
+unit-test-status:
+	go test ./internal/status/repository
+	go test ./internal/status/usecase
+	go test ./internal/status/delivery/http
+
+unit-test-notification:
+	go test ./internal/notification/repository
+	go test ./internal/notification/usecase
+	go test ./internal/notification/delivery/http
+
+unit-test:
+	make unit-test-student
+	make unit-test-faculty
+	make unit-test-program
+	make unit-test-status
+	make unit-test-notification
 
 generate:
 	@if not exist internal\$(name) mkdir internal\$(name)
@@ -108,4 +159,4 @@ generate:
 
 	@echo Module $(name) under project $(PROJECT_NAME) has been generated successfully!
 
-.PHONY: generate
+.PHONY: generate test test-summary lint testgen ci-check unit-test unit-test-student unit-test-faculty unit-test-program unit-test-status unit-test-notification mockgen

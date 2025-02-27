@@ -9,5 +9,5 @@ import (
 type IProgramUsecase interface {
 	GetPrograms(ctx context.Context) ([]*models.Program, error)
 	CreateProgram(ctx context.Context, program *models.Program) error
-	DeleteProgram(ctx context.Context, program_id int) error
+	DeleteProgram(ctx context.Context, id int) error
 }

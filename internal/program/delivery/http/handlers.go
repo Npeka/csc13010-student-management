@@ -66,14 +66,14 @@ func (ph *programHandlers) CreateProgram() gin.HandlerFunc {
 func (ph *programHandlers) DeleteProgram() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ph.lg.Info("DeleteProgram called")
-		programID, err := strconv.Atoi(c.Param("program_id"))
+		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
 			ph.lg.Error("Invalid program ID", zap.Error(err))
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid program ID"})
 			return
 		}
 
-		err = ph.pu.DeleteProgram(c, programID)
+		err = ph.pu.DeleteProgram(c, id)
 		if err != nil {
 			ph.lg.Error("Error deleting program", zap.Error(err))
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

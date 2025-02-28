@@ -1,0 +1,2078 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>http: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/csc13010-student-management/internal/faculty/delivery/http/handlers.go (100.0%)</option>
+				
+				<option value="file1">github.com/csc13010-student-management/internal/faculty/delivery/http/routes.go (0.0%)</option>
+				
+				<option value="file2">github.com/csc13010-student-management/internal/faculty/mocks/repository_mock.go (100.0%)</option>
+				
+				<option value="file3">github.com/csc13010-student-management/internal/faculty/mocks/usecase_mock.go (100.0%)</option>
+				
+				<option value="file4">github.com/csc13010-student-management/internal/faculty/repository/repository.go (6.7%)</option>
+				
+				<option value="file5">github.com/csc13010-student-management/internal/faculty/usecase/usecase.go (89.5%)</option>
+				
+				<option value="file6">github.com/csc13010-student-management/internal/program/delivery/http/handlers.go (100.0%)</option>
+				
+				<option value="file7">github.com/csc13010-student-management/internal/program/delivery/http/routes.go (0.0%)</option>
+				
+				<option value="file8">github.com/csc13010-student-management/internal/program/mocks/repository_mock.go (100.0%)</option>
+				
+				<option value="file9">github.com/csc13010-student-management/internal/program/mocks/usecase_mock.go (100.0%)</option>
+				
+				<option value="file10">github.com/csc13010-student-management/internal/program/repository/repository.go (7.1%)</option>
+				
+				<option value="file11">github.com/csc13010-student-management/internal/program/usecase/usecase.go (88.2%)</option>
+				
+				<option value="file12">github.com/csc13010-student-management/internal/status/delivery/http/handlers.go (100.0%)</option>
+				
+				<option value="file13">github.com/csc13010-student-management/internal/status/delivery/http/routes.go (0.0%)</option>
+				
+				<option value="file14">github.com/csc13010-student-management/internal/status/mocks/repository_mock.go (100.0%)</option>
+				
+				<option value="file15">github.com/csc13010-student-management/internal/status/mocks/usecase_mock.go (100.0%)</option>
+				
+				<option value="file16">github.com/csc13010-student-management/internal/status/repository/repository.go (9.1%)</option>
+				
+				<option value="file17">github.com/csc13010-student-management/internal/status/usecase/usecase.go (89.5%)</option>
+				
+				<option value="file18">github.com/csc13010-student-management/internal/student/delivery/http/handlers.go (96.3%)</option>
+				
+				<option value="file19">github.com/csc13010-student-management/internal/student/delivery/http/routes.go (0.0%)</option>
+				
+				<option value="file20">github.com/csc13010-student-management/internal/student/mocks/handlers_mock.go (0.0%)</option>
+				
+				<option value="file21">github.com/csc13010-student-management/internal/student/mocks/repository_mock.go (76.8%)</option>
+				
+				<option value="file22">github.com/csc13010-student-management/internal/student/mocks/usecase_mock.go (100.0%)</option>
+				
+				<option value="file23">github.com/csc13010-student-management/internal/student/repository/repository.go (3.4%)</option>
+				
+				<option value="file24">github.com/csc13010-student-management/internal/student/usecase/usecase.go (85.3%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package http
+
+import (
+        "net/http"
+        "strconv"
+
+        "github.com/csc13010-student-management/internal/faculty"
+        "github.com/csc13010-student-management/internal/models"
+        "github.com/csc13010-student-management/pkg/logger"
+        "github.com/gin-gonic/gin"
+        "go.uber.org/zap"
+)
+
+type facultyHandlers struct {
+        fu faculty.IFacultyUsecase
+        lg *logger.LoggerZap
+}
+
+func NewFacultyHandlers(
+        fu faculty.IFacultyUsecase,
+        lg *logger.LoggerZap,
+) faculty.IFacultyHandlers <span class="cov10" title="4">{
+        return &amp;facultyHandlers{
+                fu: fu,
+                lg: lg,
+        }
+}</span>
+
+func (fh *facultyHandlers) GetFaculties() gin.HandlerFunc <span class="cov1" title="1">{
+        return func(c *gin.Context) </span><span class="cov5" title="2">{
+                fh.lg.Info("GetFaculties called")
+                faculties, err := fh.fu.GetFaculties(c.Request.Context())
+                if err != nil </span><span class="cov1" title="1">{
+                        fh.lg.Error("Error getting faculties", zap.Error(err))
+                        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov1" title="1">fh.lg.Info("GetFaculties successful")
+                c.JSON(http.StatusOK, faculties)</span>
+        }
+}
+
+func (fh *facultyHandlers) CreateFaculty() gin.HandlerFunc <span class="cov1" title="1">{
+        return func(c *gin.Context) </span><span class="cov8" title="3">{
+                fh.lg.Info("GetFaculties called")
+                var faculty models.Faculty
+                if err := c.ShouldBindJSON(&amp;faculty); err != nil </span><span class="cov1" title="1">{
+                        fh.lg.Error("Error binding JSON", zap.Error(err))
+                        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov5" title="2">err := fh.fu.CreateFaculty(c.Request.Context(), &amp;faculty)
+                if err != nil </span><span class="cov1" title="1">{
+                        fh.lg.Error("Error creating faculty", zap.Error(err))
+                        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov1" title="1">fh.lg.Info("CreateFaculty successful")
+                c.JSON(http.StatusOK, faculty)</span>
+        }
+}
+
+func (s *facultyHandlers) DeleteFaculty() gin.HandlerFunc <span class="cov1" title="1">{
+        return func(c *gin.Context) </span><span class="cov8" title="3">{
+                s.lg.Info("DeleteFaculty called")
+                id, err := strconv.Atoi(c.Param("id"))
+                if err != nil </span><span class="cov1" title="1">{
+                        s.lg.Error("Invalid faculty ID", zap.Error(err))
+                        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid faculty ID"})
+                        return
+                }</span>
+
+                <span class="cov5" title="2">err = s.fu.DeleteFaculty(c.Request.Context(), id)
+                if err != nil </span><span class="cov1" title="1">{
+                        s.lg.Error("Error deleting faculty", zap.Error(err))
+                        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov1" title="1">s.lg.Info("DeleteFaculty successful")
+                c.JSON(http.StatusOK, gin.H{"message": "Faculty deleted successfully"})</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package http
+
+import (
+        "github.com/csc13010-student-management/internal/faculty"
+        "github.com/gin-gonic/gin"
+)
+
+func MapFacultyHandlers(ftGroup *gin.RouterGroup, h faculty.IFacultyHandlers) <span class="cov0" title="0">{
+        ftGroup.GET("/", h.GetFaculties())
+        ftGroup.POST("/", h.CreateFaculty())
+        ftGroup.DELETE("/:id", h.DeleteFaculty())
+}</span>
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: internal/faculty/repository.go
+
+// Package mocks is a generated GoMock package.
+package mocks
+
+import (
+        context "context"
+        reflect "reflect"
+
+        models "github.com/csc13010-student-management/internal/models"
+        gomock "github.com/golang/mock/gomock"
+)
+
+// MockIFacultyRepository is a mock of IFacultyRepository interface.
+type MockIFacultyRepository struct {
+        ctrl     *gomock.Controller
+        recorder *MockIFacultyRepositoryMockRecorder
+}
+
+// MockIFacultyRepositoryMockRecorder is the mock recorder for MockIFacultyRepository.
+type MockIFacultyRepositoryMockRecorder struct {
+        mock *MockIFacultyRepository
+}
+
+// NewMockIFacultyRepository creates a new mock instance.
+func NewMockIFacultyRepository(ctrl *gomock.Controller) *MockIFacultyRepository <span class="cov8" title="7">{
+        mock := &amp;MockIFacultyRepository{ctrl: ctrl}
+        mock.recorder = &amp;MockIFacultyRepositoryMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockIFacultyRepository) EXPECT() *MockIFacultyRepositoryMockRecorder <span class="cov10" title="12">{
+        return m.recorder
+}</span>
+
+// CreateFaculty mocks base method.
+func (m *MockIFacultyRepository) CreateFaculty(ctx context.Context, faculty *models.Faculty) error <span class="cov7" title="6">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "CreateFaculty", ctx, faculty)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// CreateFaculty indicates an expected call of CreateFaculty.
+func (mr *MockIFacultyRepositoryMockRecorder) CreateFaculty(ctx, faculty interface{}) *gomock.Call <span class="cov7" title="6">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateFaculty", reflect.TypeOf((*MockIFacultyRepository)(nil).CreateFaculty), ctx, faculty)
+}</span>
+
+// DeleteFaculty mocks base method.
+func (m *MockIFacultyRepository) DeleteFaculty(ctx context.Context, id int) error <span class="cov6" title="4">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "DeleteFaculty", ctx, id)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// DeleteFaculty indicates an expected call of DeleteFaculty.
+func (mr *MockIFacultyRepositoryMockRecorder) DeleteFaculty(ctx, id interface{}) *gomock.Call <span class="cov6" title="4">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFaculty", reflect.TypeOf((*MockIFacultyRepository)(nil).DeleteFaculty), ctx, id)
+}</span>
+
+// GetFaculties mocks base method.
+func (m *MockIFacultyRepository) GetFaculties(ctx context.Context) ([]*models.Faculty, error) <span class="cov3" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetFaculties", ctx)
+        ret0, _ := ret[0].([]*models.Faculty)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetFaculties indicates an expected call of GetFaculties.
+func (mr *MockIFacultyRepositoryMockRecorder) GetFaculties(ctx interface{}) *gomock.Call <span class="cov3" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFaculties", reflect.TypeOf((*MockIFacultyRepository)(nil).GetFaculties), ctx)
+}</span>
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: internal/faculty/usecase.go
+
+// Package mocks is a generated GoMock package.
+package mocks
+
+import (
+        context "context"
+        reflect "reflect"
+
+        models "github.com/csc13010-student-management/internal/models"
+        gomock "github.com/golang/mock/gomock"
+)
+
+// MockIFacultyUsecase is a mock of IFacultyUsecase interface.
+type MockIFacultyUsecase struct {
+        ctrl     *gomock.Controller
+        recorder *MockIFacultyUsecaseMockRecorder
+}
+
+// MockIFacultyUsecaseMockRecorder is the mock recorder for MockIFacultyUsecase.
+type MockIFacultyUsecaseMockRecorder struct {
+        mock *MockIFacultyUsecase
+}
+
+// NewMockIFacultyUsecase creates a new mock instance.
+func NewMockIFacultyUsecase(ctrl *gomock.Controller) *MockIFacultyUsecase <span class="cov7" title="4">{
+        mock := &amp;MockIFacultyUsecase{ctrl: ctrl}
+        mock.recorder = &amp;MockIFacultyUsecaseMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockIFacultyUsecase) EXPECT() *MockIFacultyUsecaseMockRecorder <span class="cov10" title="6">{
+        return m.recorder
+}</span>
+
+// CreateFaculty mocks base method.
+func (m *MockIFacultyUsecase) CreateFaculty(ctx context.Context, faculty *models.Faculty) error <span class="cov4" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "CreateFaculty", ctx, faculty)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// CreateFaculty indicates an expected call of CreateFaculty.
+func (mr *MockIFacultyUsecaseMockRecorder) CreateFaculty(ctx, faculty interface{}) *gomock.Call <span class="cov4" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateFaculty", reflect.TypeOf((*MockIFacultyUsecase)(nil).CreateFaculty), ctx, faculty)
+}</span>
+
+// DeleteFaculty mocks base method.
+func (m *MockIFacultyUsecase) DeleteFaculty(ctx context.Context, id int) error <span class="cov4" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "DeleteFaculty", ctx, id)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// DeleteFaculty indicates an expected call of DeleteFaculty.
+func (mr *MockIFacultyUsecaseMockRecorder) DeleteFaculty(ctx, id interface{}) *gomock.Call <span class="cov4" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFaculty", reflect.TypeOf((*MockIFacultyUsecase)(nil).DeleteFaculty), ctx, id)
+}</span>
+
+// GetFaculties mocks base method.
+func (m *MockIFacultyUsecase) GetFaculties(ctx context.Context) ([]*models.Faculty, error) <span class="cov4" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetFaculties", ctx)
+        ret0, _ := ret[0].([]*models.Faculty)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetFaculties indicates an expected call of GetFaculties.
+func (mr *MockIFacultyUsecaseMockRecorder) GetFaculties(ctx interface{}) *gomock.Call <span class="cov4" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFaculties", reflect.TypeOf((*MockIFacultyUsecase)(nil).GetFaculties), ctx)
+}</span>
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package repository
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/csc13010-student-management/internal/faculty"
+        "github.com/csc13010-student-management/internal/models"
+        "gorm.io/gorm"
+)
+
+type facultyRepository struct {
+        db *gorm.DB
+}
+
+func NewFacultyRepository(db *gorm.DB) faculty.IFacultyRepository <span class="cov10" title="4">{
+        return &amp;facultyRepository{db: db}
+}</span>
+
+func (fr *facultyRepository) GetFaculties(ctx context.Context) ([]*models.Faculty, error) <span class="cov0" title="0">{
+        var faculties []*models.Faculty
+        err := fr.db.WithContext(ctx).Find(&amp;faculties).Error
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("failed to get faculties: %w", err)
+        }</span>
+        <span class="cov0" title="0">return faculties, nil</span>
+}
+
+func (fr *facultyRepository) CreateFaculty(ctx context.Context, faculty *models.Faculty) error <span class="cov0" title="0">{
+        var existing models.Faculty
+        if err := fr.db.WithContext(ctx).Where("name = ?", faculty.Name).First(&amp;existing).Error; err == nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("faculty already exists: %w", err)
+        }</span>
+        <span class="cov0" title="0">if err := fr.db.WithContext(ctx).Create(&amp;faculty).Error; err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("failed to create faculty: %w", err)
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (fr *facultyRepository) DeleteFaculty(ctx context.Context, id int) error <span class="cov0" title="0">{
+        if err := fr.db.WithContext(ctx).Where("id = ?", id).Delete(&amp;models.Faculty{}).Error; err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("failed to delete faculty: %w", err)
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package usecase
+
+import (
+        "context"
+
+        "github.com/csc13010-student-management/internal/faculty"
+        "github.com/csc13010-student-management/internal/models"
+        "github.com/csc13010-student-management/pkg/logger"
+        "go.uber.org/zap"
+)
+
+type facultyUsecase struct {
+        fr faculty.IFacultyRepository
+        lg *logger.LoggerZap
+}
+
+func NewFacultyUsecase(
+        fr faculty.IFacultyRepository,
+        lg *logger.LoggerZap,
+) faculty.IFacultyUsecase <span class="cov10" title="4">{
+        return &amp;facultyUsecase{
+                fr: fr,
+                lg: lg,
+        }
+}</span>
+
+func (fu *facultyUsecase) GetFaculties(ctx context.Context) ([]*models.Faculty, error) <span class="cov1" title="1">{
+        faculties, err := fu.fr.GetFaculties(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                fu.lg.Error("Failed to get faculties", zap.Error(err))
+                return nil, err
+        }</span>
+        <span class="cov1" title="1">fu.lg.Info("Successfully fetched faculties")
+        return faculties, nil</span>
+}
+
+func (fu *facultyUsecase) CreateFaculty(ctx context.Context, faculty *models.Faculty) error <span class="cov8" title="3">{
+        err := fu.fr.CreateFaculty(ctx, faculty)
+        if err != nil </span><span class="cov5" title="2">{
+                fu.lg.Error("Failed to create faculty", zap.Error(err))
+                return err
+        }</span>
+        <span class="cov1" title="1">fu.lg.Info("Successfully created faculty")
+        return nil</span>
+}
+
+func (fu *facultyUsecase) DeleteFaculty(ctx context.Context, id int) error <span class="cov5" title="2">{
+        err := fu.fr.DeleteFaculty(ctx, id)
+        if err != nil </span><span class="cov1" title="1">{
+                fu.lg.Error("Failed to delete faculty", zap.Error(err))
+                return err
+        }</span>
+        <span class="cov1" title="1">fu.lg.Info("Successfully deleted faculty")
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package http
+
+import (
+        "net/http"
+        "strconv"
+
+        "github.com/csc13010-student-management/internal/models"
+        "github.com/csc13010-student-management/internal/program"
+        "github.com/csc13010-student-management/pkg/logger"
+        "github.com/gin-gonic/gin"
+        "go.uber.org/zap"
+)
+
+type programHandlers struct {
+        pu program.IProgramUsecase
+        lg *logger.LoggerZap
+}
+
+func NewProgramHandlers(
+        pu program.IProgramUsecase,
+        lg *logger.LoggerZap,
+) program.IProgramHandlers <span class="cov10" title="4">{
+        return &amp;programHandlers{
+                pu: pu,
+                lg: lg,
+        }
+}</span>
+
+func (ph *programHandlers) GetPrograms() gin.HandlerFunc <span class="cov1" title="1">{
+        return func(c *gin.Context) </span><span class="cov5" title="2">{
+                ph.lg.Info("GetPrograms called")
+                programs, err := ph.pu.GetPrograms(c)
+                if err != nil </span><span class="cov1" title="1">{
+                        ph.lg.Error("Error getting programs", zap.Error(err))
+                        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov1" title="1">ph.lg.Info("GetPrograms successful")
+                c.JSON(http.StatusOK, programs)</span>
+        }
+}
+
+func (ph *programHandlers) CreateProgram() gin.HandlerFunc <span class="cov1" title="1">{
+        return func(c *gin.Context) </span><span class="cov8" title="3">{
+                ph.lg.Info("CreateProgram called")
+                var program models.Program
+                if err := c.ShouldBindJSON(&amp;program); err != nil </span><span class="cov1" title="1">{
+                        ph.lg.Error("Error binding JSON", zap.Error(err))
+                        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov5" title="2">err := ph.pu.CreateProgram(c, &amp;program)
+                if err != nil </span><span class="cov1" title="1">{
+                        ph.lg.Error("Error creating program", zap.Error(err))
+                        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov1" title="1">ph.lg.Info("CreateProgram successful")
+                c.JSON(http.StatusOK, program)</span>
+        }
+}
+
+func (ph *programHandlers) DeleteProgram() gin.HandlerFunc <span class="cov1" title="1">{
+        return func(c *gin.Context) </span><span class="cov8" title="3">{
+                ph.lg.Info("DeleteProgram called")
+                id, err := strconv.Atoi(c.Param("id"))
+                if err != nil </span><span class="cov1" title="1">{
+                        ph.lg.Error("Invalid program ID", zap.Error(err))
+                        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid program ID"})
+                        return
+                }</span>
+
+                <span class="cov5" title="2">err = ph.pu.DeleteProgram(c, id)
+                if err != nil </span><span class="cov1" title="1">{
+                        ph.lg.Error("Error deleting program", zap.Error(err))
+                        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov1" title="1">ph.lg.Info("DeleteProgram successful")
+                c.JSON(http.StatusOK, gin.H{"message": "Program deleted successfully"})</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package http
+
+import (
+        "github.com/csc13010-student-management/internal/program"
+        "github.com/gin-gonic/gin"
+)
+
+func MapProgramHandlers(pgGroup *gin.RouterGroup, ph program.IProgramHandlers) <span class="cov0" title="0">{
+        pgGroup.GET("/", ph.GetPrograms())
+        pgGroup.POST("/", ph.CreateProgram())
+        pgGroup.DELETE("/:id", ph.DeleteProgram())
+}</span>
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: internal/program/repository.go
+
+// Package mocks is a generated GoMock package.
+package mocks
+
+import (
+        context "context"
+        reflect "reflect"
+
+        models "github.com/csc13010-student-management/internal/models"
+        gomock "github.com/golang/mock/gomock"
+)
+
+// MockIProgramRepository is a mock of IProgramRepository interface.
+type MockIProgramRepository struct {
+        ctrl     *gomock.Controller
+        recorder *MockIProgramRepositoryMockRecorder
+}
+
+// MockIProgramRepositoryMockRecorder is the mock recorder for MockIProgramRepository.
+type MockIProgramRepositoryMockRecorder struct {
+        mock *MockIProgramRepository
+}
+
+// NewMockIProgramRepository creates a new mock instance.
+func NewMockIProgramRepository(ctrl *gomock.Controller) *MockIProgramRepository <span class="cov8" title="7">{
+        mock := &amp;MockIProgramRepository{ctrl: ctrl}
+        mock.recorder = &amp;MockIProgramRepositoryMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockIProgramRepository) EXPECT() *MockIProgramRepositoryMockRecorder <span class="cov10" title="12">{
+        return m.recorder
+}</span>
+
+// CreateProgram mocks base method.
+func (m *MockIProgramRepository) CreateProgram(ctx context.Context, program *models.Program) error <span class="cov7" title="6">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "CreateProgram", ctx, program)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// CreateProgram indicates an expected call of CreateProgram.
+func (mr *MockIProgramRepositoryMockRecorder) CreateProgram(ctx, program interface{}) *gomock.Call <span class="cov7" title="6">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateProgram", reflect.TypeOf((*MockIProgramRepository)(nil).CreateProgram), ctx, program)
+}</span>
+
+// DeleteProgram mocks base method.
+func (m *MockIProgramRepository) DeleteProgram(ctx context.Context, id int) error <span class="cov6" title="4">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "DeleteProgram", ctx, id)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// DeleteProgram indicates an expected call of DeleteProgram.
+func (mr *MockIProgramRepositoryMockRecorder) DeleteProgram(ctx, id interface{}) *gomock.Call <span class="cov6" title="4">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteProgram", reflect.TypeOf((*MockIProgramRepository)(nil).DeleteProgram), ctx, id)
+}</span>
+
+// GetPrograms mocks base method.
+func (m *MockIProgramRepository) GetPrograms(ctx context.Context) ([]*models.Program, error) <span class="cov3" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetPrograms", ctx)
+        ret0, _ := ret[0].([]*models.Program)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetPrograms indicates an expected call of GetPrograms.
+func (mr *MockIProgramRepositoryMockRecorder) GetPrograms(ctx interface{}) *gomock.Call <span class="cov3" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPrograms", reflect.TypeOf((*MockIProgramRepository)(nil).GetPrograms), ctx)
+}</span>
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: internal/program/usecase.go
+
+// Package mocks is a generated GoMock package.
+package mocks
+
+import (
+        context "context"
+        reflect "reflect"
+
+        models "github.com/csc13010-student-management/internal/models"
+        gomock "github.com/golang/mock/gomock"
+)
+
+// MockIProgramUsecase is a mock of IProgramUsecase interface.
+type MockIProgramUsecase struct {
+        ctrl     *gomock.Controller
+        recorder *MockIProgramUsecaseMockRecorder
+}
+
+// MockIProgramUsecaseMockRecorder is the mock recorder for MockIProgramUsecase.
+type MockIProgramUsecaseMockRecorder struct {
+        mock *MockIProgramUsecase
+}
+
+// NewMockIProgramUsecase creates a new mock instance.
+func NewMockIProgramUsecase(ctrl *gomock.Controller) *MockIProgramUsecase <span class="cov7" title="4">{
+        mock := &amp;MockIProgramUsecase{ctrl: ctrl}
+        mock.recorder = &amp;MockIProgramUsecaseMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockIProgramUsecase) EXPECT() *MockIProgramUsecaseMockRecorder <span class="cov10" title="6">{
+        return m.recorder
+}</span>
+
+// CreateProgram mocks base method.
+func (m *MockIProgramUsecase) CreateProgram(ctx context.Context, program *models.Program) error <span class="cov4" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "CreateProgram", ctx, program)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// CreateProgram indicates an expected call of CreateProgram.
+func (mr *MockIProgramUsecaseMockRecorder) CreateProgram(ctx, program interface{}) *gomock.Call <span class="cov4" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateProgram", reflect.TypeOf((*MockIProgramUsecase)(nil).CreateProgram), ctx, program)
+}</span>
+
+// DeleteProgram mocks base method.
+func (m *MockIProgramUsecase) DeleteProgram(ctx context.Context, id int) error <span class="cov4" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "DeleteProgram", ctx, id)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// DeleteProgram indicates an expected call of DeleteProgram.
+func (mr *MockIProgramUsecaseMockRecorder) DeleteProgram(ctx, id interface{}) *gomock.Call <span class="cov4" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteProgram", reflect.TypeOf((*MockIProgramUsecase)(nil).DeleteProgram), ctx, id)
+}</span>
+
+// GetPrograms mocks base method.
+func (m *MockIProgramUsecase) GetPrograms(ctx context.Context) ([]*models.Program, error) <span class="cov4" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetPrograms", ctx)
+        ret0, _ := ret[0].([]*models.Program)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetPrograms indicates an expected call of GetPrograms.
+func (mr *MockIProgramUsecaseMockRecorder) GetPrograms(ctx interface{}) *gomock.Call <span class="cov4" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPrograms", reflect.TypeOf((*MockIProgramUsecase)(nil).GetPrograms), ctx)
+}</span>
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package repository
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/csc13010-student-management/internal/models"
+        "github.com/csc13010-student-management/internal/program"
+        "gorm.io/gorm"
+)
+
+type programRepository struct {
+        db *gorm.DB
+}
+
+func NewProgramRepository(db *gorm.DB) program.IProgramRepository <span class="cov10" title="4">{
+        return &amp;programRepository{db: db}
+}</span>
+
+func (pr *programRepository) GetPrograms(ctx context.Context) ([]*models.Program, error) <span class="cov0" title="0">{
+        var programs []*models.Program
+        if err := pr.db.WithContext(ctx).Find(&amp;programs).Error; err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("failed to get programs: %w", err)
+        }</span>
+        <span class="cov0" title="0">return programs, nil</span>
+}
+
+func (pr *programRepository) CreateProgram(ctx context.Context, program *models.Program) error <span class="cov0" title="0">{
+        var existing models.Program
+        if err := pr.db.WithContext(ctx).Where("name = ?", program.Name).First(&amp;existing).Error; err == nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("program already exists: %w", err)
+        }</span>
+        <span class="cov0" title="0">if err := pr.db.WithContext(ctx).Create(program).Error; err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("failed to create program: %w", err)
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (pr *programRepository) DeleteProgram(ctx context.Context, id int) error <span class="cov0" title="0">{
+        if err := pr.db.WithContext(ctx).Where("id = ?", id).Delete(&amp;models.Program{}).Error; err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("failed to delete program: %w", err)
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package usecase
+
+import (
+        "context"
+
+        "github.com/csc13010-student-management/internal/models"
+        "github.com/csc13010-student-management/internal/program"
+        "github.com/csc13010-student-management/pkg/logger"
+        "go.uber.org/zap"
+)
+
+type programUsecase struct {
+        pr program.IProgramRepository
+        lg *logger.LoggerZap
+}
+
+func NewProgramUsecase(
+        pr program.IProgramRepository,
+        lg *logger.LoggerZap,
+) program.IProgramUsecase <span class="cov10" title="4">{
+        return &amp;programUsecase{
+                pr: pr,
+                lg: lg,
+        }
+}</span>
+
+func (pu *programUsecase) GetPrograms(ctx context.Context) ([]*models.Program, error) <span class="cov1" title="1">{
+        programs, err := pu.pr.GetPrograms(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                pu.lg.Error("Failed to get programs", zap.Error(err))
+                return nil, err
+        }</span>
+        <span class="cov1" title="1">pu.lg.Info("Successfully fetched programs")
+        return programs, nil</span>
+}
+
+func (pu *programUsecase) CreateProgram(ctx context.Context, program *models.Program) error <span class="cov8" title="3">{
+        if err := pu.pr.CreateProgram(ctx, program); err != nil </span><span class="cov5" title="2">{
+                pu.lg.Error("Failed to create program", zap.Error(err))
+                return err
+        }</span>
+        <span class="cov1" title="1">pu.lg.Info("Successfully created program", zap.Int("id", program.ID))
+        return nil</span>
+}
+
+func (pu *programUsecase) DeleteProgram(ctx context.Context, id int) error <span class="cov5" title="2">{
+        if err := pu.pr.DeleteProgram(ctx, id); err != nil </span><span class="cov1" title="1">{
+                pu.lg.Error("Failed to delete program", zap.Error(err))
+                return err
+        }</span>
+        <span class="cov1" title="1">pu.lg.Info("Successfully deleted program", zap.Int("id", id))
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package http
+
+import (
+        "net/http"
+        "strconv"
+
+        "github.com/csc13010-student-management/internal/models"
+        "github.com/csc13010-student-management/internal/status"
+        "github.com/csc13010-student-management/pkg/logger"
+        "github.com/gin-gonic/gin"
+        "go.uber.org/zap"
+)
+
+type statusHandlers struct {
+        su status.IStatusUsecase
+        lg *logger.LoggerZap
+}
+
+func NewStatusHandlers(
+        su status.IStatusUsecase,
+        lg *logger.LoggerZap,
+) status.IStatusHandlers <span class="cov10" title="4">{
+        return &amp;statusHandlers{
+                su: su,
+                lg: lg,
+        }
+}</span>
+
+func (sh *statusHandlers) GetStatuses() gin.HandlerFunc <span class="cov1" title="1">{
+        return func(c *gin.Context) </span><span class="cov5" title="2">{
+                sh.lg.Info("GetFaculties called")
+                statuses, err := sh.su.GetStatuses(c)
+                if err != nil </span><span class="cov1" title="1">{
+                        sh.lg.Error("Error getting statuses", zap.Error(err))
+                        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov1" title="1">sh.lg.Info("GetStatuses successful")
+                c.JSON(http.StatusOK, statuses)</span>
+        }
+}
+
+func (sh *statusHandlers) CreateStatus() gin.HandlerFunc <span class="cov1" title="1">{
+        return func(c *gin.Context) </span><span class="cov8" title="3">{
+                sh.lg.Info("GetFaculties called")
+                var status models.Status
+                if err := c.ShouldBindJSON(&amp;status); err != nil </span><span class="cov1" title="1">{
+                        sh.lg.Error("Error binding JSON", zap.Error(err))
+                        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov5" title="2">err := sh.su.CreateStatus(c, &amp;status)
+                if err != nil </span><span class="cov1" title="1">{
+                        sh.lg.Error("Error creating status", zap.Error(err))
+                        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov1" title="1">sh.lg.Info("GetFaculties successful")
+                c.JSON(http.StatusOK, status)</span>
+        }
+}
+
+func (sh *statusHandlers) DeleteStatus() gin.HandlerFunc <span class="cov1" title="1">{
+        return func(c *gin.Context) </span><span class="cov8" title="3">{
+                sh.lg.Info("DeleteStatus called")
+                id, err := strconv.Atoi(c.Param("id"))
+                if err != nil </span><span class="cov1" title="1">{
+                        sh.lg.Error("Invalid status ID", zap.Error(err))
+                        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid status ID"})
+                        return
+                }</span>
+
+                <span class="cov5" title="2">err = sh.su.DeleteStatus(c, id)
+                if err != nil </span><span class="cov1" title="1">{
+                        sh.lg.Error("Error deleting status", zap.Error(err))
+                        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov1" title="1">sh.lg.Info("DeleteStatus successful")
+                c.JSON(http.StatusOK, gin.H{"message": "Status deleted successfully"})</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package http
+
+import (
+        "github.com/csc13010-student-management/internal/status"
+        "github.com/gin-gonic/gin"
+)
+
+func MapStatusHandlers(ftGroup *gin.RouterGroup, h status.IStatusHandlers) <span class="cov0" title="0">{
+        ftGroup.GET("/", h.GetStatuses())
+        ftGroup.POST("/", h.CreateStatus())
+        ftGroup.DELETE("/:id", h.DeleteStatus())
+}</span>
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: internal/status/repository.go
+
+// Package mocks is a generated GoMock package.
+package mocks
+
+import (
+        context "context"
+        reflect "reflect"
+
+        models "github.com/csc13010-student-management/internal/models"
+        gomock "github.com/golang/mock/gomock"
+)
+
+// MockIStatusRepository is a mock of IStatusRepository interface.
+type MockIStatusRepository struct {
+        ctrl     *gomock.Controller
+        recorder *MockIStatusRepositoryMockRecorder
+}
+
+// MockIStatusRepositoryMockRecorder is the mock recorder for MockIStatusRepository.
+type MockIStatusRepositoryMockRecorder struct {
+        mock *MockIStatusRepository
+}
+
+// NewMockIStatusRepository creates a new mock instance.
+func NewMockIStatusRepository(ctrl *gomock.Controller) *MockIStatusRepository <span class="cov8" title="7">{
+        mock := &amp;MockIStatusRepository{ctrl: ctrl}
+        mock.recorder = &amp;MockIStatusRepositoryMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockIStatusRepository) EXPECT() *MockIStatusRepositoryMockRecorder <span class="cov10" title="10">{
+        return m.recorder
+}</span>
+
+// CreateStatus mocks base method.
+func (m *MockIStatusRepository) CreateStatus(ctx context.Context, status *models.Status) error <span class="cov6" title="4">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "CreateStatus", ctx, status)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// CreateStatus indicates an expected call of CreateStatus.
+func (mr *MockIStatusRepositoryMockRecorder) CreateStatus(ctx, status interface{}) *gomock.Call <span class="cov6" title="4">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateStatus", reflect.TypeOf((*MockIStatusRepository)(nil).CreateStatus), ctx, status)
+}</span>
+
+// DeleteStatus mocks base method.
+func (m *MockIStatusRepository) DeleteStatus(ctx context.Context, status_id int) error <span class="cov6" title="4">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "DeleteStatus", ctx, status_id)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// DeleteStatus indicates an expected call of DeleteStatus.
+func (mr *MockIStatusRepositoryMockRecorder) DeleteStatus(ctx, status_id interface{}) *gomock.Call <span class="cov6" title="4">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteStatus", reflect.TypeOf((*MockIStatusRepository)(nil).DeleteStatus), ctx, status_id)
+}</span>
+
+// GetStatuses mocks base method.
+func (m *MockIStatusRepository) GetStatuses(ctx context.Context) ([]*models.Status, error) <span class="cov3" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetStatuses", ctx)
+        ret0, _ := ret[0].([]*models.Status)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetStatuses indicates an expected call of GetStatuses.
+func (mr *MockIStatusRepositoryMockRecorder) GetStatuses(ctx interface{}) *gomock.Call <span class="cov3" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetStatuses", reflect.TypeOf((*MockIStatusRepository)(nil).GetStatuses), ctx)
+}</span>
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: internal/status/usecase.go
+
+// Package mocks is a generated GoMock package.
+package mocks
+
+import (
+        context "context"
+        reflect "reflect"
+
+        models "github.com/csc13010-student-management/internal/models"
+        gomock "github.com/golang/mock/gomock"
+)
+
+// MockIStatusUsecase is a mock of IStatusUsecase interface.
+type MockIStatusUsecase struct {
+        ctrl     *gomock.Controller
+        recorder *MockIStatusUsecaseMockRecorder
+}
+
+// MockIStatusUsecaseMockRecorder is the mock recorder for MockIStatusUsecase.
+type MockIStatusUsecaseMockRecorder struct {
+        mock *MockIStatusUsecase
+}
+
+// NewMockIStatusUsecase creates a new mock instance.
+func NewMockIStatusUsecase(ctrl *gomock.Controller) *MockIStatusUsecase <span class="cov7" title="4">{
+        mock := &amp;MockIStatusUsecase{ctrl: ctrl}
+        mock.recorder = &amp;MockIStatusUsecaseMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockIStatusUsecase) EXPECT() *MockIStatusUsecaseMockRecorder <span class="cov10" title="6">{
+        return m.recorder
+}</span>
+
+// CreateStatus mocks base method.
+func (m *MockIStatusUsecase) CreateStatus(ctx context.Context, status *models.Status) error <span class="cov4" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "CreateStatus", ctx, status)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// CreateStatus indicates an expected call of CreateStatus.
+func (mr *MockIStatusUsecaseMockRecorder) CreateStatus(ctx, status interface{}) *gomock.Call <span class="cov4" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateStatus", reflect.TypeOf((*MockIStatusUsecase)(nil).CreateStatus), ctx, status)
+}</span>
+
+// DeleteStatus mocks base method.
+func (m *MockIStatusUsecase) DeleteStatus(ctx context.Context, id int) error <span class="cov4" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "DeleteStatus", ctx, id)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// DeleteStatus indicates an expected call of DeleteStatus.
+func (mr *MockIStatusUsecaseMockRecorder) DeleteStatus(ctx, id interface{}) *gomock.Call <span class="cov4" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteStatus", reflect.TypeOf((*MockIStatusUsecase)(nil).DeleteStatus), ctx, id)
+}</span>
+
+// GetStatuses mocks base method.
+func (m *MockIStatusUsecase) GetStatuses(ctx context.Context) ([]*models.Status, error) <span class="cov4" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetStatuses", ctx)
+        ret0, _ := ret[0].([]*models.Status)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetStatuses indicates an expected call of GetStatuses.
+func (mr *MockIStatusUsecaseMockRecorder) GetStatuses(ctx interface{}) *gomock.Call <span class="cov4" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetStatuses", reflect.TypeOf((*MockIStatusUsecase)(nil).GetStatuses), ctx)
+}</span>
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package repository
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/csc13010-student-management/internal/models"
+        "github.com/csc13010-student-management/internal/status"
+        "gorm.io/gorm"
+)
+
+type statusRepository struct {
+        db *gorm.DB
+}
+
+func NewStatusRepository(
+        db *gorm.DB,
+) status.IStatusRepository <span class="cov10" title="4">{
+        return &amp;statusRepository{
+                db: db,
+        }
+}</span>
+
+func (s *statusRepository) GetStatuses(ctx context.Context) ([]*models.Status, error) <span class="cov0" title="0">{
+        var statuses []*models.Status
+        if err := s.db.WithContext(ctx).Find(&amp;statuses).Error; err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("failed to get statuses: %w", err)
+        }</span>
+        <span class="cov0" title="0">return statuses, nil</span>
+}
+
+func (s *statusRepository) CreateStatus(ctx context.Context, status *models.Status) error <span class="cov0" title="0">{
+        if err := s.db.WithContext(ctx).Create(status).Error; err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("failed to create status: %w", err)
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (s *statusRepository) DeleteStatus(ctx context.Context, id int) error <span class="cov0" title="0">{
+        if err := s.db.WithContext(ctx).Where("id = ?", id).Delete(&amp;models.Status{}).Error; err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("failed to delete status: %w", err)
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package usecase
+
+import (
+        "context"
+
+        "github.com/csc13010-student-management/internal/models"
+        "github.com/csc13010-student-management/internal/status"
+        "github.com/csc13010-student-management/pkg/logger"
+        "go.uber.org/zap"
+)
+
+type statusUsecase struct {
+        sr status.IStatusRepository
+        lg *logger.LoggerZap
+}
+
+func NewStatusUsecase(
+        sr status.IStatusRepository,
+        lg *logger.LoggerZap,
+) status.IStatusUsecase <span class="cov10" title="4">{
+        return &amp;statusUsecase{
+                sr: sr,
+                lg: lg,
+        }
+}</span>
+
+func (su *statusUsecase) GetStatuses(ctx context.Context) ([]*models.Status, error) <span class="cov1" title="1">{
+        statuses, err := su.sr.GetStatuses(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                su.lg.Error("Failed to get statuses", zap.Error(err))
+                return nil, err
+        }</span>
+        <span class="cov1" title="1">su.lg.Info("Successfully fetched statuses")
+        return statuses, nil</span>
+}
+
+func (su *statusUsecase) CreateStatus(ctx context.Context, status *models.Status) error <span class="cov5" title="2">{
+        err := su.sr.CreateStatus(ctx, status)
+        if err != nil </span><span class="cov1" title="1">{
+                su.lg.Error("Failed to create status", zap.Error(err))
+                return err
+        }</span>
+        <span class="cov1" title="1">su.lg.Info("Successfully created status")
+        return nil</span>
+}
+
+func (su *statusUsecase) DeleteStatus(ctx context.Context, status_id int) error <span class="cov5" title="2">{
+        err := su.sr.DeleteStatus(ctx, status_id)
+        if err != nil </span><span class="cov1" title="1">{
+                su.lg.Error("Failed to delete status", zap.Error(err))
+                return err
+        }</span>
+        <span class="cov1" title="1">su.lg.Info("Successfully deleted status")
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package http
+
+import (
+        "net/http"
+        "strconv"
+
+        "github.com/csc13010-student-management/internal/models"
+        "github.com/csc13010-student-management/internal/student"
+        "github.com/csc13010-student-management/pkg/logger"
+        "github.com/gin-gonic/gin"
+        "go.uber.org/zap"
+)
+
+type studentHandlers struct {
+        su student.IStudentUsecase
+        lg *logger.LoggerZap
+}
+
+func NewStudentHandlers(
+        su student.IStudentUsecase,
+        lg *logger.LoggerZap,
+) student.IStudentHandlers <span class="cov10" title="4">{
+        return &amp;studentHandlers{
+                su: su,
+                lg: lg,
+        }
+}</span>
+
+// GetStudents implements student.IStudentHandlers.
+func (s *studentHandlers) GetStudents() gin.HandlerFunc <span class="cov1" title="1">{
+        return func(c *gin.Context) </span><span class="cov5" title="2">{
+                s.lg.Info("GetStudents called")
+                students, err := s.su.GetStudents(c)
+                if err != nil </span><span class="cov1" title="1">{
+                        s.lg.Error("Error getting students", zap.Error(err))
+                        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+                        return
+                }</span>
+                <span class="cov1" title="1">s.lg.Info("GetStudents successful")
+                c.JSON(http.StatusOK, students)</span>
+        }
+}
+
+// GetStudentByStudentID implements student.IStudentHandlers.
+func (s *studentHandlers) GetStudentByStudentID() gin.HandlerFunc <span class="cov1" title="1">{
+        return func(c *gin.Context) </span><span class="cov5" title="2">{
+                s.lg.Info("GetStudentByStudentID called")
+                student_id := c.Param("student_id")
+
+                student, err := s.su.GetStudentByStudentID(c, student_id)
+                if err != nil </span><span class="cov1" title="1">{
+                        s.lg.Error("Error getting student", zap.Error(err))
+                        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov1" title="1">s.lg.Info("GetStudentByStudentID successful")
+                c.JSON(http.StatusOK, student)</span>
+        }
+}
+
+// GetFullInfoStudentByStudentID implements student.IStudentHandlers.
+func (s *studentHandlers) GetFullInfoStudentByStudentID() gin.HandlerFunc <span class="cov1" title="1">{
+        return func(c *gin.Context) </span><span class="cov5" title="2">{
+                s.lg.Info("GetFullInfoStudentByStudentID called")
+                student_id := c.Param("student_id")
+
+                student, err := s.su.GetFullInfoStudentByStudentID(c, student_id)
+                if err != nil </span><span class="cov1" title="1">{
+                        s.lg.Error("Error getting full info student", zap.Error(err))
+                        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov1" title="1">s.lg.Info("GetFullInfoStudentByStudentID successful")
+                c.JSON(http.StatusOK, student)</span>
+        }
+}
+
+// CreateStudent implements student.IStudentHandlers.
+func (s *studentHandlers) CreateStudent() gin.HandlerFunc <span class="cov1" title="1">{
+        return func(c *gin.Context) </span><span class="cov8" title="3">{
+                s.lg.Info("CreateStudent called")
+                var student models.Student
+                if err := c.ShouldBindJSON(&amp;student); err != nil </span><span class="cov1" title="1">{
+                        s.lg.Error("Error binding JSON", zap.Error(err))
+                        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov5" title="2">err := s.su.CreateStudent(c, &amp;student)
+                if err != nil </span><span class="cov1" title="1">{
+                        s.lg.Error("Error creating student", zap.Error(err))
+                        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov1" title="1">s.lg.Info("CreateStudent successful")
+                c.JSON(http.StatusCreated, student)</span>
+        }
+}
+
+// UpdateStudent implements student.IStudentHandlers.
+func (s *studentHandlers) UpdateStudent() gin.HandlerFunc <span class="cov1" title="1">{
+        return func(c *gin.Context) </span><span class="cov8" title="3">{
+                s.lg.Info("UpdateStudent called")
+                student_id, err := strconv.ParseInt(c.Param("student_id"), 10, 64)
+                if err != nil </span><span class="cov1" title="1">{
+                        s.lg.Error("Invalid student ID", zap.Error(err))
+                        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid student ID"})
+                        return
+                }</span>
+
+                <span class="cov5" title="2">student := models.Student{StudentID: strconv.FormatInt(student_id, 10)}
+                if err := c.ShouldBindJSON(&amp;student); err != nil </span><span class="cov0" title="0">{
+                        s.lg.Error("Error binding JSON", zap.Error(err))
+                        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov5" title="2">err = s.su.UpdateStudent(c, &amp;student)
+                if err != nil </span><span class="cov1" title="1">{
+                        s.lg.Error("Error updating student", zap.Error(err))
+                        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov1" title="1">s.lg.Info("UpdateStudent successful")
+                c.JSON(http.StatusOK, student)</span>
+        }
+}
+
+// const defaultDeleteTimeLimit = 30 * time.Minute
+
+// DeleteStudent implements student.IStudentHandlers.
+func (s *studentHandlers) DeleteStudent() gin.HandlerFunc <span class="cov1" title="1">{
+        return func(c *gin.Context) </span><span class="cov5" title="2">{
+                // if os.Getenv("ALLOW_DELETE_ANYTIME") == "false" {
+                //         c.JSON(http.StatusForbidden, gin.H{"error": "DeleteStudent is disabled"})
+                //         return
+                // }
+
+                s.lg.Info("DeleteStudent called")
+                student_id := c.Param("student_id")
+
+                // student, err := s.su.GetStudentByStudentID(c, student_id)
+                // if err != nil {
+                //         c.JSON(http.StatusNotFound, gin.H{"error": "Student not found"})
+                //         return
+                // }
+
+                // deleteTimeLimit := defaultDeleteTimeLimit
+                // if envLimit, exists := os.LookupEnv("DELETE_TIME_LIMIT"); exists {
+                //         parsedLimit, err := time.ParseDuration(envLimit)
+                //         if err == nil {
+                //                 deleteTimeLimit = parsedLimit
+                //         }
+                // }
+
+                // if time.Since(student.CreatedAt) &gt; deleteTimeLimit {
+                //         c.JSON(http.StatusForbidden, gin.H{"error": "Student cannot be deleted after the allowed time"})
+                //         return
+                // }
+
+                err := s.su.DeleteStudent(c, student_id)
+                if err != nil </span><span class="cov1" title="1">{
+                        s.lg.Error("Error deleting student", zap.Error(err))
+                        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov1" title="1">s.lg.Info("DeleteStudent successful")
+                c.JSON(http.StatusOK, gin.H{"message": "Student deleted successfully"})</span>
+        }
+}
+
+func (s *studentHandlers) GetOptions() gin.HandlerFunc <span class="cov1" title="1">{
+        return func(c *gin.Context) </span><span class="cov5" title="2">{
+                s.lg.Info("GetOptions called")
+                options, err := s.su.GetOptions(c)
+                if err != nil </span><span class="cov1" title="1">{
+                        s.lg.Error("Error getting options", zap.Error(err))
+                        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+                        return
+                }</span>
+
+                <span class="cov1" title="1">s.lg.Info("GetOptions successful")
+                c.JSON(http.StatusOK, options)</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package http
+
+import (
+        "github.com/csc13010-student-management/internal/student"
+        "github.com/gin-gonic/gin"
+)
+
+func MapStudentHandlers(stGroup *gin.RouterGroup, h student.IStudentHandlers) <span class="cov0" title="0">{
+        stGroup.GET("/", h.GetStudents())
+        stGroup.GET("/:student_id", h.GetStudentByStudentID())
+        stGroup.GET("/full/:student_id", h.GetFullInfoStudentByStudentID())
+        stGroup.POST("/", h.CreateStudent())
+        stGroup.PATCH("/:student_id", h.UpdateStudent())
+        stGroup.DELETE("/:student_id", h.DeleteStudent())
+        stGroup.GET("/options", h.GetOptions())
+
+}</span>
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: internal/student/delivery.go
+
+// Package mocks is a generated GoMock package.
+package mocks
+
+import (
+        reflect "reflect"
+
+        gin "github.com/gin-gonic/gin"
+        gomock "github.com/golang/mock/gomock"
+)
+
+// MockIStudentHandlers is a mock of IStudentHandlers interface.
+type MockIStudentHandlers struct {
+        ctrl     *gomock.Controller
+        recorder *MockIStudentHandlersMockRecorder
+}
+
+// MockIStudentHandlersMockRecorder is the mock recorder for MockIStudentHandlers.
+type MockIStudentHandlersMockRecorder struct {
+        mock *MockIStudentHandlers
+}
+
+// NewMockIStudentHandlers creates a new mock instance.
+func NewMockIStudentHandlers(ctrl *gomock.Controller) *MockIStudentHandlers <span class="cov0" title="0">{
+        mock := &amp;MockIStudentHandlers{ctrl: ctrl}
+        mock.recorder = &amp;MockIStudentHandlersMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockIStudentHandlers) EXPECT() *MockIStudentHandlersMockRecorder <span class="cov0" title="0">{
+        return m.recorder
+}</span>
+
+// CreateStudent mocks base method.
+func (m *MockIStudentHandlers) CreateStudent() gin.HandlerFunc <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "CreateStudent")
+        ret0, _ := ret[0].(gin.HandlerFunc)
+        return ret0
+}</span>
+
+// CreateStudent indicates an expected call of CreateStudent.
+func (mr *MockIStudentHandlersMockRecorder) CreateStudent() *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateStudent", reflect.TypeOf((*MockIStudentHandlers)(nil).CreateStudent))
+}</span>
+
+// DeleteStudent mocks base method.
+func (m *MockIStudentHandlers) DeleteStudent() gin.HandlerFunc <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "DeleteStudent")
+        ret0, _ := ret[0].(gin.HandlerFunc)
+        return ret0
+}</span>
+
+// DeleteStudent indicates an expected call of DeleteStudent.
+func (mr *MockIStudentHandlersMockRecorder) DeleteStudent() *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteStudent", reflect.TypeOf((*MockIStudentHandlers)(nil).DeleteStudent))
+}</span>
+
+// GetOptions mocks base method.
+func (m *MockIStudentHandlers) GetOptions() gin.HandlerFunc <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetOptions")
+        ret0, _ := ret[0].(gin.HandlerFunc)
+        return ret0
+}</span>
+
+// GetOptions indicates an expected call of GetOptions.
+func (mr *MockIStudentHandlersMockRecorder) GetOptions() *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOptions", reflect.TypeOf((*MockIStudentHandlers)(nil).GetOptions))
+}</span>
+
+// GetStudents mocks base method.
+func (m *MockIStudentHandlers) GetStudents() gin.HandlerFunc <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetStudents")
+        ret0, _ := ret[0].(gin.HandlerFunc)
+        return ret0
+}</span>
+
+// GetStudents indicates an expected call of GetStudents.
+func (mr *MockIStudentHandlersMockRecorder) GetStudents() *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetStudents", reflect.TypeOf((*MockIStudentHandlers)(nil).GetStudents))
+}</span>
+
+// UpdateStudent mocks base method.
+func (m *MockIStudentHandlers) UpdateStudent() gin.HandlerFunc <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "UpdateStudent")
+        ret0, _ := ret[0].(gin.HandlerFunc)
+        return ret0
+}</span>
+
+// UpdateStudent indicates an expected call of UpdateStudent.
+func (mr *MockIStudentHandlersMockRecorder) UpdateStudent() *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateStudent", reflect.TypeOf((*MockIStudentHandlers)(nil).UpdateStudent))
+}</span>
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: internal/student/repository.go
+
+// Package mocks is a generated GoMock package.
+package mocks
+
+import (
+        context "context"
+        reflect "reflect"
+
+        models "github.com/csc13010-student-management/internal/models"
+        dtos "github.com/csc13010-student-management/internal/student/dtos"
+        gomock "github.com/golang/mock/gomock"
+)
+
+// MockIStudentRepository is a mock of IStudentRepository interface.
+type MockIStudentRepository struct {
+        ctrl     *gomock.Controller
+        recorder *MockIStudentRepositoryMockRecorder
+}
+
+// MockIStudentRepositoryMockRecorder is the mock recorder for MockIStudentRepository.
+type MockIStudentRepositoryMockRecorder struct {
+        mock *MockIStudentRepository
+}
+
+// NewMockIStudentRepository creates a new mock instance.
+func NewMockIStudentRepository(ctrl *gomock.Controller) *MockIStudentRepository <span class="cov9" title="14">{
+        mock := &amp;MockIStudentRepository{ctrl: ctrl}
+        mock.recorder = &amp;MockIStudentRepositoryMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockIStudentRepository) EXPECT() *MockIStudentRepositoryMockRecorder <span class="cov10" title="18">{
+        return m.recorder
+}</span>
+
+// CreateStudent mocks base method.
+func (m *MockIStudentRepository) CreateStudent(ctx context.Context, student *models.Student) error <span class="cov4" title="3">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "CreateStudent", ctx, student)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// CreateStudent indicates an expected call of CreateStudent.
+func (mr *MockIStudentRepositoryMockRecorder) CreateStudent(ctx, student interface{}) *gomock.Call <span class="cov4" title="3">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateStudent", reflect.TypeOf((*MockIStudentRepository)(nil).CreateStudent), ctx, student)
+}</span>
+
+// CreateStudents mocks base method.
+func (m *MockIStudentRepository) CreateStudents(ctx context.Context, students []models.Student) error <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "CreateStudents", ctx, students)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// CreateStudents indicates an expected call of CreateStudents.
+func (mr *MockIStudentRepositoryMockRecorder) CreateStudents(ctx, students interface{}) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateStudents", reflect.TypeOf((*MockIStudentRepository)(nil).CreateStudents), ctx, students)
+}</span>
+
+// DeleteStudent mocks base method.
+func (m *MockIStudentRepository) DeleteStudent(ctx context.Context, student_id string) error <span class="cov4" title="3">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "DeleteStudent", ctx, student_id)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// DeleteStudent indicates an expected call of DeleteStudent.
+func (mr *MockIStudentRepositoryMockRecorder) DeleteStudent(ctx, student_id interface{}) *gomock.Call <span class="cov4" title="3">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteStudent", reflect.TypeOf((*MockIStudentRepository)(nil).DeleteStudent), ctx, student_id)
+}</span>
+
+// GetFullInfoStudentByStudentID mocks base method.
+func (m *MockIStudentRepository) GetFullInfoStudentByStudentID(ctx context.Context, student_id string) (*dtos.StudentDTO, error) <span class="cov4" title="3">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetFullInfoStudentByStudentID", ctx, student_id)
+        ret0, _ := ret[0].(*dtos.StudentDTO)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetFullInfoStudentByStudentID indicates an expected call of GetFullInfoStudentByStudentID.
+func (mr *MockIStudentRepositoryMockRecorder) GetFullInfoStudentByStudentID(ctx, student_id interface{}) *gomock.Call <span class="cov4" title="3">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFullInfoStudentByStudentID", reflect.TypeOf((*MockIStudentRepository)(nil).GetFullInfoStudentByStudentID), ctx, student_id)
+}</span>
+
+// GetOptions mocks base method.
+func (m *MockIStudentRepository) GetOptions(ctx context.Context) (*dtos.OptionDTO, error) <span class="cov4" title="3">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetOptions", ctx)
+        ret0, _ := ret[0].(*dtos.OptionDTO)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetOptions indicates an expected call of GetOptions.
+func (mr *MockIStudentRepositoryMockRecorder) GetOptions(ctx interface{}) *gomock.Call <span class="cov4" title="3">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOptions", reflect.TypeOf((*MockIStudentRepository)(nil).GetOptions), ctx)
+}</span>
+
+// GetStudentByStudentID mocks base method.
+func (m *MockIStudentRepository) GetStudentByStudentID(ctx context.Context, student_id string) (*models.Student, error) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetStudentByStudentID", ctx, student_id)
+        ret0, _ := ret[0].(*models.Student)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetStudentByStudentID indicates an expected call of GetStudentByStudentID.
+func (mr *MockIStudentRepositoryMockRecorder) GetStudentByStudentID(ctx, student_id interface{}) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetStudentByStudentID", reflect.TypeOf((*MockIStudentRepository)(nil).GetStudentByStudentID), ctx, student_id)
+}</span>
+
+// GetStudents mocks base method.
+func (m *MockIStudentRepository) GetStudents(ctx context.Context) ([]*models.Student, error) <span class="cov4" title="3">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetStudents", ctx)
+        ret0, _ := ret[0].([]*models.Student)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetStudents indicates an expected call of GetStudents.
+func (mr *MockIStudentRepositoryMockRecorder) GetStudents(ctx interface{}) *gomock.Call <span class="cov4" title="3">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetStudents", reflect.TypeOf((*MockIStudentRepository)(nil).GetStudents), ctx)
+}</span>
+
+// UpdateStudent mocks base method.
+func (m *MockIStudentRepository) UpdateStudent(ctx context.Context, student *models.Student) error <span class="cov4" title="3">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "UpdateStudent", ctx, student)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// UpdateStudent indicates an expected call of UpdateStudent.
+func (mr *MockIStudentRepositoryMockRecorder) UpdateStudent(ctx, student interface{}) *gomock.Call <span class="cov4" title="3">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateStudent", reflect.TypeOf((*MockIStudentRepository)(nil).UpdateStudent), ctx, student)
+}</span>
+</pre>
+		
+		<pre class="file" id="file22" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: internal/student/usecase.go
+
+// Package mocks is a generated GoMock package.
+package mocks
+
+import (
+        context "context"
+        reflect "reflect"
+
+        models "github.com/csc13010-student-management/internal/models"
+        dtos "github.com/csc13010-student-management/internal/student/dtos"
+        gomock "github.com/golang/mock/gomock"
+)
+
+// MockIStudentUsecase is a mock of IStudentUsecase interface.
+type MockIStudentUsecase struct {
+        ctrl     *gomock.Controller
+        recorder *MockIStudentUsecaseMockRecorder
+}
+
+// MockIStudentUsecaseMockRecorder is the mock recorder for MockIStudentUsecase.
+type MockIStudentUsecaseMockRecorder struct {
+        mock *MockIStudentUsecase
+}
+
+// NewMockIStudentUsecase creates a new mock instance.
+func NewMockIStudentUsecase(ctrl *gomock.Controller) *MockIStudentUsecase <span class="cov8" title="8">{
+        mock := &amp;MockIStudentUsecase{ctrl: ctrl}
+        mock.recorder = &amp;MockIStudentUsecaseMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockIStudentUsecase) EXPECT() *MockIStudentUsecaseMockRecorder <span class="cov10" title="14">{
+        return m.recorder
+}</span>
+
+// CreateStudent mocks base method.
+func (m *MockIStudentUsecase) CreateStudent(ctx context.Context, student *models.Student) error <span class="cov3" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "CreateStudent", ctx, student)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// CreateStudent indicates an expected call of CreateStudent.
+func (mr *MockIStudentUsecaseMockRecorder) CreateStudent(ctx, student interface{}) *gomock.Call <span class="cov3" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateStudent", reflect.TypeOf((*MockIStudentUsecase)(nil).CreateStudent), ctx, student)
+}</span>
+
+// DeleteStudent mocks base method.
+func (m *MockIStudentUsecase) DeleteStudent(ctx context.Context, student_id string) error <span class="cov3" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "DeleteStudent", ctx, student_id)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// DeleteStudent indicates an expected call of DeleteStudent.
+func (mr *MockIStudentUsecaseMockRecorder) DeleteStudent(ctx, student_id interface{}) *gomock.Call <span class="cov3" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteStudent", reflect.TypeOf((*MockIStudentUsecase)(nil).DeleteStudent), ctx, student_id)
+}</span>
+
+// GetFullInfoStudentByStudentID mocks base method.
+func (m *MockIStudentUsecase) GetFullInfoStudentByStudentID(ctx context.Context, student_id string) (*dtos.StudentDTO, error) <span class="cov3" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetFullInfoStudentByStudentID", ctx, student_id)
+        ret0, _ := ret[0].(*dtos.StudentDTO)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetFullInfoStudentByStudentID indicates an expected call of GetFullInfoStudentByStudentID.
+func (mr *MockIStudentUsecaseMockRecorder) GetFullInfoStudentByStudentID(ctx, student_id interface{}) *gomock.Call <span class="cov3" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFullInfoStudentByStudentID", reflect.TypeOf((*MockIStudentUsecase)(nil).GetFullInfoStudentByStudentID), ctx, student_id)
+}</span>
+
+// GetOptions mocks base method.
+func (m *MockIStudentUsecase) GetOptions(ctx context.Context) (*dtos.OptionDTO, error) <span class="cov3" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetOptions", ctx)
+        ret0, _ := ret[0].(*dtos.OptionDTO)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetOptions indicates an expected call of GetOptions.
+func (mr *MockIStudentUsecaseMockRecorder) GetOptions(ctx interface{}) *gomock.Call <span class="cov3" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOptions", reflect.TypeOf((*MockIStudentUsecase)(nil).GetOptions), ctx)
+}</span>
+
+// GetStudentByStudentID mocks base method.
+func (m *MockIStudentUsecase) GetStudentByStudentID(ctx context.Context, student_id string) (*models.Student, error) <span class="cov3" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetStudentByStudentID", ctx, student_id)
+        ret0, _ := ret[0].(*models.Student)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetStudentByStudentID indicates an expected call of GetStudentByStudentID.
+func (mr *MockIStudentUsecaseMockRecorder) GetStudentByStudentID(ctx, student_id interface{}) *gomock.Call <span class="cov3" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetStudentByStudentID", reflect.TypeOf((*MockIStudentUsecase)(nil).GetStudentByStudentID), ctx, student_id)
+}</span>
+
+// GetStudents mocks base method.
+func (m *MockIStudentUsecase) GetStudents(ctx context.Context) ([]*models.Student, error) <span class="cov3" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetStudents", ctx)
+        ret0, _ := ret[0].([]*models.Student)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetStudents indicates an expected call of GetStudents.
+func (mr *MockIStudentUsecaseMockRecorder) GetStudents(ctx interface{}) *gomock.Call <span class="cov3" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetStudents", reflect.TypeOf((*MockIStudentUsecase)(nil).GetStudents), ctx)
+}</span>
+
+// UpdateStudent mocks base method.
+func (m *MockIStudentUsecase) UpdateStudent(ctx context.Context, student *models.Student) error <span class="cov3" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "UpdateStudent", ctx, student)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// UpdateStudent indicates an expected call of UpdateStudent.
+func (mr *MockIStudentUsecaseMockRecorder) UpdateStudent(ctx, student interface{}) *gomock.Call <span class="cov3" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateStudent", reflect.TypeOf((*MockIStudentUsecase)(nil).UpdateStudent), ctx, student)
+}</span>
+</pre>
+		
+		<pre class="file" id="file23" style="display: none">package repository
+
+import (
+        "context"
+        "errors"
+
+        "github.com/csc13010-student-management/internal/models"
+        "github.com/csc13010-student-management/internal/student"
+        "github.com/csc13010-student-management/internal/student/dtos"
+        "gorm.io/gorm"
+)
+
+type studentRepository struct {
+        db *gorm.DB
+}
+
+// NewStudentRepository initializes the repository with the database
+func NewStudentRepository(db *gorm.DB) student.IStudentRepository <span class="cov10" title="4">{
+        return &amp;studentRepository{db: db}
+}</span>
+
+// GetStudents retrieves the list of all students
+func (s *studentRepository) GetStudents(ctx context.Context) ([]*models.Student, error) <span class="cov0" title="0">{
+        var students []*models.Student
+        if err := s.db.WithContext(ctx).Find(&amp;students).Error; err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return students, nil</span>
+}
+
+// CreateStudents adds multiple students to the database
+func (s *studentRepository) CreateStudents(ctx context.Context, students []models.Student) error <span class="cov0" title="0">{
+        return s.db.WithContext(ctx).Create(&amp;students).Error
+}</span>
+
+// GetStudentByStudentID retrieves student information by ID
+func (s *studentRepository) GetStudentByStudentID(ctx context.Context, studentID string) (*models.Student, error) <span class="cov0" title="0">{
+        student := &amp;models.Student{}
+        if err := s.db.WithContext(ctx).Where("student_id = ?", studentID).First(student).Error; err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        return nil, nil
+                }</span>
+                <span class="cov0" title="0">return nil, err</span>
+        }
+        <span class="cov0" title="0">return student, nil</span>
+}
+
+// GetFullInfoStudentByStudentID retrieves full student information by ID
+func (s *studentRepository) GetFullInfoStudentByStudentID(ctx context.Context, studentID string) (*dtos.StudentDTO, error) <span class="cov0" title="0">{
+        studentDTO := &amp;dtos.StudentDTO{}
+        err := s.db.WithContext(ctx).
+                Table("students").
+                Select("students.id, students.student_id, students.full_name, students.birth_date, students.gender_id, genders.name as gender_name, students.faculty_id, faculties.name as faculty_name, students.course_id, courses.name as course_name, students.program_id, programs.name as program_name, students.status_id, statuses.name as status_name").
+                Joins("left join genders on students.gender_id = genders.id").
+                Joins("left join faculties on students.faculty_id = faculties.id").
+                Joins("left join courses on students.course_id = courses.id").
+                Joins("left join programs on students.program_id = programs.id").
+                Joins("left join statuses on students.status_id = statuses.id").
+                Where("students.student_id = ?", studentID).
+                First(studentDTO).Error
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov0" title="0">{
+                        return nil, nil
+                }</span>
+                <span class="cov0" title="0">return nil, err</span>
+        }
+        <span class="cov0" title="0">return studentDTO, nil</span>
+}
+
+// CreateStudent adds a student to the database
+func (s *studentRepository) CreateStudent(ctx context.Context, student *models.Student) error <span class="cov0" title="0">{
+        return s.db.WithContext(ctx).Create(student).Error
+}</span>
+
+// UpdateStudent updates student information
+func (s *studentRepository) UpdateStudent(ctx context.Context, student *models.Student) error <span class="cov0" title="0">{
+        return s.db.WithContext(ctx).Where("student_id = ?", student.StudentID).Updates(student).Error
+}</span>
+
+// DeleteStudent removes a student from the database by ID
+func (s *studentRepository) DeleteStudent(ctx context.Context, studentID string) error <span class="cov0" title="0">{
+        return s.db.WithContext(ctx).Where("student_id = ?", studentID).Delete(&amp;models.Student{}).Error
+}</span>
+
+// GetOptions retrieves various options for students
+func (s *studentRepository) GetOptions(ctx context.Context) (*dtos.OptionDTO, error) <span class="cov0" title="0">{
+        optionDTO := &amp;dtos.OptionDTO{}
+
+        optionMap := map[string]*[]*dtos.Option{
+                "genders":   &amp;optionDTO.Genders,
+                "faculties": &amp;optionDTO.Faculties,
+                "courses":   &amp;optionDTO.Courses,
+                "programs":  &amp;optionDTO.Programs,
+                "statuses":  &amp;optionDTO.Statuses,
+        }
+
+        modelMap := map[string]interface{}{
+                "genders":   &amp;models.Gender{},
+                "faculties": &amp;models.Faculty{},
+                "courses":   &amp;models.Course{},
+                "programs":  &amp;models.Program{},
+                "statuses":  &amp;models.Status{},
+        }
+
+        for key, model := range modelMap </span><span class="cov0" title="0">{
+                if err := s.db.Model(model).Select("id, name").Find(optionMap[key]).Error; err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+        }
+
+        <span class="cov0" title="0">return optionDTO, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file24" style="display: none">package usecase
+
+import (
+        "context"
+
+        "github.com/csc13010-student-management/internal/models"
+        "github.com/csc13010-student-management/internal/student"
+        "github.com/csc13010-student-management/internal/student/dtos"
+        "github.com/csc13010-student-management/pkg/logger"
+        "go.uber.org/zap"
+)
+
+type studentUsecase struct {
+        sr student.IStudentRepository
+        lg *logger.LoggerZap
+}
+
+func NewStudentUsecase(
+        sr student.IStudentRepository,
+        lg *logger.LoggerZap,
+) student.IStudentUsecase <span class="cov7" title="4">{
+        return &amp;studentUsecase{
+                sr: sr,
+                lg: lg,
+        }
+}</span>
+
+func (s *studentUsecase) logAndReturnError(msg string, err error) error <span class="cov10" title="7">{
+        s.lg.Error(msg, zap.Error(err))
+        return err
+}</span>
+
+func (s *studentUsecase) GetStudents(ctx context.Context) (students []*models.Student, err error) <span class="cov4" title="2">{
+        students, err = s.sr.GetStudents(ctx)
+        if err != nil </span><span class="cov1" title="1">{
+                return nil, s.logAndReturnError("Failed to get students", err)
+        }</span>
+        <span class="cov1" title="1">s.lg.Info("Successfully fetched students")
+        return students, nil</span>
+}
+
+func (s *studentUsecase) GetStudentByStudentID(ctx context.Context, studentID string) (student *models.Student, err error) <span class="cov0" title="0">{
+        student, err = s.sr.GetStudentByStudentID(ctx, studentID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, s.logAndReturnError("Failed to get student", err)
+        }</span>
+        <span class="cov0" title="0">s.lg.Info("Successfully fetched student", zap.String("id", studentID))
+        return student, nil</span>
+}
+
+func (s *studentUsecase) GetFullInfoStudentByStudentID(ctx context.Context, studentID string) (student *dtos.StudentDTO, err error) <span class="cov4" title="2">{
+        student, err = s.sr.GetFullInfoStudentByStudentID(ctx, studentID)
+        if err != nil </span><span class="cov1" title="1">{
+                return nil, s.logAndReturnError("Failed to get full info student", err)
+        }</span>
+        <span class="cov1" title="1">return student, nil</span>
+}
+
+func (s *studentUsecase) CreateStudent(ctx context.Context, student *models.Student) error <span class="cov4" title="2">{
+        if err := s.sr.CreateStudent(ctx, student); err != nil </span><span class="cov1" title="1">{
+                return s.logAndReturnError("Failed to create student", err)
+        }</span>
+        <span class="cov1" title="1">s.lg.Info("Successfully created student", zap.Int("id", student.ID))
+        return nil</span>
+}
+
+func (s *studentUsecase) UpdateStudent(ctx context.Context, student *models.Student) error <span class="cov4" title="2">{
+        if err := s.sr.UpdateStudent(ctx, student); err != nil </span><span class="cov1" title="1">{
+                return s.logAndReturnError("Failed to update student", err)
+        }</span>
+        <span class="cov1" title="1">s.lg.Info("Successfully updated student", zap.Int("id", student.ID))
+        return nil</span>
+}
+
+func (s *studentUsecase) DeleteStudent(ctx context.Context, studentID string) error <span class="cov4" title="2">{
+        if err := s.sr.DeleteStudent(ctx, studentID); err != nil </span><span class="cov1" title="1">{
+                return s.logAndReturnError("Failed to delete student", err)
+        }</span>
+        <span class="cov1" title="1">s.lg.Info("Successfully deleted student", zap.String("id", studentID))
+        return nil</span>
+}
+
+func (s *studentUsecase) GetOptions(ctx context.Context) (options *dtos.OptionDTO, err error) <span class="cov4" title="2">{
+        options, err = s.sr.GetOptions(ctx)
+        if err != nil </span><span class="cov1" title="1">{
+                return nil, s.logAndReturnError("Failed to get student options", err)
+        }</span>
+        <span class="cov1" title="1">s.lg.Info("Successfully fetched student options")
+        return options, nil</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

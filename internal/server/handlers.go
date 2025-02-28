@@ -7,6 +7,9 @@ import (
 	ftHttp "github.com/csc13010-student-management/internal/faculty/delivery/http"
 	ftRepository "github.com/csc13010-student-management/internal/faculty/repository"
 	ftUsecase "github.com/csc13010-student-management/internal/faculty/usecase"
+	fpHttp "github.com/csc13010-student-management/internal/fileprocessor/delivery/http"
+	fpRepository "github.com/csc13010-student-management/internal/fileprocessor/repository"
+	fpUsecase "github.com/csc13010-student-management/internal/fileprocessor/usecase"
 	pgHttp "github.com/csc13010-student-management/internal/program/delivery/http"
 	pgRepository "github.com/csc13010-student-management/internal/program/repository"
 	pgUsecase "github.com/csc13010-student-management/internal/program/usecase"
@@ -27,6 +30,7 @@ func (s *Server) MapHandlers(r *gin.Engine) error {
 	pgRepo := pgRepository.NewProgramRepository(s.pg)
 	ftRepo := ftRepository.NewFacultyRepository(s.pg)
 	alRepo := alRepository.NewAuditLogRepository(s.pg)
+	fpRepo := fpRepository.NewFileProcessorRepository(s.pg)
 
 	// usecase
 	stUc := stdUsecase.NewStudentUsecase(stRepo, s.lg)
@@ -34,6 +38,7 @@ func (s *Server) MapHandlers(r *gin.Engine) error {
 	pgUc := pgUsecase.NewProgramUsecase(pgRepo, s.lg)
 	ftUc := ftUsecase.NewFacultyUsecase(ftRepo, s.lg)
 	alUc := alUsecase.NewAuditLogUsecase(alRepo, s.lg)
+	fpUc := fpUsecase.NewFileProcessorUsecase(fpRepo, s.lg)
 
 	// handler
 	stHandler := stdHttp.NewStudentHandlers(stUc, s.lg)
@@ -41,6 +46,7 @@ func (s *Server) MapHandlers(r *gin.Engine) error {
 	pgHandler := pgHttp.NewProgramHandlers(pgUc, s.lg)
 	ftHandler := ftHttp.NewFacultyHandlers(ftUc, s.lg)
 	alHandler := alHttp.NewAuditLogHandlers(alUc, s.lg)
+	fpHandler := fpHttp.NewFileProcessingHandlers(fpUc, s.lg)
 
 	// router group
 	v1 := r.Group("/api/v1")
@@ -49,6 +55,7 @@ func (s *Server) MapHandlers(r *gin.Engine) error {
 	pgGroup := v1.Group("/programs")
 	ftGroup := v1.Group("/faculties")
 	alGroup := v1.Group("/auditlogs")
+	fpGroup := v1.Group("/fileprocessor")
 
 	// router
 	stdHttp.MapStudentHandlers(stdGroup, stHandler)
@@ -56,6 +63,7 @@ func (s *Server) MapHandlers(r *gin.Engine) error {
 	pgHttp.MapProgramHandlers(pgGroup, pgHandler)
 	ftHttp.MapFacultyHandlers(ftGroup, ftHandler)
 	alHttp.MapAuditLogHandlers(alGroup, alHandler)
+	fpHttp.MapfileProcessingHandlers(fpGroup, fpHandler)
 
 	return nil
 }

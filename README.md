@@ -19,7 +19,7 @@ This is a **Student Management System** implemented in **Go** for the backend an
 
 - Add New Student – Supports adding **Faculty, Student Status, Training Program**.
 - Delete Student – Remove a student by **Student ID (MSSV)**.
-- Update Student Information – Modify student details by **Student ID (MSSV)**.
+- Update Student Information – Modify student details by **Student ID**.
 - Search Students – Search by **Full Name, Student ID, Faculty**, or a combination of **Faculty + Student Name**.
 - Import/Export Data – Supports at least **two formats**: **CSV, JSON, XML, Excel**.
 - Logging Mechanism – Records logs for **troubleshooting & audit purposes**.
@@ -42,8 +42,8 @@ Each student record contains the following details:
 
 ### Version 2.0 Enhancements
 
-- **Data Storage** – Supports **XML, JSON, CSV, Database**.
-- **Dynamic Modifications** – Rename/Add **Faculty, Student Status, Training Program**.
+- **Data Storage** – Supports **JSON, CSV, Database**.
+- **Dynamic Modifications** – Rename/Add **Faculty, Student Status, Program**.
 - **Advanced Search** – Search by **Faculty, Faculty + Student Name**.
 - **Data Import/Export** – Supports **CSV, JSON**.
 - **Enhanced Logging Mechanism** – Logs for troubleshooting & production.

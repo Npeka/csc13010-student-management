@@ -80,12 +80,35 @@ test-unit-package:
 	$(TEST_CMD) ./internal/$(name)/delivery/http
 
 test-unit:
-	make test-unit-package name=notification NOCACHE=$(NOCACHE)
+# make test-unit-package name=notification NOCACHE=$(NOCACHE)
 	make test-unit-package name=fileprocessor NOCACHE=$(NOCACHE)
 	make test-unit-package name=status NOCACHE=$(NOCACHE)
 	make test-unit-package name=program NOCACHE=$(NOCACHE)
 	make test-unit-package name=faculty NOCACHE=$(NOCACHE)
 	make test-unit-package name=student NOCACHE=$(NOCACHE)
+
+COVERAGE_FILE = coverage.out
+
+test-cover-package:
+	go test -coverprofile=$(name).cover -covermode=atomic ./internal/$(name)/...
+	@if exist $(name).cover ( findstr /V "mode:" $(name).cover >> $(COVERAGE_FILE) & del $(name).cover )
+
+test-cover:
+	@if exist $(COVERAGE_FILE) del /F /Q $(COVERAGE_FILE)
+	@echo mode: atomic > $(COVERAGE_FILE)
+# make test-cover-package name=notification
+# make test-cover-package name=fileprocessor
+	make test-cover-package name=status
+	make test-cover-package name=program
+	make test-cover-package name=faculty
+	make test-cover-package name=student
+
+test-cover-html:
+	go tool cover -html=$(COVERAGE_FILE) -o coverage.html
+
+test-cover-all:
+	make test-cover 
+	make test-cover-html
 
 # -------------------------------------------------------------------------------------
 

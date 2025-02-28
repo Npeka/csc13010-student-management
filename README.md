@@ -326,8 +326,8 @@ _Export Options (CSV/JSON)_: Options to download CSV or JSON.
 _Import Students (Drag & Drop)_: Import student files supporting CSV or JSON, with drag and drop functionality.
 _Import CSV Example_: Demo importing a file `students.csv`, then clicking upload to import.
 
-| Filter Students by Columns                                     | Search Students by Name                        |
-| -------------------------------------------------------------- | ---------------------------------------------- |
+| Filter Students by Columns                                    | Search Students by Name                        |
+| ------------------------------------------------------------- | ---------------------------------------------- |
 | ![Filter Columns](screenshots/v3.0/student-filter-column.png) | ![Search](screenshots/v3.0/student-search.png) |
 
 _Filter Students by Columns_: Filter students by program (choose the select on the header table), supporting filters by gender, faculty, course, program, status.
@@ -340,12 +340,12 @@ _Search Students by Name_: Search students by name.
 _Manage Faculty, Program, Status_: List options for faculty, program, status. You can add, edit, delete each of these.
 _Audit Log for Actions_: Audit log records when creating/updating/deleting, etc.
 
-| Test Coverage - Faculty Handlers                                                | Test Coverage - Faculty Use Cases                                                |
+| Test Coverage - Faculty Handlers                                                | Test Coverage - All Test                                                         |
 | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
 | ![Faculty Handlers](screenshots/v3.0/student-test-coverage-faculty-handler.png) | ![Faculty Use Cases](screenshots/v3.0/student-test-coverage-faculty-usecase.png) |
 
 _Test Coverage - Faculty Handlers_: Demo test coverage for handlers of faculty.
-_Test Coverage - Faculty Use Cases_: Demo test coverage for use cases of faculty.
+_Test Coverage - Selection test_: this is all test you can see.
 
 <!-- Below are some screenshots of the Student Management System:
 

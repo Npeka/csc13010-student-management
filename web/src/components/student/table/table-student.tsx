@@ -8,14 +8,13 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import {
   type ColumnDef,
   type ColumnFiltersState,
   type SortingState,
   getPaginationRowModel,
+  VisibilityState,
+  type Table,
 } from "@tanstack/react-table";
-
 import { OptionDTO, StudentResponseDTO } from "@/types/student";
 import { StudentColumns } from "./table-student-columns";
 import {
@@ -23,10 +22,24 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
+  DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { VisibilityState } from "@tanstack/react-table";
-import type { Table } from "@tanstack/react-table";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { useDropzone } from "react-dropzone";
+import { Upload, Download, File, Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import {
+  useImportFileMutation,
+  useLazyExportFileQuery,
+} from "@/services/fileprocessor-service";
 
 export const StudentTable = ({
   data,
@@ -38,8 +51,9 @@ export const StudentTable = ({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+
   const table = useReactTable({
-    data: data,
+    data,
     columns: StudentColumns({ options }),
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -48,23 +62,19 @@ export const StudentTable = ({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-    },
+    state: { sorting, columnFilters, columnVisibility },
   });
 
   useEffect(() => {
-    const hideColunms = (keys: string[]): { [key: string]: boolean } => {
+    const hideColumns = (keys: string[]): { [key: string]: boolean } => {
       return keys.reduce((acc, key) => {
         acc[key] = false;
         return acc;
       }, {} as { [key: string]: boolean });
     };
 
-    table.setColumnVisibility(hideColunms(["email", "birth_date", "address"]));
-  }, []);
+    table.setColumnVisibility(hideColumns(["email", "birth_date", "address"]));
+  }, [table]);
 
   return (
     <>
@@ -81,7 +91,7 @@ export const StudentTable = ({
     </>
   );
 };
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+
 const TableExportData = () => {
   return (
     <DropdownMenu>
@@ -99,34 +109,18 @@ const TableExportData = () => {
   );
 };
 
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { useDropzone } from "react-dropzone";
-import { Upload, Download, File } from "lucide-react";
-import { Loader2 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-
 const ImportFileButton = () => {
   const { toast } = useToast();
   const [files, setFiles] = useState<File[]>([]);
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [triggerImportFile, { isLoading }] = useImportFileMutation();
 
   const onDrop = (acceptedFiles: File[]) => {
     setFiles(acceptedFiles);
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: {
-      "text/csv": [".csv"],
-      "application/json": [".json"],
-    },
+    accept: { "text/csv": [".csv"], "application/json": [".json"] },
     multiple: false,
     onDrop,
   });
@@ -141,25 +135,13 @@ const ImportFileButton = () => {
       return;
     }
 
-    setLoading(true);
-    const formData = new FormData();
-    formData.append("students", files[0]);
-
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/v1/students/import`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      if (!response.ok) throw new Error("Error uploading file!");
-
-      toast({
-        title: "Success",
-        description: "Import success!",
-      });
+      await triggerImportFile({
+        file: files[0],
+        format: files[0].type === "application/json" ? "json" : "csv",
+        module: "students",
+      }).unwrap();
+      toast({ title: "Success", description: "Import success!" });
       setFiles([]);
       setOpen(false);
     } catch (error) {
@@ -168,8 +150,6 @@ const ImportFileButton = () => {
         description: "Error uploading file!",
         variant: "destructive",
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -188,8 +168,6 @@ const ImportFileButton = () => {
             Select or drag and drop a CSV / JSON file to import.
           </DialogDescription>
         </DialogHeader>
-
-        {/* Drag and drop file */}
         <div
           {...getRootProps()}
           className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:bg-gray-100 transition"
@@ -203,8 +181,6 @@ const ImportFileButton = () => {
             </p>
           )}
         </div>
-
-        {/* Selected file list */}
         {files.length > 0 && (
           <div className="mt-4 p-3 border rounded-lg flex items-center justify-between bg-gray-100">
             <File className="w-5 h-5 text-gray-600" />
@@ -214,14 +190,12 @@ const ImportFileButton = () => {
             </Button>
           </div>
         )}
-
-        {/* Upload button */}
         <Button
           className="w-full mt-4"
           onClick={handleUpload}
-          disabled={files.length === 0 || loading}
+          disabled={files.length === 0 || isLoading}
         >
-          {loading ? (
+          {isLoading ? (
             <Loader2 className="w-4 h-4 animate-spin mr-2" />
           ) : (
             "Upload File"
@@ -239,43 +213,29 @@ const ExportFileButton = ({
   text: string;
   format: "csv" | "json";
 }) => {
-  const [downloading, setDownloading] = useState(false);
+  const [triggerExportFile, { isLoading }] = useLazyExportFileQuery();
 
-  const handleDownload = async () => {
-    setDownloading(true);
+  const handleClick = async () => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/v1/students/export?format=${format}`,
-        {
-          method: "GET",
-        }
-      );
-
-      if (!response.ok) throw new Error("Failed to fetch file");
-
-      // Lấy Blob từ response
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-
-      // Tạo thẻ <a> để tải file
+      const blob = await triggerExportFile({
+        format,
+        module: "students",
+      }).unwrap();
+      const url = window.URL.createObjectURL(new Blob([blob]));
       const a = document.createElement("a");
       a.href = url;
-      a.download = `students.${format}`;
+      a.download = `export.${format}`;
       document.body.appendChild(a);
       a.click();
-
-      // Cleanup
-      URL.revokeObjectURL(url);
-      document.body.removeChild(a);
+      a.remove();
+      window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Download error:", error);
-    } finally {
-      setDownloading(false);
+      console.error("Export file failed:", error);
     }
   };
 
   return (
-    <DropdownMenuItem onClick={handleDownload} disabled={downloading}>
+    <DropdownMenuItem onClick={handleClick} disabled={isLoading}>
       {text}
     </DropdownMenuItem>
   );
@@ -293,18 +253,16 @@ const TableVisibleColumns = ({ table }: { table: Table<any> }) => {
         {table
           .getAllColumns()
           .filter((column) => column.getCanHide())
-          .map((column) => {
-            return (
-              <DropdownMenuCheckboxItem
-                key={column.id}
-                className="capitalize"
-                checked={column.getIsVisible()}
-                onCheckedChange={(value) => column.toggleVisibility(!!value)}
-              >
-                {column.id}
-              </DropdownMenuCheckboxItem>
-            );
-          })}
+          .map((column) => (
+            <DropdownMenuCheckboxItem
+              key={column.id}
+              className="capitalize"
+              checked={column.getIsVisible()}
+              onCheckedChange={(value) => column.toggleVisibility(!!value)}
+            >
+              {column.id}
+            </DropdownMenuCheckboxItem>
+          ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

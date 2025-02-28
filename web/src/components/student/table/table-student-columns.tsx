@@ -8,10 +8,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Column } from "@tanstack/react-table";
-import { Option, OptionDTO } from "@/types/student";
-import { StudentResponseDTO } from "@/types/student";
+import { Option, OptionDTO, StudentResponseDTO } from "@/types/student";
 import { MoreHorizontal } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -21,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useDeleteStudentMutation } from "@/services/student-service";
+import { useRouter } from "next/navigation";
 
 export const StudentColumns = ({ options }: { options?: OptionDTO }) => {
   const columns: ColumnDef<StudentResponseDTO>[] = [
@@ -29,173 +28,108 @@ export const StudentColumns = ({ options }: { options?: OptionDTO }) => {
     {
       header: "Birth Date",
       accessorKey: "birth_date",
-      cell: ({ row }) => {
-        return new Date(row.original.birth_date).toLocaleDateString();
-      },
+      cell: ({ row }) => new Date(row.original.birth_date).toLocaleDateString(),
     },
-    {
-      header: ({ column }) => {
-        return ColumnFilter({
-          header: "Gender",
-          column,
-          options: options?.genders.slice() ?? [],
-        });
-      },
-      accessorKey: "gender",
-      filterFn: (row, columnId, filterValue) => {
-        if (!filterValue) return true;
-        return row.getValue(columnId) === filterValue;
-      },
-    },
-    {
-      header: ({ column }) => {
-        return ColumnFilter({
-          header: "Faculty",
-          column,
-          options: options?.faculties.slice() ?? [],
-        });
-      },
-      accessorKey: "faculty",
-      filterFn: (row, columnId, filterValue) => {
-        if (!filterValue) return true;
-        return row.getValue(columnId) === filterValue;
-      },
-    },
-    {
-      header: ({ column }) => {
-        return ColumnFilter({
-          header: "Course",
-          column,
-          options: options?.courses.slice() ?? [],
-        });
-      },
-      accessorKey: "course",
-      filterFn: (row, columnId, filterValue) => {
-        if (!filterValue) return true;
-        return row.getValue(columnId) === filterValue;
-      },
-    },
-    {
-      header: ({ column }) => {
-        return ColumnFilter({
-          header: "Program",
-          column,
-          options: options?.programs.slice() ?? [],
-        });
-      },
-      accessorKey: "program",
-      filterFn: (row, columnId, filterValue) => {
-        if (!filterValue) return true;
-        return row.getValue(columnId) === filterValue;
-      },
-    },
+    createFilterColumn("Gender", "gender", options?.genders),
+    createFilterColumn("Faculty", "faculty", options?.faculties),
+    createFilterColumn("Course", "course", options?.courses),
+    createFilterColumn("Program", "program", options?.programs),
     { header: "Address", accessorKey: "address" },
-    {
-      header: "Email",
-      accessorKey: "email",
-      meta: { isHidden: true },
-    },
+    { header: "Email", accessorKey: "email", meta: { isHidden: true } },
     { header: "Phone", accessorKey: "phone" },
-    {
-      header: ({ column }) => {
-        return ColumnFilter({
-          header: "Status",
-          column,
-          options: options?.statuses.slice() ?? [],
-        });
-      },
-      accessorKey: "status",
-      filterFn: (row, columnId, filterValue) => {
-        if (!filterValue) return true;
-        return row.getValue(columnId) === filterValue;
-      },
-    },
+    createFilterColumn("Status", "status", options?.statuses),
     {
       header: "Actions",
       id: "actions",
-      cell: ({ row }) => {
-        const student = row.original;
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <ActionEditDropdown student_id={student.student_id} />
-              <ActionDeleteDropdown student_id={student.student_id} />
-              <ActionExportCertificateDropdown
-                student_id={student.student_id}
-                format="pdf"
-                text="PDF Cert"
-              />
-              <ActionExportCertificateDropdown
-                student_id={student.student_id}
-                format="docx"
-                text="DOCX Cert"
-              />
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
+      cell: ({ row }) => <ActionMenu student={row.original} />,
     },
   ];
 
   return columns;
 };
 
-const ActionExportCertificateDropdown = ({
-  student_id,
-  format,
-  text,
-}: {
-  student_id: string;
-  format: "pdf" | "docx";
-  text?: string;
-}) => {
-  const handleExport = async (format: "pdf" | "docx") => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/v1/students/certificate/${student_id}?format=${format}`
-      );
+const createFilterColumn = (
+  header: string,
+  accessorKey: string,
+  options?: Option[]
+) => ({
+  header: ({ column }: { column: Column<any, unknown> }) =>
+    ColumnFilter({ header, column, options: options ?? [] }),
+  accessorKey,
+  filterFn: (row: any, columnId: string, filterValue: string) =>
+    !filterValue || row.getValue(columnId) === filterValue,
+});
 
-      if (!response.ok) throw new Error("Failed to fetch file");
+const ActionMenu = ({ student }: { student: StudentResponseDTO }) => (
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <Button variant="ghost" className="h-8 w-8 p-0">
+        <span className="sr-only">Open menu</span>
+        <MoreHorizontal className="h-4 w-4" />
+      </Button>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent align="end">
+      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+      <ActionEditDropdown student_id={student.student_id} />
+      <ActionDeleteDropdown student_id={student.student_id} />
+      {/* <ActionExportCertificateDropdown
+        student_id={student.student_id}
+        format="pdf"
+        text="PDF Cert"
+      />
+      <ActionExportCertificateDropdown
+        student_id={student.student_id}
+        format="docx"
+        text="DOCX Cert"
+      /> */}
+    </DropdownMenuContent>
+  </DropdownMenu>
+);
 
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
+// const ActionExportCertificateDropdown = ({
+//   student_id,
+//   format,
+//   text,
+// }: {
+//   student_id: string;
+//   format: "pdf" | "docx";
+//   text?: string;
+// }) => {
+//   const handleExport = async (format: "pdf" | "docx") => {
+//     try {
+//       const response = await fetch(
+//         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/v1/students/certificate/${student_id}?format=${format}`
+//       );
 
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `certificate_${student_id}.${format}`;
-      document.body.appendChild(a);
-      a.click();
+//       if (!response.ok) throw new Error("Failed to fetch file");
 
-      URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    } catch (error) {
-      console.error("Download error:", error);
-    }
-  };
+//       const blob = await response.blob();
+//       const url = URL.createObjectURL(blob);
 
-  return (
-    <DropdownMenuItem onClick={() => handleExport(format)}>
-      {text || `Download as ${format.toUpperCase()}`}
-    </DropdownMenuItem>
-  );
-};
+//       const a = document.createElement("a");
+//       a.href = url;
+//       a.download = `certificate_${student_id}.${format}`;
+//       document.body.appendChild(a);
+//       a.click();
 
-import { useRouter } from "next/navigation";
+//       URL.revokeObjectURL(url);
+//       document.body.removeChild(a);
+//     } catch (error) {
+//       console.error("Download error:", error);
+//     }
+//   };
+
+//   return (
+//     <DropdownMenuItem onClick={() => handleExport(format)}>
+//       {text || `Download as ${format.toUpperCase()}`}
+//     </DropdownMenuItem>
+//   );
+// };
+
 const ActionEditDropdown = ({ student_id }: { student_id: string }) => {
   const router = useRouter();
   return (
-    <DropdownMenuItem
-      onClick={() => {
-        router.push(`/${student_id}`);
-      }}
-    >
+    <DropdownMenuItem onClick={() => router.push(`/${student_id}`)}>
       Edit
     </DropdownMenuItem>
   );
@@ -205,9 +139,7 @@ const ActionDeleteDropdown = ({ student_id }: { student_id: string }) => {
   const [deleteStudent, { isLoading }] = useDeleteStudentMutation();
   return (
     <DropdownMenuItem
-      onClick={() => {
-        deleteStudent(student_id);
-      }}
+      onClick={() => deleteStudent(student_id)}
       disabled={isLoading}
     >
       Delete
@@ -228,13 +160,13 @@ const ColumnFilter = ({
   return (
     <Select
       value={columnFilterValue ?? "All"}
-      onValueChange={(value) => {
-        column.setFilterValue(value === "All" ? undefined : value);
-      }}
+      onValueChange={(value) =>
+        column.setFilterValue(value === "All" ? undefined : value)
+      }
     >
       <SelectTrigger>
         <SelectValue placeholder={`All ${header}`}>
-          {columnFilterValue ? columnFilterValue : `All ${header}`}
+          {columnFilterValue || `All ${header}`}
         </SelectValue>
       </SelectTrigger>
       <SelectContent>

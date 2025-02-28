@@ -99,14 +99,14 @@ func TestConvertToStruct(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    T
+		want    map[string]interface{}
 		wantErr bool
 	}{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := ConvertToStruct(tt.args.data)
+			got, err := ConvertToStruct[map[string]interface{}](tt.args.data)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ConvertToStruct() error = %v, wantErr %v", err, tt.wantErr)
 				return

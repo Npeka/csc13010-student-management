@@ -11,20 +11,20 @@ import (
 
 // Student struct with data validation
 type Student struct {
-	ID        int       `gorm:"primaryKey;autoIncrement;not null" json:"id"`
-	StudentID string    `gorm:"type:varchar(12);uniqueIndex;not null" json:"student_id"`
-	FullName  string    `gorm:"type:varchar(100);not null" json:"full_name"`
-	BirthDate time.Time `gorm:"type:date;not null" json:"birth_date"`
-	GenderID  int       `gorm:"not null" json:"gender_id"`
-	FacultyID int       `gorm:"not null" json:"faculty_id"`
-	CourseID  int       `gorm:"not null" json:"course_id"`
-	ProgramID int       `gorm:"not null" json:"program_id"`
-	Address   string    `gorm:"type:text" json:"address,omitempty"`
-	Email     string    `gorm:"type:varchar(255);uniqueIndex;not null" json:"email"`
-	Phone     string    `gorm:"type:varchar(20);not null" json:"phone"`
-	StatusID  int       `gorm:"not null" json:"status_id"`
-	CreatedAt time.Time `gorm:"type:timestamp;default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt time.Time `gorm:"type:timestamp;default:CURRENT_TIMESTAMP" json:"updated_at"`
+	ID        int       `gorm:"primaryKey;autoIncrement;not null" json:"id" csv:"id"`
+	StudentID string    `gorm:"type:varchar(12);uniqueIndex;not null" json:"student_id" csv:"student_id"`
+	FullName  string    `gorm:"type:varchar(100);not null" json:"full_name" csv:"full_name"`
+	BirthDate time.Time `gorm:"type:date;not null" json:"birth_date" csv:"birth_date"`
+	GenderID  int       `gorm:"not null" json:"gender_id" csv:"gender_id"`
+	FacultyID int       `gorm:"not null" json:"faculty_id" csv:"faculty_id"`
+	CourseID  int       `gorm:"not null" json:"course_id" csv:"course_id"`
+	ProgramID int       `gorm:"not null" json:"program_id" csv:"program_id"`
+	Address   string    `gorm:"type:text" json:"address,omitempty" csv:"address"`
+	Email     string    `gorm:"type:varchar(255);uniqueIndex;not null" json:"email" csv:"email"`
+	Phone     string    `gorm:"type:varchar(20);not null" json:"phone" csv:"phone"`
+	StatusID  int       `gorm:"not null" json:"status_id" csv:"status_id"`
+	CreatedAt time.Time `gorm:"type:timestamp;default:CURRENT_TIMESTAMP" json:"created_at" csv:"created_at"`
+	UpdatedAt time.Time `gorm:"type:timestamp;default:CURRENT_TIMESTAMP" json:"updated_at" csv:"updated_at"`
 }
 
 // TableName - table name in DB

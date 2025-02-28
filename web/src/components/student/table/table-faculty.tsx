@@ -30,7 +30,6 @@ export const TableFaculty = () => {
 
 const TableDataFaculty = ({ data }: { data: Faculty[] }) => {
   const columns: ColumnDef<Faculty>[] = [
-    // { header: "ID", accessorKey: "id" },
     { header: "Name", accessorKey: "name" },
     {
       header: () => <div className="text-right mr-2">Action</div>,

@@ -30,7 +30,6 @@ export const TableProgram = () => {
 
 const TableDataProgram = ({ data }: { data: Program[] }) => {
   const columns: ColumnDef<Program>[] = [
-    // { header: "ID", accessorKey: "id" },
     { header: "Name", accessorKey: "name" },
     {
       header: () => <div className="text-right mr-2">Action</div>,

@@ -2,9 +2,7 @@ package http
 
 import (
 	"net/http"
-	"os"
 	"strconv"
-	"time"
 
 	"github.com/csc13010-student-management/internal/models"
 	"github.com/csc13010-student-management/internal/student"
@@ -132,39 +130,39 @@ func (s *studentHandlers) UpdateStudent() gin.HandlerFunc {
 	}
 }
 
-const defaultDeleteTimeLimit = 30 * time.Minute
+// const defaultDeleteTimeLimit = 30 * time.Minute
 
 // DeleteStudent implements student.IStudentHandlers.
 func (s *studentHandlers) DeleteStudent() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if os.Getenv("ALLOW_DELETE_ANYTIME") == "false" {
-			c.JSON(http.StatusForbidden, gin.H{"error": "DeleteStudent is disabled"})
-			return
-		}
+		// if os.Getenv("ALLOW_DELETE_ANYTIME") == "false" {
+		// 	c.JSON(http.StatusForbidden, gin.H{"error": "DeleteStudent is disabled"})
+		// 	return
+		// }
 
 		s.lg.Info("DeleteStudent called")
 		student_id := c.Param("student_id")
 
-		student, err := s.su.GetStudentByStudentID(c, student_id)
-		if err != nil {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Student not found"})
-			return
-		}
+		// student, err := s.su.GetStudentByStudentID(c, student_id)
+		// if err != nil {
+		// 	c.JSON(http.StatusNotFound, gin.H{"error": "Student not found"})
+		// 	return
+		// }
 
-		deleteTimeLimit := defaultDeleteTimeLimit
-		if envLimit, exists := os.LookupEnv("DELETE_TIME_LIMIT"); exists {
-			parsedLimit, err := time.ParseDuration(envLimit)
-			if err == nil {
-				deleteTimeLimit = parsedLimit
-			}
-		}
+		// deleteTimeLimit := defaultDeleteTimeLimit
+		// if envLimit, exists := os.LookupEnv("DELETE_TIME_LIMIT"); exists {
+		// 	parsedLimit, err := time.ParseDuration(envLimit)
+		// 	if err == nil {
+		// 		deleteTimeLimit = parsedLimit
+		// 	}
+		// }
 
-		if time.Since(student.CreatedAt) > deleteTimeLimit {
-			c.JSON(http.StatusForbidden, gin.H{"error": "Student cannot be deleted after the allowed time"})
-			return
-		}
+		// if time.Since(student.CreatedAt) > deleteTimeLimit {
+		// 	c.JSON(http.StatusForbidden, gin.H{"error": "Student cannot be deleted after the allowed time"})
+		// 	return
+		// }
 
-		err = s.su.DeleteStudent(c, student_id)
+		err := s.su.DeleteStudent(c, student_id)
 		if err != nil {
 			s.lg.Error("Error deleting student", zap.Error(err))
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

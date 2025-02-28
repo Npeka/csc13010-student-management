@@ -1,7 +1,6 @@
 **Bài Kiểm Tra Kỹ Thuật Lập Trình**  
 
 ### **Yêu cầu**  
-Viết một chương trình quản lý danh sách sinh viên với các chức năng sau:  
 
 1. **Thêm sinh viên mới** – Nhập và lưu thông tin sinh viên vào danh sách. Hỗ trợ thêm mới các giá trị cho **Khoa, Tình trạng sinh viên, Chương trình đào tạo**.  
 2. **Xóa sinh viên** – Xóa sinh viên dựa trên Mã số sinh viên (MSSV).  

@@ -319,15 +319,15 @@ _Hidden Columns_: Hide some columns.
 _Export - Choose Folder_: Show the screen to choose a folder to download.
 _Export Options (CSV/JSON)_: Options to download CSV or JSON.
 
-| Import Students (Drag & Drop)                           | Import CSV Example                                      |
-| ------------------------------------------------------- | ------------------------------------------------------- |
-| ![Import Students](screenshots/v3.0/student-import.png) | ![Import CSV](screenshots/v3.0/student-import-demo.png) |
+| Import Students (Drag & Drop)                           | Import CSV Example                                           |
+| ------------------------------------------------------- | ------------------------------------------------------------ |
+| ![Import Students](screenshots/v3.0/student-import.png) | ![Import CSV](screenshots/v3.0/student-import-demo-file.png) |
 
 _Import Students (Drag & Drop)_: Import student files supporting CSV or JSON, with drag and drop functionality.
 _Import CSV Example_: Demo importing a file `students.csv`, then clicking upload to import.
 
-| Filter Students by Columns                                    | Search Students by Name                        |
-| ------------------------------------------------------------- | ---------------------------------------------- |
+| Filter Students by Columns                                     | Search Students by Name                        |
+| -------------------------------------------------------------- | ---------------------------------------------- |
 | ![Filter Columns](screenshots/v3.0/student-filter-column.png) | ![Search](screenshots/v3.0/student-search.png) |
 
 _Filter Students by Columns_: Filter students by program (choose the select on the header table), supporting filters by gender, faculty, course, program, status.

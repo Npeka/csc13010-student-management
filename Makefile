@@ -7,10 +7,7 @@ run:
 	go run cmd/server/main.go
 
 build:
-	go build -o student-management.exe main.go
-
-# test:
-# 	go test -v ./tests
+	go build -o student-management.exe cmd/server/main.go
 
 d-up:
 	docker-compose up

@@ -17,7 +17,7 @@ const studentApi = appApi.injectEndpoints({
         url: "/api/v1/students/",
         method: "GET",
       }),
-      providesTags: ["Student"],
+      providesTags: ["Student", "FileProcessor"],
     }),
 
     getStudentById: builder.query<StudentResponseDTO, string>({

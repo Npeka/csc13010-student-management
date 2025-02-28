@@ -5,14 +5,18 @@ import { RootState } from "@/lib/store/store";
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_BACKEND_BASE_URL,
   credentials: "include",
-  prepareHeaders: (headers, { getState }) => {
+  prepareHeaders: (headers, { getState, endpoint }) => {
     const state = getState() as RootState;
 
     // const accessToken = state.auth.accessToken;
     // if (accessToken) {
     //   headers.set("Authorization", `Bearer ${accessToken}`);
     // }
-    headers.set("Content-Type", "application/json");
+
+    if (endpoint !== "importFile") {
+      headers.set("Content-Type", "application/json");
+    }
+
     return headers;
   },
 });
@@ -21,5 +25,5 @@ export const appApi = createApi({
   reducerPath: "appApi",
   baseQuery: baseQuery,
   endpoints: () => ({}),
-  tagTypes: ["Student", "Faculty", "Program", "Status"],
+  tagTypes: ["Student", "Faculty", "Program", "Status", "FileProcessor"],
 });

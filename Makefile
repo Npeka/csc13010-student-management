@@ -35,7 +35,7 @@ testgen:
 	make testgen-package name=faculty
 	make testgen-package name=program
 	make testgen-package name=status
-	make testgen-package name=fileprocessing
+	make testgen-package name=fileprocessor
 	make testgen-package name=notification
 	
 # -------------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ mockgen:
 	make mockgen-package name=faculty
 	make mockgen-package name=program
 	make mockgen-package name=status
-	make mockgen-package name=fileprocessing
+	make mockgen-package name=fileprocessor
 	make mockgen-package name=notification
 
 test:

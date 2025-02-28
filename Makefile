@@ -9,8 +9,8 @@ run:
 build:
 	go build -o student-management.exe main.go
 
-test:
-	go test -v ./tests
+# test:
+# 	go test -v ./tests
 
 d-up:
 	docker-compose up
@@ -25,20 +25,7 @@ d-down-v:
 	docker-compose down -v
 
 # -------------------------------------------------------------------------------------
-testgen-package:
-	gotests -all -w internal/$(name)/repository/repository.go
-	gotests -all -w internal/$(name)/usecase/usecase.go
-	gotests -all -w internal/$(name)/delivery/http/handlers.go
 
-testgen:
-	make testgen-package name=student
-	make testgen-package name=faculty
-	make testgen-package name=program
-	make testgen-package name=status
-	make testgen-package name=fileprocessor
-	make testgen-package name=notification
-	
-# -------------------------------------------------------------------------------------
 mockgen-package:
 	mockgen -source='internal/$(name)/repository.go' -destination='internal/$(name)/mocks/repository_mock.go' -package=mocks
 	mockgen -source='internal/$(name)/usecase.go' -destination='internal/$(name)/mocks/usecase_mock.go' -package=mocks
@@ -51,52 +38,56 @@ mockgen:
 	make mockgen-package name=fileprocessor
 	make mockgen-package name=notification
 
+# -------------------------------------------------------------------------------------
+
+testgen-package:
+	gotests -all -w internal/$(name)/repository/repository.go
+	gotests -all -w internal/$(name)/usecase/usecase.go
+	gotests -all -w internal/$(name)/delivery/http/handlers.go
+
+testgen:
+	make testgen-package name=student
+	make testgen-package name=faculty
+	make testgen-package name=program
+	make testgen-package name=status
+	make testgen-package name=fileprocessor
+	make testgen-package name=notification
+
+# -------------------------------------------------------------------------------------
+
 test:
 	go test -cover ./...
 
 test-summary:
 	gotestsum --junitfile report.xml ./...
 
-lint:
+test-lint:
 	golangci-lint run ./...
 
-ci-check:
+test-ci-check:
 	@echo "Running lint..."
 	$(MAKE) lint
 	@echo "Running tests..."
 	$(MAKE) test-summary
 
-unit-test-student:
-	go test ./internal/student/repository
-	go test ./internal/student/usecase
-	go test ./internal/student/delivery/http
+NOCACHE ?= 1
 
-unit-test-faculty:
-	go test ./internal/faculty/repository
-	go test ./internal/faculty/usecase
-	go test ./internal/faculty/delivery/http
+TEST_CMD = go test $(if $(filter 1,$(NOCACHE)),-count=1) 
 
-unit-test-program:
-	go test ./internal/program/repository
-	go test ./internal/program/usecase
-	go test ./internal/program/delivery/http
+test-unit-package:
+	$(TEST_CMD) ./internal/$(name)/repository
+	$(TEST_CMD) ./internal/$(name)/usecase
+	$(TEST_CMD) ./internal/$(name)/delivery/http
 
-unit-test-status:
-	go test ./internal/status/repository
-	go test ./internal/status/usecase
-	go test ./internal/status/delivery/http
+test-unit:
+	make test-unit-package name=notification NOCACHE=$(NOCACHE)
+	make test-unit-package name=fileprocessor NOCACHE=$(NOCACHE)
+	make test-unit-package name=status NOCACHE=$(NOCACHE)
+	make test-unit-package name=program NOCACHE=$(NOCACHE)
+	make test-unit-package name=faculty NOCACHE=$(NOCACHE)
+	make test-unit-package name=student NOCACHE=$(NOCACHE)
 
-unit-test-notification:
-	go test ./internal/notification/repository
-	go test ./internal/notification/usecase
-	go test ./internal/notification/delivery/http
-
-unit-test:
-	make unit-test-student
-	make unit-test-faculty
-	make unit-test-program
-	make unit-test-status
-	make unit-test-notification
+# -------------------------------------------------------------------------------------
 
 generate:
 	@if not exist internal\$(name) mkdir internal\$(name)
@@ -159,4 +150,4 @@ generate:
 
 	@echo Module $(name) under project $(PROJECT_NAME) has been generated successfully!
 
-.PHONY: generate test test-summary lint testgen ci-check unit-test unit-test-student unit-test-faculty unit-test-program unit-test-status unit-test-notification mockgen
+.PHONY: generate test test-summary lint testgen ci-check test-unit test-unit-student test-unit-faculty test-unit-program test-unit-status test-unit-notification mockgen

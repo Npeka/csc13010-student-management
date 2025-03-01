@@ -187,14 +187,14 @@ func Test_facultyRepository_DeleteFaculty(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockRepo := mocks.NewMockIFacultyRepository(ctrl)
-	mockFacultyID := 1
+	mockFacultyID := uint(1)
 
 	type fields struct {
 		fr faculty.IFacultyRepository
 	}
 	type args struct {
 		ctx context.Context
-		id  int
+		id  uint
 	}
 	tests := []struct {
 		name    string

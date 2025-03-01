@@ -44,7 +44,7 @@ func (fu *facultyUsecase) CreateFaculty(ctx context.Context, faculty *models.Fac
 	return nil
 }
 
-func (fu *facultyUsecase) DeleteFaculty(ctx context.Context, id int) error {
+func (fu *facultyUsecase) DeleteFaculty(ctx context.Context, id uint) error {
 	err := fu.fr.DeleteFaculty(ctx, id)
 	if err != nil {
 		fu.lg.Error("Failed to delete faculty", zap.Error(err))

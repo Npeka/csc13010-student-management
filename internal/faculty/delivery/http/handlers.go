@@ -73,7 +73,7 @@ func (s *facultyHandlers) DeleteFaculty() gin.HandlerFunc {
 			return
 		}
 
-		err = s.fu.DeleteFaculty(c.Request.Context(), id)
+		err = s.fu.DeleteFaculty(c.Request.Context(), uint(id))
 		if err != nil {
 			s.lg.Error("Error deleting faculty", zap.Error(err))
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

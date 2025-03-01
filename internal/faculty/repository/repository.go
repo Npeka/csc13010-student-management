@@ -37,7 +37,7 @@ func (fr *facultyRepository) CreateFaculty(ctx context.Context, faculty *models.
 	return nil
 }
 
-func (fr *facultyRepository) DeleteFaculty(ctx context.Context, id int) error {
+func (fr *facultyRepository) DeleteFaculty(ctx context.Context, id uint) error {
 	if err := fr.db.WithContext(ctx).Where("id = ?", id).Delete(&models.Faculty{}).Error; err != nil {
 		return fmt.Errorf("failed to delete faculty: %w", err)
 	}

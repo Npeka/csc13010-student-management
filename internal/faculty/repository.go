@@ -9,5 +9,5 @@ import (
 type IFacultyRepository interface {
 	GetFaculties(ctx context.Context) ([]*models.Faculty, error)
 	CreateFaculty(ctx context.Context, faculty *models.Faculty) error
-	DeleteFaculty(ctx context.Context, id int) error
+	DeleteFaculty(ctx context.Context, id uint) error
 }

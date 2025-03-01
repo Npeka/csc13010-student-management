@@ -50,7 +50,7 @@ func (mr *MockIFacultyUsecaseMockRecorder) CreateFaculty(ctx, faculty interface{
 }
 
 // DeleteFaculty mocks base method.
-func (m *MockIFacultyUsecase) DeleteFaculty(ctx context.Context, id int) error {
+func (m *MockIFacultyUsecase) DeleteFaculty(ctx context.Context, id uint) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteFaculty", ctx, id)
 	ret0, _ := ret[0].(error)

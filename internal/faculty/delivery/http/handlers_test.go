@@ -212,7 +212,7 @@ func Test_facultyHandlers_DeleteFaculty(t *testing.T) {
 		name           string
 		facultyID      string
 		mockBehavior   func()
-		expectedStatus int
+		expectedStatus uint
 		expectedBody   string
 	}{
 		{

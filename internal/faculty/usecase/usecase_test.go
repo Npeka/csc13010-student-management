@@ -212,7 +212,7 @@ func Test_facultyUsecase_DeleteFaculty(t *testing.T) {
 
 	mockRepo := mocks.NewMockIFacultyRepository(ctrl)
 	mockLogger := logger.NewLoggerTest()
-	mockFacultyID := 1
+	mockFacultyID := uint(1)
 
 	type fields struct {
 		fr faculty.IFacultyRepository
@@ -220,7 +220,7 @@ func Test_facultyUsecase_DeleteFaculty(t *testing.T) {
 	}
 	type args struct {
 		ctx context.Context
-		id  int
+		id  uint
 	}
 	tests := []struct {
 		name    string

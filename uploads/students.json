@@ -1,47 +1,28 @@
 [
   {
-    "student_id": "22127189",
-    "full_name": "Nguyen Phuc Khang",
-    "birth_date": "2004-08-27T00:00:00Z",
-    "gender_id": 1,
-    "faculty_id": 1,
-    "course_id": 1,
-    "program_id": 1,
-    "address": "HCM",
-    "email": "npkhang28@student.university.edu.vn",
-    "phone": "0789123456",
-    "status_id": 1,
-    "created_at": "2025-02-26T12:54:36.172331Z",
-    "updated_at": "2025-02-26T12:54:36.172331Z"
-  },
-  {
-    "student_id": "22127188",
+    "student_id": "22127108",
     "full_name": "Huynh Yen Ngoc",
     "birth_date": "2004-10-19T00:00:00Z",
     "gender_id": 2,
-    "faculty_id": 1,
-    "course_id": 1,
+    "faculty_id": 2,
+    "course_id": 3,
     "program_id": 1,
     "address": "HCM",
-    "email": "huynhyenngocc@student.university.edu.vn",
+    "email": "huynhyenngoc@student.university.edu.vn",
     "phone": "0903123456",
-    "status_id": 1,
-    "created_at": "2025-02-26T12:54:36.172331Z",
-    "updated_at": "2025-02-26T12:54:36.172331Z"
+    "status_id": 1
   },
   {
-    "student_id": "22127414",
-    "full_name": "Nguyen Minh Toan",
-    "birth_date": "2004-01-08T00:00:00Z",
+    "student_id": "22127180",
+    "full_name": "Nguyen Phuc Khang",
+    "birth_date": "2004-08-27T00:00:00Z",
     "gender_id": 1,
-    "faculty_id": 1,
+    "faculty_id": 2,
     "course_id": 1,
-    "program_id": 1,
+    "program_id": 2,
     "address": "HCM",
-    "email": "minhto1an@student.university.edu.vn",
-    "phone": "0356123456",
-    "status_id": 1,
-    "created_at": "2025-02-26T12:54:36.172331Z",
-    "updated_at": "2025-02-26T12:54:36.172331Z"
+    "email": "npkhang287@student.university.edu.vn",
+    "phone": "0789123456",
+    "status_id": 1
   }
 ]

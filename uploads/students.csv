@@ -1,4 +1,4 @@
-ID,StudentID,FullName,BirthDate,GenderID,FacultyID,CourseID,ProgramID,Address,Email,Phone,StatusID
-1,22127180,Nguyen Phuc Khang,2004-08-27,1,1,1,1,HCM,npkhang287@student.university.edu.vn,0789123456,1
-2,22127108,Huynh Yen Ngoc,2004-10-19,2,1,1,1,HCM,huynhyenngoc@student.university.edu.vn,0903123456,1
-3,22127419,Nguyen Minh Toan,2004-01-08,1,1,1,1,HCM,minhtoan@student.university.edu.vn,0356123456,1
+address,birth_date,course_id,created_at,email,faculty_id,full_name,gender_id,phone,program_id,status_id,student_id,updated_at
+HCM,2004-08-27 00:00:00 +0000 UTC,1,2025-02-28 14:50:43.519464 +0000 UTC,npkhang287@student.university.edu.vn,1,Nguyen Phuc Khang,1,0789123456,2,1,22127180,2025-02-28 14:50:43.519464 +0000 UTC
+HCM,2004-10-19 00:00:00 +0000 UTC,3,2025-02-28 14:50:43.519464 +0000 UTC,huynhyenngoc@student.university.edu.vn,2,Huynh Yen Ngoc,2,0903123456,1,1,22127108,2025-02-28 14:50:43.519464 +0000 UTC
+HCM,2004-01-08 00:00:00 +0000 UTC,2,2025-02-28 14:50:43.519464 +0000 UTC,minhtoan@student.university.edu.vn,3,Nguyen Minh Toan,1,0356123456,3,3,22127419,2025-02-28 14:50:43.519464 +0000 UTC

@@ -5,28 +5,60 @@
 package mocks
 
 import (
+	context "context"
+	reflect "reflect"
+
 	gomock "github.com/golang/mock/gomock"
 )
 
-// MockIFileProcessingUsecase is a mock of IFileProcessingUsecase interface.
-type MockIFileProcessingUsecase struct {
+// MockIFileProcessorUsecase is a mock of IFileProcessorUsecase interface.
+type MockIFileProcessorUsecase struct {
 	ctrl     *gomock.Controller
-	recorder *MockIFileProcessingUsecaseMockRecorder
+	recorder *MockIFileProcessorUsecaseMockRecorder
 }
 
-// MockIFileProcessingUsecaseMockRecorder is the mock recorder for MockIFileProcessingUsecase.
-type MockIFileProcessingUsecaseMockRecorder struct {
-	mock *MockIFileProcessingUsecase
+// MockIFileProcessorUsecaseMockRecorder is the mock recorder for MockIFileProcessorUsecase.
+type MockIFileProcessorUsecaseMockRecorder struct {
+	mock *MockIFileProcessorUsecase
 }
 
-// NewMockIFileProcessingUsecase creates a new mock instance.
-func NewMockIFileProcessingUsecase(ctrl *gomock.Controller) *MockIFileProcessingUsecase {
-	mock := &MockIFileProcessingUsecase{ctrl: ctrl}
-	mock.recorder = &MockIFileProcessingUsecaseMockRecorder{mock}
+// NewMockIFileProcessorUsecase creates a new mock instance.
+func NewMockIFileProcessorUsecase(ctrl *gomock.Controller) *MockIFileProcessorUsecase {
+	mock := &MockIFileProcessorUsecase{ctrl: ctrl}
+	mock.recorder = &MockIFileProcessorUsecaseMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockIFileProcessingUsecase) EXPECT() *MockIFileProcessingUsecaseMockRecorder {
+func (m *MockIFileProcessorUsecase) EXPECT() *MockIFileProcessorUsecaseMockRecorder {
 	return m.recorder
+}
+
+// ExportFile mocks base method.
+func (m *MockIFileProcessorUsecase) ExportFile(ctx context.Context, module, format string) ([]byte, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ExportFile", ctx, module, format)
+	ret0, _ := ret[0].([]byte)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ExportFile indicates an expected call of ExportFile.
+func (mr *MockIFileProcessorUsecaseMockRecorder) ExportFile(ctx, module, format interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ExportFile", reflect.TypeOf((*MockIFileProcessorUsecase)(nil).ExportFile), ctx, module, format)
+}
+
+// ImportFile mocks base method.
+func (m *MockIFileProcessorUsecase) ImportFile(ctx context.Context, module, format string, fileData []byte) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ImportFile", ctx, module, format, fileData)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// ImportFile indicates an expected call of ImportFile.
+func (mr *MockIFileProcessorUsecaseMockRecorder) ImportFile(ctx, module, format, fileData interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ImportFile", reflect.TypeOf((*MockIFileProcessorUsecase)(nil).ImportFile), ctx, module, format, fileData)
 }

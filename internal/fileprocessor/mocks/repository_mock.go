@@ -5,28 +5,60 @@
 package mocks
 
 import (
+	context "context"
+	reflect "reflect"
+
 	gomock "github.com/golang/mock/gomock"
 )
 
-// MockIFileProcessingRepository is a mock of IFileProcessingRepository interface.
-type MockIFileProcessingRepository struct {
+// MockIFileProcessorRepository is a mock of IFileProcessorRepository interface.
+type MockIFileProcessorRepository struct {
 	ctrl     *gomock.Controller
-	recorder *MockIFileProcessingRepositoryMockRecorder
+	recorder *MockIFileProcessorRepositoryMockRecorder
 }
 
-// MockIFileProcessingRepositoryMockRecorder is the mock recorder for MockIFileProcessingRepository.
-type MockIFileProcessingRepositoryMockRecorder struct {
-	mock *MockIFileProcessingRepository
+// MockIFileProcessorRepositoryMockRecorder is the mock recorder for MockIFileProcessorRepository.
+type MockIFileProcessorRepositoryMockRecorder struct {
+	mock *MockIFileProcessorRepository
 }
 
-// NewMockIFileProcessingRepository creates a new mock instance.
-func NewMockIFileProcessingRepository(ctrl *gomock.Controller) *MockIFileProcessingRepository {
-	mock := &MockIFileProcessingRepository{ctrl: ctrl}
-	mock.recorder = &MockIFileProcessingRepositoryMockRecorder{mock}
+// NewMockIFileProcessorRepository creates a new mock instance.
+func NewMockIFileProcessorRepository(ctrl *gomock.Controller) *MockIFileProcessorRepository {
+	mock := &MockIFileProcessorRepository{ctrl: ctrl}
+	mock.recorder = &MockIFileProcessorRepositoryMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockIFileProcessingRepository) EXPECT() *MockIFileProcessingRepositoryMockRecorder {
+func (m *MockIFileProcessorRepository) EXPECT() *MockIFileProcessorRepositoryMockRecorder {
 	return m.recorder
+}
+
+// GetExportData mocks base method.
+func (m *MockIFileProcessorRepository) GetExportData(ctx context.Context, module string) ([]map[string]interface{}, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetExportData", ctx, module)
+	ret0, _ := ret[0].([]map[string]interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetExportData indicates an expected call of GetExportData.
+func (mr *MockIFileProcessorRepositoryMockRecorder) GetExportData(ctx, module interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetExportData", reflect.TypeOf((*MockIFileProcessorRepository)(nil).GetExportData), ctx, module)
+}
+
+// SaveImportedData mocks base method.
+func (m *MockIFileProcessorRepository) SaveImportedData(ctx context.Context, module string, data []map[string]interface{}) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SaveImportedData", ctx, module, data)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SaveImportedData indicates an expected call of SaveImportedData.
+func (mr *MockIFileProcessorRepositoryMockRecorder) SaveImportedData(ctx, module, data interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveImportedData", reflect.TypeOf((*MockIFileProcessorRepository)(nil).SaveImportedData), ctx, module, data)
 }

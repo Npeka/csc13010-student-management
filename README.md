@@ -51,6 +51,8 @@ Each student record contains the following details:
 
 ### Version 3.0 Enhancements
 
+#### Business Rule Enhancements
+
 - **Unique Student ID (MSSV)** – Ensure MSSV is unique when adding or updating a student.
 - **Configurable Email Domain** – Accept only emails from a specific domain, e.g., `@student.university.edu.vn`.
 - **Valid Phone Number Format** – Validate phone numbers according to country-specific formats, e.g., Vietnam (`+84` or `0[3|5|7|8|9]xxxxxxxx`).

@@ -44,6 +44,16 @@ func (fu *facultyUsecase) CreateFaculty(ctx context.Context, faculty *models.Fac
 	return nil
 }
 
+func (fu *facultyUsecase) UpdateFaculty(ctx context.Context, faculty *models.Faculty) error {
+	err := fu.fr.UpdateFaculty(ctx, faculty)
+	if err != nil {
+		fu.lg.Error("Failed to update faculty", zap.Error(err))
+		return err
+	}
+	fu.lg.Info("Successfully updated faculty")
+	return nil
+}
+
 func (fu *facultyUsecase) DeleteFaculty(ctx context.Context, id uint) error {
 	err := fu.fr.DeleteFaculty(ctx, id)
 	if err != nil {

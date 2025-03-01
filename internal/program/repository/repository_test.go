@@ -188,14 +188,14 @@ func Test_programRepository_DeleteProgram(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockRepo := mocks.NewMockIProgramRepository(ctrl)
-	mockProgramID := 1
+	mockProgramID := uint(1)
 
 	type fields struct {
 		pr program.IProgramRepository
 	}
 	type args struct {
 		ctx context.Context
-		id  int
+		id  uint
 	}
 	tests := []struct {
 		name    string

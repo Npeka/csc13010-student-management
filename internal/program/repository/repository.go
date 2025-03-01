@@ -36,7 +36,7 @@ func (pr *programRepository) CreateProgram(ctx context.Context, program *models.
 	return nil
 }
 
-func (pr *programRepository) DeleteProgram(ctx context.Context, id int) error {
+func (pr *programRepository) DeleteProgram(ctx context.Context, id uint) error {
 	if err := pr.db.WithContext(ctx).Where("id = ?", id).Delete(&models.Program{}).Error; err != nil {
 		return fmt.Errorf("failed to delete program: %w", err)
 	}

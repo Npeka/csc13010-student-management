@@ -39,15 +39,15 @@ func (pu *programUsecase) CreateProgram(ctx context.Context, program *models.Pro
 		pu.lg.Error("Failed to create program", zap.Error(err))
 		return err
 	}
-	pu.lg.Info("Successfully created program", zap.Int("id", program.ID))
+	pu.lg.Info("Successfully created program", zap.Uint("id", program.ID))
 	return nil
 }
 
-func (pu *programUsecase) DeleteProgram(ctx context.Context, id int) error {
+func (pu *programUsecase) DeleteProgram(ctx context.Context, id uint) error {
 	if err := pu.pr.DeleteProgram(ctx, id); err != nil {
 		pu.lg.Error("Failed to delete program", zap.Error(err))
 		return err
 	}
-	pu.lg.Info("Successfully deleted program", zap.Int("id", id))
+	pu.lg.Info("Successfully deleted program", zap.Uint("id", id))
 	return nil
 }

@@ -50,7 +50,7 @@ func (mr *MockIProgramRepositoryMockRecorder) CreateProgram(ctx, program interfa
 }
 
 // DeleteProgram mocks base method.
-func (m *MockIProgramRepository) DeleteProgram(ctx context.Context, id int) error {
+func (m *MockIProgramRepository) DeleteProgram(ctx context.Context, id uint) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteProgram", ctx, id)
 	ret0, _ := ret[0].(error)

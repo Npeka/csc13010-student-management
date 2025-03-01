@@ -50,7 +50,7 @@ func (mr *MockIProgramUsecaseMockRecorder) CreateProgram(ctx, program interface{
 }
 
 // DeleteProgram mocks base method.
-func (m *MockIProgramUsecase) DeleteProgram(ctx context.Context, id int) error {
+func (m *MockIProgramUsecase) DeleteProgram(ctx context.Context, id uint) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteProgram", ctx, id)
 	ret0, _ := ret[0].(error)

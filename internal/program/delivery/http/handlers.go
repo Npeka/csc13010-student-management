@@ -73,7 +73,7 @@ func (ph *programHandlers) DeleteProgram() gin.HandlerFunc {
 			return
 		}
 
-		err = ph.pu.DeleteProgram(c, id)
+		err = ph.pu.DeleteProgram(c, uint(id))
 		if err != nil {
 			ph.lg.Error("Error deleting program", zap.Error(err))
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

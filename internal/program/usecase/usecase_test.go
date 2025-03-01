@@ -213,7 +213,7 @@ func Test_programUsecase_DeleteProgram(t *testing.T) {
 
 	mockRepo := mocks.NewMockIProgramRepository(ctrl)
 	mockLogger := logger.NewLoggerTest()
-	mockProgramID := 1
+	mockProgramID := uint(1)
 
 	type fields struct {
 		pr program.IProgramRepository
@@ -221,7 +221,7 @@ func Test_programUsecase_DeleteProgram(t *testing.T) {
 	}
 	type args struct {
 		ctx context.Context
-		id  int
+		id  uint
 	}
 	tests := []struct {
 		name    string

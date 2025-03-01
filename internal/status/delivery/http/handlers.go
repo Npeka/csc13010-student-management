@@ -73,7 +73,7 @@ func (sh *statusHandlers) DeleteStatus() gin.HandlerFunc {
 			return
 		}
 
-		err = sh.su.DeleteStatus(c, id)
+		err = sh.su.DeleteStatus(c, uint(id))
 		if err != nil {
 			sh.lg.Error("Error deleting status", zap.Error(err))
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

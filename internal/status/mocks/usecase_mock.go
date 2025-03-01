@@ -50,7 +50,7 @@ func (mr *MockIStatusUsecaseMockRecorder) CreateStatus(ctx, status interface{}) 
 }
 
 // DeleteStatus mocks base method.
-func (m *MockIStatusUsecase) DeleteStatus(ctx context.Context, id int) error {
+func (m *MockIStatusUsecase) DeleteStatus(ctx context.Context, id uint) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteStatus", ctx, id)
 	ret0, _ := ret[0].(error)

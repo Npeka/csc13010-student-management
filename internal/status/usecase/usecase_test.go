@@ -198,15 +198,15 @@ func Test_statusUsecase_DeleteStatus(t *testing.T) {
 
 	mockRepo := mocks.NewMockIStatusRepository(ctrl)
 	mockLogger := logger.NewLoggerTest()
-	mockStatusID := 1
+	mockStatusID := uint(1)
 
 	type fields struct {
 		sr status.IStatusRepository
 		lg *logger.LoggerZap
 	}
 	type args struct {
-		ctx       context.Context
-		status_id int
+		ctx context.Context
+		id  uint
 	}
 	tests := []struct {
 		name    string
@@ -222,8 +222,8 @@ func Test_statusUsecase_DeleteStatus(t *testing.T) {
 				lg: mockLogger,
 			},
 			args: args{
-				ctx:       context.Background(),
-				status_id: mockStatusID,
+				ctx: context.Background(),
+				id:  mockStatusID,
 			},
 			wantErr: false,
 			setup: func() {
@@ -237,8 +237,8 @@ func Test_statusUsecase_DeleteStatus(t *testing.T) {
 				lg: mockLogger,
 			},
 			args: args{
-				ctx:       context.Background(),
-				status_id: mockStatusID,
+				ctx: context.Background(),
+				id:  mockStatusID,
 			},
 			wantErr: true,
 			setup: func() {
@@ -253,7 +253,7 @@ func Test_statusUsecase_DeleteStatus(t *testing.T) {
 				sr: tt.fields.sr,
 				lg: tt.fields.lg,
 			}
-			if err := su.DeleteStatus(tt.args.ctx, tt.args.status_id); (err != nil) != tt.wantErr {
+			if err := su.DeleteStatus(tt.args.ctx, tt.args.id); (err != nil) != tt.wantErr {
 				t.Errorf("statusUsecase.DeleteStatus() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

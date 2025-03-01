@@ -44,8 +44,8 @@ func (su *statusUsecase) CreateStatus(ctx context.Context, status *models.Status
 	return nil
 }
 
-func (su *statusUsecase) DeleteStatus(ctx context.Context, status_id int) error {
-	err := su.sr.DeleteStatus(ctx, status_id)
+func (su *statusUsecase) DeleteStatus(ctx context.Context, id uint) error {
+	err := su.sr.DeleteStatus(ctx, id)
 	if err != nil {
 		su.lg.Error("Failed to delete status", zap.Error(err))
 		return err

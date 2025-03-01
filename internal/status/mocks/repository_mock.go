@@ -50,17 +50,17 @@ func (mr *MockIStatusRepositoryMockRecorder) CreateStatus(ctx, status interface{
 }
 
 // DeleteStatus mocks base method.
-func (m *MockIStatusRepository) DeleteStatus(ctx context.Context, status_id int) error {
+func (m *MockIStatusRepository) DeleteStatus(ctx context.Context, id uint) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteStatus", ctx, status_id)
+	ret := m.ctrl.Call(m, "DeleteStatus", ctx, id)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // DeleteStatus indicates an expected call of DeleteStatus.
-func (mr *MockIStatusRepositoryMockRecorder) DeleteStatus(ctx, status_id interface{}) *gomock.Call {
+func (mr *MockIStatusRepositoryMockRecorder) DeleteStatus(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteStatus", reflect.TypeOf((*MockIStatusRepository)(nil).DeleteStatus), ctx, status_id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteStatus", reflect.TypeOf((*MockIStatusRepository)(nil).DeleteStatus), ctx, id)
 }
 
 // GetStatuses mocks base method.

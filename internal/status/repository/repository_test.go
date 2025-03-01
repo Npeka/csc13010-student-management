@@ -174,14 +174,14 @@ func Test_statusRepository_DeleteStatus(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockRepo := mocks.NewMockIStatusRepository(ctrl)
-	mockStatusID := 1
+	mockStatusID := uint(1)
 
 	type fields struct {
 		sr status.IStatusRepository
 	}
 	type args struct {
 		ctx context.Context
-		id  int
+		id  uint
 	}
 	tests := []struct {
 		name    string

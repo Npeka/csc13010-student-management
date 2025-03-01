@@ -36,7 +36,7 @@ func (s *statusRepository) CreateStatus(ctx context.Context, status *models.Stat
 	return nil
 }
 
-func (s *statusRepository) DeleteStatus(ctx context.Context, id int) error {
+func (s *statusRepository) DeleteStatus(ctx context.Context, id uint) error {
 	if err := s.db.WithContext(ctx).Where("id = ?", id).Delete(&models.Status{}).Error; err != nil {
 		return fmt.Errorf("failed to delete status: %w", err)
 	}

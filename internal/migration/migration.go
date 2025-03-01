@@ -9,12 +9,13 @@ import (
 
 var allModels = []interface{}{
 	// student management models
-	&models.Student{},
+	&models.User{},
 	&models.Gender{},
 	&models.Program{},
 	&models.Faculty{},
 	&models.Course{},
 	&models.Status{},
+	&models.Student{},
 
 	// audit log model
 	&models.AuditLog{},

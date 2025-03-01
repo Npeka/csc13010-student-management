@@ -5,20 +5,22 @@ import (
 	"time"
 
 	"github.com/csc13010-student-management/internal/models"
+	"github.com/csc13010-student-management/utils/crypto"
 	"gorm.io/gorm"
 )
 
 func autoMigrateStudent(db *gorm.DB) {
 	var wg sync.WaitGroup
-	wg.Add(5)
 
 	go func() {
+
 		defer wg.Done()
 		autoMigrateTable(db, "genders", []models.Gender{
 			{Name: "Male"},
 			{Name: "Female"},
 			{Name: "Other"},
 		})
+		wg.Add(1)
 	}()
 
 	go func() {
@@ -29,6 +31,7 @@ func autoMigrateStudent(db *gorm.DB) {
 			{Name: "Talented Bachelor"},
 			{Name: "Advanced Program"},
 		})
+		wg.Add(1)
 	}()
 
 	go func() {
@@ -39,6 +42,7 @@ func autoMigrateStudent(db *gorm.DB) {
 			{Name: "Japanese"},
 			{Name: "French"},
 		})
+		wg.Add(1)
 	}()
 
 	go func() {
@@ -49,6 +53,7 @@ func autoMigrateStudent(db *gorm.DB) {
 			{Name: "CSC13012 - Data Structure and Algorithms"},
 			{Name: "CSC13013 - Computer Network"},
 		})
+		wg.Add(1)
 	}()
 
 	go func() {
@@ -62,12 +67,33 @@ func autoMigrateStudent(db *gorm.DB) {
 			{Name: "Suspended"},
 			{Name: "Other"},
 		})
+		wg.Add(1)
+	}()
+
+	go func() {
+		defer wg.Done()
+		autoMigrateTable(db, "users", []models.User{
+			{
+				Username: "22127180",
+				Password: crypto.GetHash("22127180"),
+			},
+			{
+				Username: "22127108",
+				Password: crypto.GetHash("22127108"),
+			},
+			{
+				Username: "22127419",
+				Password: crypto.GetHash("22127419"),
+			},
+		})
+		wg.Add(1)
 	}()
 
 	wg.Wait()
 
 	autoMigrateTable(db, "students", []models.Student{
 		{
+			UserID:    1,
 			StudentID: "22127180",
 			FullName:  "Nguyen Phuc Khang",
 			BirthDate: time.Date(2004, 8, 27, 0, 0, 0, 0, time.UTC),
@@ -81,6 +107,7 @@ func autoMigrateStudent(db *gorm.DB) {
 			StatusID:  1,
 		},
 		{
+			UserID:    2,
 			StudentID: "22127108",
 			FullName:  "Huynh Yen Ngoc",
 			BirthDate: time.Date(2004, 10, 19, 0, 0, 0, 0, time.UTC),
@@ -94,6 +121,7 @@ func autoMigrateStudent(db *gorm.DB) {
 			StatusID:  1,
 		},
 		{
+			UserID:    3,
 			StudentID: "22127419",
 			FullName:  "Nguyen Minh Toan",
 			BirthDate: time.Date(2004, 1, 8, 0, 0, 0, 0, time.UTC),

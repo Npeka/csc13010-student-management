@@ -77,3 +77,17 @@ func (mr *MockIFacultyUsecaseMockRecorder) GetFaculties(ctx interface{}) *gomock
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFaculties", reflect.TypeOf((*MockIFacultyUsecase)(nil).GetFaculties), ctx)
 }
+
+// UpdateFaculty mocks base method.
+func (m *MockIFacultyUsecase) UpdateFaculty(ctx context.Context, faculty *models.Faculty) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateFaculty", ctx, faculty)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateFaculty indicates an expected call of UpdateFaculty.
+func (mr *MockIFacultyUsecaseMockRecorder) UpdateFaculty(ctx, faculty interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateFaculty", reflect.TypeOf((*MockIFacultyUsecase)(nil).UpdateFaculty), ctx, faculty)
+}

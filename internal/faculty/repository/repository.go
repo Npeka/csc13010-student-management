@@ -37,6 +37,13 @@ func (fr *facultyRepository) CreateFaculty(ctx context.Context, faculty *models.
 	return nil
 }
 
+func (fr *facultyRepository) UpdateFaculty(ctx context.Context, faculty *models.Faculty) error {
+	if err := fr.db.WithContext(ctx).Where("id = ?", faculty.ID).Updates(&faculty).Error; err != nil {
+		return fmt.Errorf("failed to update faculty: %w", err)
+	}
+	return nil
+}
+
 func (fr *facultyRepository) DeleteFaculty(ctx context.Context, id uint) error {
 	if err := fr.db.WithContext(ctx).Where("id = ?", id).Delete(&models.Faculty{}).Error; err != nil {
 		return fmt.Errorf("failed to delete faculty: %w", err)

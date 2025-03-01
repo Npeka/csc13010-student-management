@@ -63,6 +63,28 @@ func (fh *facultyHandlers) CreateFaculty() gin.HandlerFunc {
 	}
 }
 
+func (fh *facultyHandlers) UpdateFaculty() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		fh.lg.Info("UpdateFaculty called")
+		var faculty models.Faculty
+		if err := c.ShouldBindJSON(&faculty); err != nil {
+			fh.lg.Error("Error binding JSON", zap.Error(err))
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		err := fh.fu.UpdateFaculty(c.Request.Context(), &faculty)
+		if err != nil {
+			fh.lg.Error("Error updating faculty", zap.Error(err))
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		fh.lg.Info("UpdateFaculty successful")
+		c.JSON(http.StatusOK, faculty)
+	}
+}
+
 func (s *facultyHandlers) DeleteFaculty() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		s.lg.Info("DeleteFaculty called")

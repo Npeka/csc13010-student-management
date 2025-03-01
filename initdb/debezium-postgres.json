@@ -1,0 +1,18 @@
+{
+  "name": "csc13010-student-managemen-connect",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "tasks.max": "1",
+    "database.hostname": "postgres",
+    "database.port": "5432",
+    "database.user": "postgres",
+    "database.password": "postgres",
+    "database.dbname": "student_management",
+    "plugin.name": "pgoutput",
+    "topic.prefix": "dbserver1",
+    "schema.history.internal.kafka.bootstrap.servers": "kafka:29092",
+    "schema.history.internal.kafka.topic": "schema-changes.student_management",
+    "slot.name": "debezium_slot",
+    "publication.name": "debezium_pub"
+  }
+}

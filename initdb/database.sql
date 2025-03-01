@@ -1,3 +1,9 @@
+ALTER SYSTEM SET wal_level = logical;
+CREATE PUBLICATION debezium_pub FOR ALL TABLES;
+-- CREATE PUBLICATION debezium_pub FOR TABLE students, student_notifications;
+SELECT * FROM pg_create_logical_replication_slot('debezium_slot', 'pgoutput');
+
+
 -- DO $$ 
 -- BEGIN 
 --    IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'student_management') THEN

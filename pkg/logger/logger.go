@@ -1,9 +1,11 @@
 package logger
 
 import (
+	"net/http"
 	"os"
 
 	"github.com/csc13010-student-management/config"
+	"github.com/gin-gonic/gin"
 	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -78,4 +80,31 @@ func GetWriterSync() zapcore.WriteSyncer {
 	syncFile := zapcore.AddSync(file)
 	syncConsole := zapcore.AddSync(os.Stderr)
 	return zapcore.NewMultiWriteSyncer(syncFile, syncConsole)
+}
+
+func GetRequestID(c *gin.Context) string {
+	return c.Request.Header.Get("X-Request-ID")
+}
+
+func GetIPAddress(c *gin.Context) string {
+	return c.ClientIP()
+}
+
+func ErrResponseWithLog(ctx *gin.Context, logger *LoggerZap, err error) {
+	logger.Error(
+		"ErrResponseWithLog",
+		zap.String("RequestID", GetRequestID(ctx)),
+		zap.String("IPAddress", GetIPAddress(ctx)),
+		zap.Error(err),
+	)
+	ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+}
+
+func LogResponseError(ctx *gin.Context, logger *LoggerZap, err error) {
+	logger.Error(
+		"LogResponseError",
+		zap.String("RequestID", GetRequestID(ctx)),
+		zap.String("IPAddress", GetIPAddress(ctx)),
+		zap.Error(err),
+	)
 }

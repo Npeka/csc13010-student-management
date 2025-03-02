@@ -71,7 +71,6 @@ func (sh *statusHandlers) UpdateStatus() gin.HandlerFunc {
 		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "status.UpdateStatus")
 		defer span.Finish()
 
-		sh.lg.Info("UpdateStatus called")
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
 			logger.ErrResponseWithLog(c, sh.lg, err)

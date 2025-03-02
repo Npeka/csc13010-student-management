@@ -1,12 +1,13 @@
 package http
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/csc13010-student-management/internal/auditlog"
 	"github.com/csc13010-student-management/pkg/logger"
+	"github.com/csc13010-student-management/pkg/response"
 	"github.com/gin-gonic/gin"
+	"github.com/opentracing/opentracing-go"
 )
 
 type auditLogHandlers struct {
@@ -26,30 +27,35 @@ func NewAuditLogHandlers(
 
 func (h *auditLogHandlers) GetAuditLogs() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		ctx := context.Background()
+		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "auditlog.GetAuditLogs")
+		defer span.Finish()
 
 		auditLogs, err := h.au.GetAuditLogs(ctx)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			logger.ErrResponseWithLog(c, h.lg, err)
+			response.Error(c, http.StatusInternalServerError)
 			return
 		}
 
-		c.JSON(http.StatusOK, auditLogs)
+		response.Success(c, response.ErrCodeSuccess, auditLogs)
 	}
 }
 
 func (h *auditLogHandlers) GetModelAuditLogs() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		ctx := context.Background()
+		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "auditlog.GetModelAuditLogs")
+		defer span.Finish()
+
 		table_name := c.Param("table_name")
 		record_id := c.Param("record_id")
 
 		auditLogs, err := h.au.GetModelAuditLogs(ctx, table_name, record_id)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			logger.ErrResponseWithLog(c, h.lg, err)
+			response.Error(c, http.StatusInternalServerError)
 			return
 		}
 
-		c.JSON(http.StatusOK, auditLogs)
+		response.Success(c, response.ErrCodeSuccess, auditLogs)
 	}
 }

@@ -1,10 +1,15 @@
 package config
 
+func NewConfig() *Config {
+	return &Config{}
+}
+
 type Config struct {
 	Server   ServerConfig   `mapstructure:"server"`
 	Postgres PostgresConfig `mapstructure:"postgres"`
 	Logger   LoggerConfig   `mapstructure:"logger"`
 	Redis    RedisConfig    `mapstructure:"redis"`
+	Kafka    KafkaConfig    `mapstructure:"kafka"`
 }
 
 type ServerConfig struct {
@@ -37,6 +42,7 @@ type LoggerConfig struct {
 	Compress      bool   `mapstructure:"compress"`
 }
 
-func NewConfig() *Config {
-	return &Config{}
+type KafkaConfig struct {
+	Host string `mapstructure:"host"`
+	Port int    `mapstructure:"port"`
 }

@@ -33,3 +33,5 @@ redis:
 kafka:
   bootstrap.servers: localhost:9092
   group.id: mygroup
+  host: localhost
+  port: 9092

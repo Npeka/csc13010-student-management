@@ -7,8 +7,9 @@ import (
 	"github.com/csc13010-student-management/internal/models"
 	"github.com/csc13010-student-management/internal/student"
 	"github.com/csc13010-student-management/pkg/logger"
+	"github.com/csc13010-student-management/pkg/response"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
+	"github.com/opentracing/opentracing-go"
 )
 
 type studentHandlers struct {
@@ -29,162 +30,141 @@ func NewStudentHandlers(
 // GetStudents implements student.IStudentHandlers.
 func (s *studentHandlers) GetStudents() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		s.lg.Info("GetStudents called")
-		students, err := s.su.GetStudents(c)
+		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "student.GetStudents")
+		defer span.Finish()
+
+		students, err := s.su.GetStudents(ctx)
 		if err != nil {
-			s.lg.Error("Error getting students", zap.Error(err))
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			logger.ErrResponseWithLog(c, s.lg, err)
+			response.Error(c, http.StatusInternalServerError)
 			return
 		}
-		s.lg.Info("GetStudents successful")
-		c.JSON(http.StatusOK, students)
+
+		response.Success(c, response.ErrCodeSuccess, students)
 	}
 }
 
 // GetStudentByStudentID implements student.IStudentHandlers.
 func (s *studentHandlers) GetStudentByStudentID() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		s.lg.Info("GetStudentByStudentID called")
-		student_id := c.Param("student_id")
+		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "student.GetStudentByStudentID")
+		defer span.Finish()
 
-		student, err := s.su.GetStudentByStudentID(c, student_id)
+		student_id := c.Param("student_id")
+		student, err := s.su.GetStudentByStudentID(ctx, student_id)
 		if err != nil {
-			s.lg.Error("Error getting student", zap.Error(err))
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			logger.ErrResponseWithLog(c, s.lg, err)
+			response.Error(c, http.StatusInternalServerError)
 			return
 		}
 
-		s.lg.Info("GetStudentByStudentID successful")
-		c.JSON(http.StatusOK, student)
+		response.Success(c, response.ErrCodeSuccess, student)
 	}
 }
 
 // GetFullInfoStudentByStudentID implements student.IStudentHandlers.
 func (s *studentHandlers) GetFullInfoStudentByStudentID() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		s.lg.Info("GetFullInfoStudentByStudentID called")
-		student_id := c.Param("student_id")
+		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "student.GetFullInfoStudentByStudentID")
+		defer span.Finish()
 
-		student, err := s.su.GetFullInfoStudentByStudentID(c, student_id)
+		student_id := c.Param("student_id")
+		student, err := s.su.GetFullInfoStudentByStudentID(ctx, student_id)
 		if err != nil {
-			s.lg.Error("Error getting full info student", zap.Error(err))
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			logger.ErrResponseWithLog(c, s.lg, err)
+			response.Error(c, http.StatusInternalServerError)
 			return
 		}
 
-		s.lg.Info("GetFullInfoStudentByStudentID successful")
-		c.JSON(http.StatusOK, student)
+		response.Success(c, response.ErrCodeSuccess, student)
 	}
 }
 
 // CreateStudent implements student.IStudentHandlers.
 func (s *studentHandlers) CreateStudent() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		s.lg.Info("CreateStudent called")
+		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "student.CreateStudent")
+		defer span.Finish()
+
 		var student models.Student
 		if err := c.ShouldBindJSON(&student); err != nil {
-			s.lg.Error("Error binding JSON", zap.Error(err))
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			logger.ErrResponseWithLog(c, s.lg, err)
+			response.Error(c, http.StatusBadRequest)
 			return
 		}
 
-		err := s.su.CreateStudent(c, &student)
+		err := s.su.CreateStudent(ctx, &student)
 		if err != nil {
-			s.lg.Error("Error creating student", zap.Error(err))
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			logger.ErrResponseWithLog(c, s.lg, err)
+			response.Error(c, http.StatusInternalServerError)
 			return
 		}
 
-		s.lg.Info("CreateStudent successful")
-		c.JSON(http.StatusCreated, student)
+		response.Success(c, response.ErrCodeSuccess, student)
 	}
 }
 
 // UpdateStudent implements student.IStudentHandlers.
 func (s *studentHandlers) UpdateStudent() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		s.lg.Info("UpdateStudent called")
+		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "student.UpdateStudent")
+		defer span.Finish()
+
 		student_id, err := strconv.ParseInt(c.Param("student_id"), 10, 64)
 		if err != nil {
-			s.lg.Error("Invalid student ID", zap.Error(err))
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid student ID"})
+			logger.ErrResponseWithLog(c, s.lg, err)
+			response.Error(c, http.StatusBadRequest)
 			return
 		}
 
 		student := models.Student{StudentID: strconv.FormatInt(student_id, 10)}
 		if err := c.ShouldBindJSON(&student); err != nil {
-			s.lg.Error("Error binding JSON", zap.Error(err))
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			logger.ErrResponseWithLog(c, s.lg, err)
+			response.Error(c, http.StatusBadRequest)
 			return
 		}
 
-		err = s.su.UpdateStudent(c, &student)
+		err = s.su.UpdateStudent(ctx, &student)
 		if err != nil {
-			s.lg.Error("Error updating student", zap.Error(err))
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			logger.ErrResponseWithLog(c, s.lg, err)
+			response.Error(c, http.StatusInternalServerError)
 			return
 		}
 
-		s.lg.Info("UpdateStudent successful")
-		c.JSON(http.StatusOK, student)
+		response.Success(c, response.ErrCodeSuccess, student)
 	}
 }
-
-// const defaultDeleteTimeLimit = 30 * time.Minute
 
 // DeleteStudent implements student.IStudentHandlers.
 func (s *studentHandlers) DeleteStudent() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// if os.Getenv("ALLOW_DELETE_ANYTIME") == "false" {
-		// 	c.JSON(http.StatusForbidden, gin.H{"error": "DeleteStudent is disabled"})
-		// 	return
-		// }
+		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "student.DeleteStudent")
+		defer span.Finish()
 
 		s.lg.Info("DeleteStudent called")
 		student_id := c.Param("student_id")
-
-		// student, err := s.su.GetStudentByStudentID(c, student_id)
-		// if err != nil {
-		// 	c.JSON(http.StatusNotFound, gin.H{"error": "Student not found"})
-		// 	return
-		// }
-
-		// deleteTimeLimit := defaultDeleteTimeLimit
-		// if envLimit, exists := os.LookupEnv("DELETE_TIME_LIMIT"); exists {
-		// 	parsedLimit, err := time.ParseDuration(envLimit)
-		// 	if err == nil {
-		// 		deleteTimeLimit = parsedLimit
-		// 	}
-		// }
-
-		// if time.Since(student.CreatedAt) > deleteTimeLimit {
-		// 	c.JSON(http.StatusForbidden, gin.H{"error": "Student cannot be deleted after the allowed time"})
-		// 	return
-		// }
-
-		err := s.su.DeleteStudent(c, student_id)
+		err := s.su.DeleteStudent(ctx, student_id)
 		if err != nil {
-			s.lg.Error("Error deleting student", zap.Error(err))
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			logger.ErrResponseWithLog(c, s.lg, err)
+			response.Error(c, http.StatusInternalServerError)
 			return
 		}
 
-		s.lg.Info("DeleteStudent successful")
-		c.JSON(http.StatusOK, gin.H{"message": "Student deleted successfully"})
+		response.Success(c, response.ErrCodeSuccess, gin.H{"message": "Student deleted successfully"})
 	}
 }
 
 func (s *studentHandlers) GetOptions() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		s.lg.Info("GetOptions called")
-		options, err := s.su.GetOptions(c)
+		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "student.GetOptions")
+		defer span.Finish()
+
+		options, err := s.su.GetOptions(ctx)
 		if err != nil {
-			s.lg.Error("Error getting options", zap.Error(err))
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			logger.ErrResponseWithLog(c, s.lg, err)
+			response.Error(c, http.StatusInternalServerError)
 			return
 		}
-
-		s.lg.Info("GetOptions successful")
-		c.JSON(http.StatusOK, options)
+		response.Success(c, response.ErrCodeSuccess, options)
 	}
 }

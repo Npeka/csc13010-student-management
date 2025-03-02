@@ -1,0 +1,8 @@
+p, admin, /dashboard, read
+p, admin, /dashboard, write
+p, user, /profile, read
+
+g, alice, admin   # Alice có role admin
+g, bob, user      # Bob có role user
+
+

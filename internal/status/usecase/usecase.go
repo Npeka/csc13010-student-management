@@ -6,7 +6,7 @@ import (
 	"github.com/csc13010-student-management/internal/models"
 	"github.com/csc13010-student-management/internal/status"
 	"github.com/csc13010-student-management/pkg/logger"
-	"go.uber.org/zap"
+	"github.com/opentracing/opentracing-go"
 )
 
 type statusUsecase struct {
@@ -25,31 +25,45 @@ func NewStatusUsecase(
 }
 
 func (su *statusUsecase) GetStatuses(ctx context.Context) ([]*models.Status, error) {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "statusUsecase.GetStatuses")
+	defer span.Finish()
+
 	statuses, err := su.sr.GetStatuses(ctx)
 	if err != nil {
-		su.lg.Error("Failed to get statuses", zap.Error(err))
 		return nil, err
 	}
-	su.lg.Info("Successfully fetched statuses")
 	return statuses, nil
 }
 
 func (su *statusUsecase) CreateStatus(ctx context.Context, status *models.Status) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "statusUsecase.CreateStatus")
+	defer span.Finish()
+
 	err := su.sr.CreateStatus(ctx, status)
 	if err != nil {
-		su.lg.Error("Failed to create status", zap.Error(err))
 		return err
 	}
-	su.lg.Info("Successfully created status")
+	return nil
+}
+
+func (su *statusUsecase) UpdateStatus(ctx context.Context, status *models.Status) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "statusUsecase.UpdateStatus")
+	defer span.Finish()
+
+	err := su.sr.UpdateStatus(ctx, status)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func (su *statusUsecase) DeleteStatus(ctx context.Context, id uint) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "statusUsecase.DeleteStatus")
+	defer span.Finish()
+
 	err := su.sr.DeleteStatus(ctx, id)
 	if err != nil {
-		su.lg.Error("Failed to delete status", zap.Error(err))
 		return err
 	}
-	su.lg.Info("Successfully deleted status")
 	return nil
 }

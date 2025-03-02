@@ -254,3 +254,28 @@ func Test_statusHandlers_DeleteStatus(t *testing.T) {
 		})
 	}
 }
+
+func Test_statusHandlers_UpdateStatus(t *testing.T) {
+	type fields struct {
+		su status.IStatusUsecase
+		lg *logger.LoggerZap
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   gin.HandlerFunc
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			sh := &statusHandlers{
+				su: tt.fields.su,
+				lg: tt.fields.lg,
+			}
+			if got := sh.UpdateStatus(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("statusHandlers.UpdateStatus() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

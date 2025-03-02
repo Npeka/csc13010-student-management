@@ -1,9 +1,10 @@
 package models
 
 import (
-	"encoding/json"
+	"context"
 	"errors"
 	"regexp"
+	"strings"
 	"time"
 
 	"gorm.io/gorm"
@@ -11,18 +12,25 @@ import (
 
 // Student struct with data validation
 type Student struct {
-	ID        int       `gorm:"primaryKey;autoIncrement;not null" json:"id" csv:"id"`
+	ID        uint      `gorm:"primaryKey;autoIncrement;not null" json:"id" csv:"id"`
+	UserID    *uint     `gorm:"uniqueIndex" json:"user_id,omitempty"`
+	User      *User     `gorm:"foreignKey:UserID" json:"user,omitempty"`
 	StudentID string    `gorm:"type:varchar(12);uniqueIndex;not null" json:"student_id" csv:"student_id"`
 	FullName  string    `gorm:"type:varchar(100);not null" json:"full_name" csv:"full_name"`
-	BirthDate time.Time `gorm:"type:date;not null" json:"birth_date" csv:"birth_date"`
-	GenderID  int       `gorm:"not null" json:"gender_id" csv:"gender_id"`
-	FacultyID int       `gorm:"not null" json:"faculty_id" csv:"faculty_id"`
-	CourseID  int       `gorm:"not null" json:"course_id" csv:"course_id"`
-	ProgramID int       `gorm:"not null" json:"program_id" csv:"program_id"`
+	BirthDate string    `gorm:"type:date;not null" json:"birth_date" csv:"birth_date"`
+	GenderID  uint      `gorm:"not null" json:"gender_id" csv:"gender_id"`
+	Gender    Gender    `gorm:"foreignKey:GenderID" json:"gender,omitempty" csv:"gender"`
+	FacultyID uint      `gorm:"not null" json:"faculty_id" csv:"faculty_id"`
+	Faculty   Faculty   `gorm:"foreignKey:FacultyID" json:"faculty,omitempty" csv:"faculty"`
+	CourseID  uint      `gorm:"not null" json:"course_id" csv:"course_id"`
+	Course    Course    `gorm:"foreignKey:CourseID" json:"course,omitempty" csv:"course"`
+	ProgramID uint      `gorm:"not null" json:"program_id" csv:"program_id"`
+	Program   Program   `gorm:"foreignKey:ProgramID" json:"program,omitempty" csv:"program"`
 	Address   string    `gorm:"type:text" json:"address,omitempty" csv:"address"`
 	Email     string    `gorm:"type:varchar(255);uniqueIndex;not null" json:"email" csv:"email"`
 	Phone     string    `gorm:"type:varchar(20);not null" json:"phone" csv:"phone"`
-	StatusID  int       `gorm:"not null" json:"status_id" csv:"status_id"`
+	StatusID  uint      `gorm:"not null" json:"status_id" csv:"status_id"`
+	Status    Status    `gorm:"foreignKey:StatusID" json:"status,omitempty" csv:"status"`
 	CreatedAt time.Time `gorm:"type:timestamp;default:CURRENT_TIMESTAMP" json:"created_at" csv:"created_at"`
 	UpdatedAt time.Time `gorm:"type:timestamp;default:CURRENT_TIMESTAMP" json:"updated_at" csv:"updated_at"`
 }
@@ -45,8 +53,10 @@ func (s *Student) BeforeSave(tx *gorm.DB) (err error) {
 	}
 
 	// Validate BirthDate (must be before the current date)
-	if s.BirthDate.After(time.Now()) {
-		return errors.New("invalid birth_date, cannot be in the future")
+	// string to time.Time
+	_, err = time.Parse("2006-01-02", s.BirthDate)
+	if err != nil {
+		return errors.New("invalid birth_date, must be in the format YYYY-MM-DD")
 	}
 
 	// Validate Email
@@ -59,10 +69,35 @@ func (s *Student) BeforeSave(tx *gorm.DB) (err error) {
 		return errors.New("invalid phone number")
 	}
 
-	// Validate valid status transition
-	if !isValidStatusTransition(tx, s.ID, s.StudentID, s.StatusID) {
-		return errors.New("invalid student status transition")
+	if s.ID > 0 {
+		var currentStudent Student
+		if err := tx.Select("status_id").Where("id = ?", s.ID).First(&currentStudent).Error; err != nil {
+			return err
+		}
+
+		// Validate valid status transition
+		userRole := tx.Statement.Context.Value("userRole").(string)
+
+		// Check status transition
+		valid, err := IsValidStatusTransition(tx, s.StatusID, s.StatusID, userRole)
+		if err != nil {
+			return err
+		}
+		if !valid {
+			return errors.New("invalid student status transition for your role")
+		}
 	}
+
+	// Set context for AfterCreate
+	tx.Statement.Context = context.WithValue(tx.Statement.Context, "userData", struct {
+		UserID uint
+		Email  string
+		Role   string
+	}{
+		// UserID: s.UserID,
+		Email: s.Email,
+		Role:  "student",
+	})
 
 	return nil
 }
@@ -95,77 +130,135 @@ func isValidPhone(phone string) bool {
 	return match
 }
 
-// Function to check valid status transition
-func isValidStatusTransition(tx *gorm.DB, id int, studentID string, newStatusID int) bool {
-	if id == 0 {
-		// If new student, no need to check
-		return true
+func IsValidStatusTransition(tx *gorm.DB, currentStatusID, newStatusID uint, userRole string) (bool, error) {
+	if currentStatusID == newStatusID {
+		return true, nil
 	}
 
-	var currentStudent Student
-	if err := tx.Where("student_id = ?", studentID).First(&currentStudent).Error; err != nil {
-		return false
+	var transition StatusTransition
+	err := tx.Where("current_status_id = ? AND new_status_id = ?",
+		currentStatusID, newStatusID).First(&transition).Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return false, nil // Transition not found = not allowed
+		}
+		return false, err // Database error
 	}
 
-	// Valid status transition rules
-	validTransitions := map[int][]int{
-		1: {1, 2, 3, 4}, // "Đang học" -> "Tốt nghiệp", "Bỏ học", "Đình chỉ"
-		2: {2},          // "Đã tốt nghiệp" -> KHÔNG thể thay đổi
-		3: {3},          // "Đã bỏ học" -> KHÔNG thể thay đổi
-		4: {4},          // "Bị đình chỉ" -> KHÔNG thể thay đổi
-	}
-
-	// Check if new status is valid
-	for _, valid := range validTransitions[currentStudent.StatusID] {
-		if valid == newStatusID {
-			return true
+	// Check if user role is allowed for this transition
+	allowedRoles := strings.Split(transition.AllowedRoles, ",")
+	for _, role := range allowedRoles {
+		if strings.TrimSpace(role) == userRole {
+			return true, nil
 		}
 	}
-	return false
+
+	return false, nil // User role not allowed for this transition
 }
 
 // Log changes after creating student
 func (s *Student) AfterCreate(tx *gorm.DB) (err error) {
-	newJSON, err := json.Marshal(s)
-	if err != nil {
-		return err
-	}
+	// Get user data from context
+	userData := tx.Statement.Context.Value("userData").(struct {
+		UserID uint
+		Email  string
+		Role   string
+	})
 
-	auditLog := AuditLog{
-		TableName:     s.TableName(),
-		RecordID:      s.ID,
-		Action:        ActionCreate,
-		ChangedFields: string(newJSON),
-		ChangedBy:     RoleAdmin,
-		CreatedAt:     time.Now(),
-	}
+	err = LogModelChanges(
+		tx,
+		s.TableName(),
+		s.ID,
+		ActionCreate,
+		nil, // No old student for creation
+		s,
+		userData.UserID,
+		userData.Email,
+		"admin", // Hardcoded role for creation
+	)
 
-	if err := tx.Model(&AuditLog{}).Create(&auditLog).Error; err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }
 
 // Log changes after updating student
 func (s *Student) AfterUpdate(tx *gorm.DB) (err error) {
-	changedJSON, err := json.Marshal(s)
-	if err != nil {
+	// Get the original student data before update
+	var oldStudent Student
+	if err := tx.Unscoped().Where("id = ?", s.ID).First(&oldStudent).Error; err != nil {
 		return err
 	}
 
-	auditLog := AuditLog{
-		TableName:     s.TableName(),
-		RecordID:      s.ID,
-		Action:        ActionUpdate,
-		ChangedFields: string(changedJSON),
-		ChangedBy:     RoleAdmin,
-		CreatedAt:     time.Now(),
-	}
+	// Get user data from context
+	userData := tx.Statement.Context.Value("userData").(struct {
+		UserID uint
+		Email  string
+		Role   string
+	})
 
-	if err := tx.Model(&AuditLog{}).Create(&auditLog).Error; err != nil {
-		return err
-	}
+	err = LogModelChanges(
+		tx,
+		s.TableName(),
+		s.ID,
+		ActionUpdate,
+		oldStudent,
+		s,
+		userData.UserID,
+		userData.Email,
+		userData.Role,
+	)
 
-	return nil
+	return err
 }
+
+func (s *Student) AfterDelete(tx *gorm.DB) (err error) {
+	// Get user data from context
+	userData := tx.Statement.Context.Value("userData").(struct {
+		UserID uint
+		Email  string
+		Role   string
+	})
+
+	err = LogModelChanges(
+		tx,
+		s.TableName(),
+		s.ID,
+		ActionDelete,
+		s,   // The student data to be deleted
+		nil, // No new student for deletion
+		userData.UserID,
+		userData.Email,
+		userData.Role,
+	)
+
+	return err
+}
+
+// Function to check valid status transition
+// func isValidStatusTransition(tx *gorm.DB, id int, studentID string, newStatusID int) bool {
+// 	if id == 0 {
+// 		// If new student, no need to check
+// 		return true
+// 	}
+
+// 	var currentStudent Student
+// 	if err := tx.Where("student_id = ?", studentID).First(&currentStudent).Error; err != nil {
+// 		return false
+// 	}
+
+// 	// Valid status transition rules
+// 	validTransitions := map[int][]int{
+// 		1: {1, 2, 3, 4}, // "Đang học" -> "Tốt nghiệp", "Bỏ học", "Đình chỉ"
+// 		2: {2},          // "Đã tốt nghiệp" -> KHÔNG thể thay đổi
+// 		3: {3},          // "Đã bỏ học" -> KHÔNG thể thay đổi
+// 		4: {4},          // "Bị đình chỉ" -> KHÔNG thể thay đổi
+// 	}
+
+// 	// Check if new status is valid
+// 	for _, valid := range validTransitions[currentStudent.StatusID] {
+// 		if valid == newStatusID {
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }

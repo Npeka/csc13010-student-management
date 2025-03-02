@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/csc13010-student-management/internal/initialize"
@@ -11,14 +10,15 @@ import (
 
 func main() {
 	cfg := initialize.LoadConfig()
-	fmt.Println(cfg)
 	lg := initialize.NewLogger(cfg.Logger)
 	pg := initialize.NewPostgres(cfg.Postgres)
 	rd := initialize.NewRedis(cfg.Redis)
+	ef := initialize.NewCasbinEnforcer(pg)
+	initialize.NewKafkaTopics(cfg.Kafka)
 
 	migration.Migrate(pg)
 
-	server := server.NewServer(cfg, lg, pg, rd)
+	server := server.NewServer(cfg, lg, pg, rd, ef)
 	if err := server.Run(); err != nil {
 		log.Fatal(err)
 	}

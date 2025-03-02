@@ -77,3 +77,17 @@ func (mr *MockIStatusUsecaseMockRecorder) GetStatuses(ctx interface{}) *gomock.C
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetStatuses", reflect.TypeOf((*MockIStatusUsecase)(nil).GetStatuses), ctx)
 }
+
+// UpdateStatus mocks base method.
+func (m *MockIStatusUsecase) UpdateStatus(ctx context.Context, status *models.Status) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateStatus", ctx, status)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateStatus indicates an expected call of UpdateStatus.
+func (mr *MockIStatusUsecaseMockRecorder) UpdateStatus(ctx, status interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateStatus", reflect.TypeOf((*MockIStatusUsecase)(nil).UpdateStatus), ctx, status)
+}

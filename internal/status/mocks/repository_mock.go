@@ -77,3 +77,17 @@ func (mr *MockIStatusRepositoryMockRecorder) GetStatuses(ctx interface{}) *gomoc
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetStatuses", reflect.TypeOf((*MockIStatusRepository)(nil).GetStatuses), ctx)
 }
+
+// UpdateStatus mocks base method.
+func (m *MockIStatusRepository) UpdateStatus(ctx context.Context, status *models.Status) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateStatus", ctx, status)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateStatus indicates an expected call of UpdateStatus.
+func (mr *MockIStatusRepositoryMockRecorder) UpdateStatus(ctx, status interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateStatus", reflect.TypeOf((*MockIStatusRepository)(nil).UpdateStatus), ctx, status)
+}

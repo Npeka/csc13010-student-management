@@ -9,5 +9,6 @@ import (
 type IStatusUsecase interface {
 	GetStatuses(ctx context.Context) ([]*models.Status, error)
 	CreateStatus(ctx context.Context, status *models.Status) error
+	UpdateStatus(ctx context.Context, status *models.Status) error
 	DeleteStatus(ctx context.Context, id uint) error
 }

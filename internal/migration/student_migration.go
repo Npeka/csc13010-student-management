@@ -2,10 +2,9 @@ package migration
 
 import (
 	"sync"
-	"time"
 
 	"github.com/csc13010-student-management/internal/models"
-	"github.com/csc13010-student-management/utils/crypto"
+	"github.com/csc13010-student-management/pkg/utils/crypto"
 	"gorm.io/gorm"
 )
 
@@ -93,10 +92,10 @@ func autoMigrateStudent(db *gorm.DB) {
 
 	autoMigrateTable(db, "students", []models.Student{
 		{
-			UserID:    1,
+			UserID:    func(u uint) *uint { return &u }(1),
 			StudentID: "22127180",
 			FullName:  "Nguyen Phuc Khang",
-			BirthDate: time.Date(2004, 8, 27, 0, 0, 0, 0, time.UTC),
+			BirthDate: "2004-10-19",
 			GenderID:  1,
 			FacultyID: 1,
 			CourseID:  1,
@@ -107,10 +106,10 @@ func autoMigrateStudent(db *gorm.DB) {
 			StatusID:  1,
 		},
 		{
-			UserID:    2,
+			UserID:    func(u uint) *uint { return &u }(2),
 			StudentID: "22127108",
 			FullName:  "Huynh Yen Ngoc",
-			BirthDate: time.Date(2004, 10, 19, 0, 0, 0, 0, time.UTC),
+			BirthDate: "2004-11-08",
 			GenderID:  2, // Female
 			FacultyID: 2,
 			CourseID:  3,
@@ -121,10 +120,10 @@ func autoMigrateStudent(db *gorm.DB) {
 			StatusID:  1,
 		},
 		{
-			UserID:    3,
+			UserID:    func(u uint) *uint { return &u }(3),
 			StudentID: "22127419",
 			FullName:  "Nguyen Minh Toan",
-			BirthDate: time.Date(2004, 1, 8, 0, 0, 0, 0, time.UTC),
+			BirthDate: "2004-04-19",
 			GenderID:  1, // Male
 			FacultyID: 3,
 			CourseID:  2,

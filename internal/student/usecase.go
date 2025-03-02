@@ -13,6 +13,7 @@ type IStudentUsecase interface {
 	GetFullInfoStudentByStudentID(ctx context.Context, student_id string) (*dtos.StudentDTO, error)
 	CreateStudent(ctx context.Context, student *models.Student) error
 	UpdateStudent(ctx context.Context, student *models.Student) error
+	UpdateUserIDByUsername(ctx context.Context, student_id string, user_id string) error
 	DeleteStudent(ctx context.Context, student_id string) error
 	GetOptions(ctx context.Context) (*dtos.OptionDTO, error)
 }

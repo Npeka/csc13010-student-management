@@ -28,7 +28,7 @@ func MapStudentHandlers(stGroup *gin.RouterGroup, h student.IStudentHandlers, mw
 
 	// // Các API cần quyền "write"
 	stGroup.POST("/", h.CreateStudent())
-	stGroup.PATCH("/:student_id", h.UpdateStudent())
+	stGroup.PUT("/:student_id", h.UpdateStudent())
 	stGroup.DELETE("/:student_id", h.DeleteStudent())
 
 	// // API không cần RBAC

@@ -3,6 +3,7 @@ package models
 import (
 	"context"
 	"errors"
+	"fmt"
 	"regexp"
 	"strings"
 	"time"
@@ -32,7 +33,7 @@ type Student struct {
 	StatusID  uint      `gorm:"not null" json:"status_id" csv:"status_id"`
 	Status    Status    `gorm:"foreignKey:StatusID" json:"status,omitempty" csv:"status"`
 	CreatedAt time.Time `gorm:"type:timestamp;default:CURRENT_TIMESTAMP" json:"created_at" csv:"created_at"`
-	UpdatedAt time.Time `gorm:"type:timestamp;default:CURRENT_TIMESTAMP" json:"updated_at" csv:"updated_at"`
+	UpdatedAt time.Time `gorm:"type:timestamp;default:CURRENT_TIMESTAMP;autoUpdateTime" json:"updated_at" csv:"updated_at"`
 }
 
 // TableName - table name in DB
@@ -42,6 +43,7 @@ func (Student) TableName() string {
 
 // Validate data before saving
 func (s *Student) BeforeSave(tx *gorm.DB) (err error) {
+	fmt.Println(s)
 	// Validate StudentID (only alphanumeric, length 6-12 characters)
 	if !isValidStudentID(s.StudentID) {
 		return errors.New("invalid student_id, must be 6-12 alphanumeric characters")

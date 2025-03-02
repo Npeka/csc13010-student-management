@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/csc13010-student-management/internal/models"
 	"github.com/csc13010-student-management/internal/student"
@@ -102,7 +103,23 @@ func (s *studentRepository) UpdateStudent(ctx context.Context, student *models.S
 	span, ctx := opentracing.StartSpanFromContext(ctx, "studentRepository.UpdateStudent")
 	defer span.Finish()
 
-	return s.db.WithContext(ctx).Where("student_id = ?", student.StudentID).Updates(student).Error
+	return s.db.WithContext(ctx).
+		Model(&models.Student{}).
+		Where("student_id = ?", student.StudentID).
+		UpdateColumns(map[string]interface{}{
+			"full_name":  student.FullName,
+			"birth_date": student.BirthDate,
+			"gender_id":  student.GenderID,
+			"faculty_id": student.FacultyID,
+			"course_id":  student.CourseID,
+			"program_id": student.ProgramID,
+			"address":    student.Address,
+			"email":      student.Email,
+			"phone":      student.Phone,
+			"status_id":  student.StatusID,
+			"updated_at": time.Now(),
+		}).Error
+
 }
 
 func (s *studentRepository) UpdateUserIDByUsername(ctx context.Context, studentID string, userID uint) error {

@@ -2,7 +2,6 @@ package http
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/csc13010-student-management/internal/models"
 	"github.com/csc13010-student-management/internal/student"
@@ -110,28 +109,21 @@ func (s *studentHandlers) UpdateStudent() gin.HandlerFunc {
 		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "student.UpdateStudent")
 		defer span.Finish()
 
-		student_id, err := strconv.ParseInt(c.Param("student_id"), 10, 64)
-		if err != nil {
-			logger.ErrResponseWithLog(c, s.lg, err)
-			response.Error(c, http.StatusBadRequest)
-			return
-		}
-
-		student := models.Student{StudentID: strconv.FormatInt(student_id, 10)}
+		student_id := c.Param("student_id")
+		student := models.Student{StudentID: student_id}
 		if err := c.ShouldBindJSON(&student); err != nil {
 			logger.ErrResponseWithLog(c, s.lg, err)
 			response.Error(c, http.StatusBadRequest)
 			return
 		}
 
-		err = s.su.UpdateStudent(ctx, &student)
-		if err != nil {
+		if err := s.su.UpdateStudent(ctx, &student); err != nil {
 			logger.ErrResponseWithLog(c, s.lg, err)
 			response.Error(c, http.StatusInternalServerError)
 			return
 		}
 
-		response.Success(c, response.ErrCodeSuccess, student)
+		response.Success(c, response.ErrCodeSuccess, nil)
 	}
 }
 

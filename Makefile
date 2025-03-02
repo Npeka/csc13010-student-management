@@ -5,7 +5,7 @@ MODULE_INTERFACE=$(shell powershell -Command "'$(name)'.Substring(0,1).ToUpper()
 
 .PHONY: connect
 connect:
-	curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d @/initdb/debezium-postgres.json
+	curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d @initdb/debezium-postgres.json
 
 .PHONY: reset
 reset:

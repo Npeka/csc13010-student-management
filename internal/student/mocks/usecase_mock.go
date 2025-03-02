@@ -137,3 +137,17 @@ func (mr *MockIStudentUsecaseMockRecorder) UpdateStudent(ctx, student interface{
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateStudent", reflect.TypeOf((*MockIStudentUsecase)(nil).UpdateStudent), ctx, student)
 }
+
+// UpdateUserIDByUsername mocks base method.
+func (m *MockIStudentUsecase) UpdateUserIDByUsername(ctx context.Context, student_id string, user_id uint) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateUserIDByUsername", ctx, student_id, user_id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateUserIDByUsername indicates an expected call of UpdateUserIDByUsername.
+func (mr *MockIStudentUsecaseMockRecorder) UpdateUserIDByUsername(ctx, student_id, user_id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUserIDByUsername", reflect.TypeOf((*MockIStudentUsecase)(nil).UpdateUserIDByUsername), ctx, student_id, user_id)
+}

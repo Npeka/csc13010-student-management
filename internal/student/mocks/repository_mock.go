@@ -151,3 +151,17 @@ func (mr *MockIStudentRepositoryMockRecorder) UpdateStudent(ctx, student interfa
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateStudent", reflect.TypeOf((*MockIStudentRepository)(nil).UpdateStudent), ctx, student)
 }
+
+// UpdateUserIDByUsername mocks base method.
+func (m *MockIStudentRepository) UpdateUserIDByUsername(ctx context.Context, student_id string, user_id uint) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateUserIDByUsername", ctx, student_id, user_id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateUserIDByUsername indicates an expected call of UpdateUserIDByUsername.
+func (mr *MockIStudentRepositoryMockRecorder) UpdateUserIDByUsername(ctx, student_id, user_id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUserIDByUsername", reflect.TypeOf((*MockIStudentRepository)(nil).UpdateUserIDByUsername), ctx, student_id, user_id)
+}

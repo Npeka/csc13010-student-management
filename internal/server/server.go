@@ -3,7 +3,10 @@ package server
 import (
 	"fmt"
 
+	"github.com/casbin/casbin/v2"
 	"github.com/csc13010-student-management/config"
+	"github.com/csc13010-student-management/internal/auth"
+	"github.com/csc13010-student-management/internal/student"
 	"github.com/csc13010-student-management/pkg/logger"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -12,11 +15,18 @@ import (
 )
 
 type Server struct {
-	gin *gin.Engine
 	cfg *config.Config
 	lg  *logger.LoggerZap
 	pg  *gorm.DB
 	rd  *redis.Client
+	r   *gin.Engine
+	e   *casbin.Enforcer
+	w   *ServerWorker
+}
+
+type ServerWorker struct {
+	authWorker auth.IAuthWorker
+	stdWorker  student.IStudentWorker
 }
 
 func NewServer(
@@ -24,13 +34,16 @@ func NewServer(
 	lg *logger.LoggerZap,
 	pg *gorm.DB,
 	rd *redis.Client,
+	e *casbin.Enforcer,
 ) *Server {
 	return &Server{
-		gin: newGinServer(cfg.Server),
 		cfg: cfg,
 		lg:  lg,
 		pg:  pg,
 		rd:  rd,
+		r:   newGinServer(cfg.Server),
+		e:   e,
+		w:   &ServerWorker{},
 	}
 }
 
@@ -56,10 +69,12 @@ func newGinServer(cfg config.ServerConfig) *gin.Engine {
 }
 
 func (s *Server) Run() error {
-	if err := s.MapHandlers(s.gin); err != nil {
+	if err := s.MapHandlers(); err != nil {
 		return err
 	}
 
-	s.gin.Run(fmt.Sprintf(":%v", s.cfg.Server.Port))
+	s.StartWorker()
+
+	s.r.Run(fmt.Sprintf(":%v", s.cfg.Server.Port))
 	return nil
 }

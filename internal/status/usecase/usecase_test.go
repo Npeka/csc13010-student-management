@@ -259,3 +259,33 @@ func Test_statusUsecase_DeleteStatus(t *testing.T) {
 		})
 	}
 }
+
+func Test_statusUsecase_UpdateStatus(t *testing.T) {
+	type fields struct {
+		sr status.IStatusRepository
+		lg *logger.LoggerZap
+	}
+	type args struct {
+		ctx    context.Context
+		status *models.Status
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			su := &statusUsecase{
+				sr: tt.fields.sr,
+				lg: tt.fields.lg,
+			}
+			if err := su.UpdateStatus(tt.args.ctx, tt.args.status); (err != nil) != tt.wantErr {
+				t.Errorf("statusUsecase.UpdateStatus() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}

@@ -229,3 +229,31 @@ func Test_statusRepository_DeleteStatus(t *testing.T) {
 		})
 	}
 }
+
+func Test_statusRepository_UpdateStatus(t *testing.T) {
+	type fields struct {
+		db *gorm.DB
+	}
+	type args struct {
+		ctx    context.Context
+		status *models.Status
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &statusRepository{
+				db: tt.fields.db,
+			}
+			if err := s.UpdateStatus(tt.args.ctx, tt.args.status); (err != nil) != tt.wantErr {
+				t.Errorf("statusRepository.UpdateStatus() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}

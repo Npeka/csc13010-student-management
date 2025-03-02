@@ -427,3 +427,94 @@ func Test_studentRepository_GetOptions(t *testing.T) {
 		})
 	}
 }
+
+func Test_studentRepository_CreateStudents(t *testing.T) {
+	type fields struct {
+		db *gorm.DB
+	}
+	type args struct {
+		ctx      context.Context
+		students []models.Student
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentRepository{
+				db: tt.fields.db,
+			}
+			if err := s.CreateStudents(tt.args.ctx, tt.args.students); (err != nil) != tt.wantErr {
+				t.Errorf("studentRepository.CreateStudents() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func Test_studentRepository_GetStudentByStudentID(t *testing.T) {
+	type fields struct {
+		db *gorm.DB
+	}
+	type args struct {
+		ctx       context.Context
+		studentID string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *models.Student
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentRepository{
+				db: tt.fields.db,
+			}
+			got, err := s.GetStudentByStudentID(tt.args.ctx, tt.args.studentID)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("studentRepository.GetStudentByStudentID() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("studentRepository.GetStudentByStudentID() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_studentRepository_UpdateUserIDByUsername(t *testing.T) {
+	type fields struct {
+		db *gorm.DB
+	}
+	type args struct {
+		ctx       context.Context
+		studentID string
+		userID    uint
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &studentRepository{
+				db: tt.fields.db,
+			}
+			if err := s.UpdateUserIDByUsername(tt.args.ctx, tt.args.studentID, tt.args.userID); (err != nil) != tt.wantErr {
+				t.Errorf("studentRepository.UpdateUserIDByUsername() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}

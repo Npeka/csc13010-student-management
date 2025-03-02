@@ -6,12 +6,14 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/casbin/casbin/v2"
 	"github.com/csc13010-student-management/internal/models"
 	"github.com/csc13010-student-management/internal/student"
 	"github.com/csc13010-student-management/internal/student/dtos"
 	"github.com/csc13010-student-management/internal/student/mocks"
 	"github.com/csc13010-student-management/pkg/logger"
 	"github.com/golang/mock/gomock"
+	"github.com/segmentio/kafka-go"
 )
 
 func TestNewStudentUsecase(t *testing.T) {
@@ -20,10 +22,17 @@ func TestNewStudentUsecase(t *testing.T) {
 
 	mockRepo := mocks.NewMockIStudentRepository(ctrl)
 	mockLogger := logger.NewLoggerTest()
+	mockEnforcer, _ := casbin.NewEnforcer("")
+	kafkaWriter := kafka.NewWriter(kafka.WriterConfig{
+		Brokers: []string{"localhost:9092"},
+		Topic:   "auth-service",
+	})
 
 	type args struct {
 		sr student.IStudentRepository
 		lg *logger.LoggerZap
+		kw *kafka.Writer
+		e  *casbin.Enforcer
 	}
 	tests := []struct {
 		name string
@@ -36,7 +45,7 @@ func TestNewStudentUsecase(t *testing.T) {
 				sr: mockRepo,
 				lg: mockLogger,
 			},
-			want: NewStudentUsecase(mockRepo, mockLogger),
+			want: NewStudentUsecase(mockRepo, mockLogger, kafkaWriter, mockEnforcer),
 		},
 		{
 			name: "Failed - Create Student Usecase",
@@ -44,60 +53,13 @@ func TestNewStudentUsecase(t *testing.T) {
 				sr: nil,
 				lg: nil,
 			},
-			want: NewStudentUsecase(nil, nil),
+			want: NewStudentUsecase(nil, nil, nil, nil),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewStudentUsecase(tt.args.sr, tt.args.lg); !reflect.DeepEqual(got, tt.want) {
+			if got := NewStudentUsecase(tt.args.sr, tt.args.lg, tt.args.kw, tt.args.e); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewStudentUsecase() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_studentUsecase_logAndReturnError(t *testing.T) {
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	mockRepo := mocks.NewMockIStudentRepository(ctrl)
-	mockLogger := logger.NewLoggerTest()
-
-	type fields struct {
-		sr student.IStudentRepository
-		lg *logger.LoggerZap
-	}
-	type args struct {
-		msg string
-		err error
-	}
-	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		wantErr bool
-	}{
-		{
-			name: "Log and return error",
-			fields: fields{
-				sr: mockRepo,
-				lg: mockLogger,
-			},
-			args: args{
-				msg: "Test error",
-				err: errors.New("test error"),
-			},
-			wantErr: true,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			s := &studentUsecase{
-				sr: tt.fields.sr,
-				lg: tt.fields.lg,
-			}
-			if err := s.logAndReturnError(tt.args.msg, tt.args.err); (err != nil) != tt.wantErr {
-				t.Errorf("studentUsecase.logAndReturnError() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
@@ -532,6 +494,81 @@ func Test_studentUsecase_GetOptions(t *testing.T) {
 			}
 			if !reflect.DeepEqual(gotOptions, tt.wantOptions) {
 				t.Errorf("studentUsecase.GetOptions() = %v, want %v", gotOptions, tt.wantOptions)
+			}
+		})
+	}
+}
+
+func Test_studentUsecase_GetStudentByStudentID(t *testing.T) {
+	type fields struct {
+		sr student.IStudentRepository
+		lg *logger.LoggerZap
+		kw *kafka.Writer
+		e  *casbin.Enforcer
+	}
+	type args struct {
+		ctx       context.Context
+		studentID string
+	}
+	tests := []struct {
+		name        string
+		fields      fields
+		args        args
+		wantStudent *models.Student
+		wantErr     bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			su := &studentUsecase{
+				sr: tt.fields.sr,
+				lg: tt.fields.lg,
+				kw: tt.fields.kw,
+				e:  tt.fields.e,
+			}
+			gotStudent, err := su.GetStudentByStudentID(tt.args.ctx, tt.args.studentID)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("studentUsecase.GetStudentByStudentID() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotStudent, tt.wantStudent) {
+				t.Errorf("studentUsecase.GetStudentByStudentID() = %v, want %v", gotStudent, tt.wantStudent)
+			}
+		})
+	}
+}
+
+func Test_studentUsecase_UpdateUserIDByUsername(t *testing.T) {
+	type fields struct {
+		sr student.IStudentRepository
+		lg *logger.LoggerZap
+		kw *kafka.Writer
+		e  *casbin.Enforcer
+	}
+	type args struct {
+		ctx       context.Context
+		studentID string
+		userID    uint
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			su := &studentUsecase{
+				sr: tt.fields.sr,
+				lg: tt.fields.lg,
+				kw: tt.fields.kw,
+				e:  tt.fields.e,
+			}
+			if err := su.UpdateUserIDByUsername(tt.args.ctx, tt.args.studentID, tt.args.userID); (err != nil) != tt.wantErr {
+				t.Errorf("studentUsecase.UpdateUserIDByUsername() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

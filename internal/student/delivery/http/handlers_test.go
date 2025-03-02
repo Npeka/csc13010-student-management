@@ -8,7 +8,6 @@ import (
 	"net/http/httptest"
 	"reflect"
 	"testing"
-	"time"
 
 	"github.com/csc13010-student-management/internal/models"
 	"github.com/csc13010-student-management/internal/student"
@@ -74,7 +73,7 @@ func Test_studentHandlers_GetStudents(t *testing.T) {
 		{
 			StudentID: "22127180",
 			FullName:  "Nguyen Phuc Khang",
-			BirthDate: time.Date(2004, 8, 27, 0, 0, 0, 0, time.UTC),
+			BirthDate: "2004-8-27",
 			GenderID:  1,
 			FacultyID: 1,
 			CourseID:  1,
@@ -146,7 +145,7 @@ func Test_studentHandlers_GetStudentByStudentID(t *testing.T) {
 	mockStudent := &models.Student{
 		StudentID: "22127180",
 		FullName:  "Nguyen Phuc Khang",
-		BirthDate: time.Date(2004, 8, 27, 0, 0, 0, 0, time.UTC),
+		BirthDate: "2004-8-27",
 		GenderID:  1,
 		FacultyID: 1,
 		CourseID:  1,
@@ -220,7 +219,7 @@ func Test_studentHandlers_GetFullInfoStudentByStudentID(t *testing.T) {
 	mockStudent := &dtos.StudentDTO{
 		StudentID: "22127180",
 		FullName:  "Nguyen Phuc Khang",
-		BirthDate: time.Date(2004, 8, 27, 0, 0, 0, 0, time.UTC),
+		BirthDate: "2004-8-27",
 		Gender:    "Male",
 		Faculty:   1,
 		Course:    1,
@@ -296,7 +295,7 @@ func Test_studentHandlers_CreateStudent(t *testing.T) {
 	mockStudent := &models.Student{
 		StudentID: "22127180",
 		FullName:  "Nguyen Phuc Khang",
-		BirthDate: time.Date(2004, 8, 27, 0, 0, 0, 0, time.UTC),
+		BirthDate: "2004-8-27",
 		GenderID:  1,
 		FacultyID: 1,
 		CourseID:  1,
@@ -385,7 +384,7 @@ func Test_studentHandlers_UpdateStudent(t *testing.T) {
 	mockStudent := &models.Student{
 		StudentID: "22127180",
 		FullName:  "Nguyen Phuc Khang",
-		BirthDate: time.Date(2004, 8, 27, 0, 0, 0, 0, time.UTC),
+		BirthDate: "2004-8-27",
 		GenderID:  1,
 		FacultyID: 1,
 		CourseID:  1,

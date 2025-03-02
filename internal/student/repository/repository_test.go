@@ -4,7 +4,6 @@ import (
 	"context"
 	"reflect"
 	"testing"
-	"time"
 
 	"github.com/csc13010-student-management/internal/models"
 	"github.com/csc13010-student-management/internal/student"
@@ -58,7 +57,7 @@ func Test_studentRepository_GetStudents(t *testing.T) {
 		{
 			StudentID: "22127180",
 			FullName:  "Nguyen Phuc Khang",
-			BirthDate: time.Date(2004, 8, 27, 0, 0, 0, 0, time.UTC),
+			BirthDate: "2004-8-27",
 			GenderID:  1,
 			FacultyID: 1,
 			CourseID:  1,
@@ -125,7 +124,7 @@ func Test_studentRepository_CreateStudent(t *testing.T) {
 	mockStudent := &models.Student{
 		StudentID: "22127180",
 		FullName:  "Nguyen Phuc Khang",
-		BirthDate: time.Date(2004, 8, 27, 0, 0, 0, 0, time.UTC),
+		BirthDate: "2004-8-27",
 		GenderID:  1,
 		FacultyID: 1,
 		CourseID:  1,
@@ -186,7 +185,7 @@ func Test_studentRepository_UpdateStudent(t *testing.T) {
 	mockStudent := &models.Student{
 		StudentID: "22127180",
 		FullName:  "Nguyen Phuc Khang",
-		BirthDate: time.Date(2004, 8, 27, 0, 0, 0, 0, time.UTC),
+		BirthDate: "2004-8-27",
 		GenderID:  1,
 		FacultyID: 1,
 		CourseID:  1,
@@ -295,7 +294,7 @@ func Test_studentRepository_GetFullInfoStudentByStudentID(t *testing.T) {
 	mockStudentDTO := &dtos.StudentDTO{
 		StudentID: "22127180",
 		FullName:  "Nguyen Phuc Khang",
-		BirthDate: time.Date(2004, 8, 27, 0, 0, 0, 0, time.UTC),
+		BirthDate: "2004-8-27",
 		Gender:    "Male",
 		Faculty:   1,
 		Course:    1,

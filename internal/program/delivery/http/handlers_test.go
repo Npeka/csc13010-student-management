@@ -254,3 +254,28 @@ func Test_programHandlers_DeleteProgram(t *testing.T) {
 		})
 	}
 }
+
+func Test_programHandlers_UpdateProgram(t *testing.T) {
+	type fields struct {
+		pu program.IProgramUsecase
+		lg *logger.LoggerZap
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   gin.HandlerFunc
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ph := &programHandlers{
+				pu: tt.fields.pu,
+				lg: tt.fields.lg,
+			}
+			if got := ph.UpdateProgram(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("programHandlers.UpdateProgram() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

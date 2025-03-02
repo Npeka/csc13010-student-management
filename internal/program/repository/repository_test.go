@@ -243,3 +243,31 @@ func Test_programRepository_DeleteProgram(t *testing.T) {
 		})
 	}
 }
+
+func Test_programRepository_UpdateProgram(t *testing.T) {
+	type fields struct {
+		db *gorm.DB
+	}
+	type args struct {
+		ctx     context.Context
+		program *models.Program
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			pr := &programRepository{
+				db: tt.fields.db,
+			}
+			if err := pr.UpdateProgram(tt.args.ctx, tt.args.program); (err != nil) != tt.wantErr {
+				t.Errorf("programRepository.UpdateProgram() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}

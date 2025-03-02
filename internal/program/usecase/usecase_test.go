@@ -274,3 +274,33 @@ func Test_programUsecase_DeleteProgram(t *testing.T) {
 		})
 	}
 }
+
+func Test_programUsecase_UpdateProgram(t *testing.T) {
+	type fields struct {
+		pr program.IProgramRepository
+		lg *logger.LoggerZap
+	}
+	type args struct {
+		ctx     context.Context
+		program *models.Program
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			pu := &programUsecase{
+				pr: tt.fields.pr,
+				lg: tt.fields.lg,
+			}
+			if err := pu.UpdateProgram(tt.args.ctx, tt.args.program); (err != nil) != tt.wantErr {
+				t.Errorf("programUsecase.UpdateProgram() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}

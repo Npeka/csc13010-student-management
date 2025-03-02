@@ -2,13 +2,15 @@ package repository
 
 import (
 	"context"
-	"fmt"
 	"reflect"
 	"strconv"
 	"time"
 
 	"github.com/csc13010-student-management/internal/fileprocessor"
 	"github.com/csc13010-student-management/internal/models"
+	"github.com/opentracing/opentracing-go"
+	"github.com/pkg/errors"
+
 	"gorm.io/gorm"
 )
 
@@ -23,6 +25,9 @@ func NewFileProcessorRepository(
 }
 
 func (fr *fileProcessingRepository) SaveImportedData(ctx context.Context, module string, data []map[string]interface{}) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "fileprocessor.SaveImportedData")
+	defer span.Finish()
+
 	var students []models.Student
 	for _, row := range data {
 		student, err := ConvertToStruct[models.Student](row)
@@ -33,15 +38,18 @@ func (fr *fileProcessingRepository) SaveImportedData(ctx context.Context, module
 	}
 
 	if err := fr.db.WithContext(ctx).Table(module).Create(students).Error; err != nil {
-		return fmt.Errorf("failed to save imported data: %w", err)
+		return errors.Wrap(err, "fileprocessor.SaveImportedData.Create")
 	}
 	return nil
 }
 
 func (fr *fileProcessingRepository) GetExportData(ctx context.Context, module string) ([]map[string]interface{}, error) {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "fileprocessor.GetExportData")
+	defer span.Finish()
+
 	var results []map[string]interface{}
 	if err := fr.db.WithContext(ctx).Table(module).Find(&results).Error; err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "fileprocessor.GetExportData.Find")
 	}
 	for i := range results {
 		delete(results[i], "id")

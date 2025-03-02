@@ -7,7 +7,9 @@ import (
 	"github.com/csc13010-student-management/internal/fileprocessor"
 	"github.com/csc13010-student-management/internal/fileprocessor/processor"
 	"github.com/csc13010-student-management/pkg/logger"
+	"github.com/csc13010-student-management/pkg/response"
 	"github.com/gin-gonic/gin"
+	"github.com/opentracing/opentracing-go"
 )
 
 type fileProcessingHandlers struct {
@@ -27,46 +29,57 @@ func NewFileProcessingHandlers(
 
 func (fh *fileProcessingHandlers) ImportFile() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "fileprocessor.ImportFile")
+		defer span.Finish()
+
 		module := c.Query("module")
 		format := c.Query("format")
 
 		file, err := c.FormFile("file")
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "File not provided"})
+			logger.ErrResponseWithLog(c, fh.lg, err)
+			response.Error(c, http.StatusBadRequest)
 			return
 		}
 
 		fileData, err := file.Open()
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to open file"})
+			logger.ErrResponseWithLog(c, fh.lg, err)
+			response.Error(c, http.StatusInternalServerError)
 			return
 		}
 		defer fileData.Close()
 
 		fileBytes, err := io.ReadAll(fileData)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read file"})
+			logger.ErrResponseWithLog(c, fh.lg, err)
+			response.Error(c, http.StatusInternalServerError)
 			return
 		}
 
-		err = fh.fu.ImportFile(c.Request.Context(), module, format, fileBytes)
+		err = fh.fu.ImportFile(ctx, module, format, fileBytes)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Import failed"})
+			logger.ErrResponseWithLog(c, fh.lg, err)
+			response.Error(c, http.StatusInternalServerError)
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"message": "File imported successfully"})
+		response.Success(c, response.ErrCodeSuccess, nil)
 	}
 }
 
 func (fh *fileProcessingHandlers) ExportFile() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "fileprocessor.ExportFile")
+		defer span.Finish()
+
 		module := c.Query("module")
 		format := c.Query("format")
 
-		data, err := fh.fu.ExportFile(c.Request.Context(), module, format)
+		data, err := fh.fu.ExportFile(ctx, module, format)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Export failed"})
+			logger.ErrResponseWithLog(c, fh.lg, err)
+			response.Error(c, http.StatusInternalServerError)
 			return
 		}
 

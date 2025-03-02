@@ -77,3 +77,17 @@ func (mr *MockIProgramUsecaseMockRecorder) GetPrograms(ctx interface{}) *gomock.
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPrograms", reflect.TypeOf((*MockIProgramUsecase)(nil).GetPrograms), ctx)
 }
+
+// UpdateProgram mocks base method.
+func (m *MockIProgramUsecase) UpdateProgram(ctx context.Context, program *models.Program) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateProgram", ctx, program)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateProgram indicates an expected call of UpdateProgram.
+func (mr *MockIProgramUsecaseMockRecorder) UpdateProgram(ctx, program interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateProgram", reflect.TypeOf((*MockIProgramUsecase)(nil).UpdateProgram), ctx, program)
+}

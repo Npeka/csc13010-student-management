@@ -8,5 +8,6 @@ import (
 func MapStatusHandlers(ftGroup *gin.RouterGroup, h status.IStatusHandlers) {
 	ftGroup.GET("/", h.GetStatuses())
 	ftGroup.POST("/", h.CreateStatus())
+	ftGroup.PUT("/:id", h.UpdateStatus())
 	ftGroup.DELETE("/:id", h.DeleteStatus())
 }

@@ -256,3 +256,28 @@ func Test_facultyHandlers_DeleteFaculty(t *testing.T) {
 		})
 	}
 }
+
+func Test_facultyHandlers_UpdateFaculty(t *testing.T) {
+	type fields struct {
+		fu faculty.IFacultyUsecase
+		lg *logger.LoggerZap
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   gin.HandlerFunc
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fh := &facultyHandlers{
+				fu: tt.fields.fu,
+				lg: tt.fields.lg,
+			}
+			if got := fh.UpdateFaculty(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("facultyHandlers.UpdateFaculty() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

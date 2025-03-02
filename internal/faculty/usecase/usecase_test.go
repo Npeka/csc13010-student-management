@@ -274,3 +274,33 @@ func Test_facultyUsecase_DeleteFaculty(t *testing.T) {
 		})
 	}
 }
+
+func Test_facultyUsecase_UpdateFaculty(t *testing.T) {
+	type fields struct {
+		fr faculty.IFacultyRepository
+		lg *logger.LoggerZap
+	}
+	type args struct {
+		ctx     context.Context
+		faculty *models.Faculty
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fu := &facultyUsecase{
+				fr: tt.fields.fr,
+				lg: tt.fields.lg,
+			}
+			if err := fu.UpdateFaculty(tt.args.ctx, tt.args.faculty); (err != nil) != tt.wantErr {
+				t.Errorf("facultyUsecase.UpdateFaculty() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}

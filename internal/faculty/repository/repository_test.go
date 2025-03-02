@@ -243,3 +243,31 @@ func Test_facultyRepository_DeleteFaculty(t *testing.T) {
 		})
 	}
 }
+
+func Test_facultyRepository_UpdateFaculty(t *testing.T) {
+	type fields struct {
+		db *gorm.DB
+	}
+	type args struct {
+		ctx     context.Context
+		faculty *models.Faculty
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fr := &facultyRepository{
+				db: tt.fields.db,
+			}
+			if err := fr.UpdateFaculty(tt.args.ctx, tt.args.faculty); (err != nil) != tt.wantErr {
+				t.Errorf("facultyRepository.UpdateFaculty() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}

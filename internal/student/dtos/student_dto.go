@@ -8,7 +8,7 @@ type StudentDTO struct {
 	ID        int       `gorm:"primaryKey;autoIncrement" json:"id"`
 	StudentID string    `gorm:"type:varchar(255);uniqueIndex;not null" json:"student_id"`
 	FullName  string    `gorm:"type:varchar(255);not null" json:"full_name"`
-	BirthDate time.Time `gorm:"type:date;not null" json:"birth_date"`
+	BirthDate string    `gorm:"type:date;not null" json:"birth_date"`
 	Gender    string    `gorm:"not null" json:"gender"`
 	Faculty   int       `gorm:"not null" json:"faculty_id"`
 	Course    int       `gorm:"not null" json:"course_id"`

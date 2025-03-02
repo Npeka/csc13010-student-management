@@ -12,7 +12,6 @@ import (
 
 type Claims struct {
 	Username string `json:"username"`
-	Role     string `json:"role"`
 	jwt.StandardClaims
 }
 
@@ -25,7 +24,6 @@ const (
 func CreateJWTToken(username string, exp int) (string, error) {
 	claims := &Claims{
 		Username: username,
-		Role:     username,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * time.Duration(exp)).Unix(),
 		},

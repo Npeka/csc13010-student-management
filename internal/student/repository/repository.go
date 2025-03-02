@@ -7,6 +7,7 @@ import (
 	"github.com/csc13010-student-management/internal/models"
 	"github.com/csc13010-student-management/internal/student"
 	"github.com/csc13010-student-management/internal/student/dtos"
+	"github.com/opentracing/opentracing-go"
 	"gorm.io/gorm"
 )
 
@@ -14,27 +15,48 @@ type studentRepository struct {
 	db *gorm.DB
 }
 
-// NewStudentRepository initializes the repository with the database
 func NewStudentRepository(db *gorm.DB) student.IStudentRepository {
 	return &studentRepository{db: db}
 }
 
-// GetStudents retrieves the list of all students
 func (s *studentRepository) GetStudents(ctx context.Context) ([]*models.Student, error) {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "studentRepository.GetStudents")
+	defer span.Finish()
+
 	var students []*models.Student
-	if err := s.db.WithContext(ctx).Find(&students).Error; err != nil {
+	if err := s.db.WithContext(ctx).
+		Preload("Gender", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id, name")
+		}).
+		Preload("Faculty", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id, name")
+		}).
+		Preload("Course", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id, name")
+		}).
+		Preload("Program", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id, name")
+		}).
+		Preload("Status", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id, name")
+		}).
+		Find(&students).Error; err != nil {
 		return nil, err
 	}
 	return students, nil
 }
 
-// CreateStudents adds multiple students to the database
 func (s *studentRepository) CreateStudents(ctx context.Context, students []models.Student) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "studentRepository.CreateStudents")
+	defer span.Finish()
+
 	return s.db.WithContext(ctx).Create(&students).Error
 }
 
-// GetStudentByStudentID retrieves student information by ID
 func (s *studentRepository) GetStudentByStudentID(ctx context.Context, studentID string) (*models.Student, error) {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "studentRepository.GetStudentByStudentID")
+	defer span.Finish()
+
 	student := &models.Student{}
 	if err := s.db.WithContext(ctx).Where("student_id = ?", studentID).First(student).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -45,8 +67,10 @@ func (s *studentRepository) GetStudentByStudentID(ctx context.Context, studentID
 	return student, nil
 }
 
-// GetFullInfoStudentByStudentID retrieves full student information by ID
 func (s *studentRepository) GetFullInfoStudentByStudentID(ctx context.Context, studentID string) (*dtos.StudentDTO, error) {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "studentRepository.GetFullInfoStudentByStudentID")
+	defer span.Finish()
+
 	studentDTO := &dtos.StudentDTO{}
 	err := s.db.WithContext(ctx).
 		Table("students").
@@ -67,23 +91,42 @@ func (s *studentRepository) GetFullInfoStudentByStudentID(ctx context.Context, s
 	return studentDTO, nil
 }
 
-// CreateStudent adds a student to the database
 func (s *studentRepository) CreateStudent(ctx context.Context, student *models.Student) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "studentRepository.CreateStudent")
+	defer span.Finish()
+
 	return s.db.WithContext(ctx).Create(student).Error
 }
 
-// UpdateStudent updates student information
 func (s *studentRepository) UpdateStudent(ctx context.Context, student *models.Student) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "studentRepository.UpdateStudent")
+	defer span.Finish()
+
 	return s.db.WithContext(ctx).Where("student_id = ?", student.StudentID).Updates(student).Error
 }
 
-// DeleteStudent removes a student from the database by ID
+func (s *studentRepository) UpdateUserIDByUsername(ctx context.Context, studentID string, userID uint) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "studentRepository.UpdateUserIDByUsername")
+	defer span.Finish()
+
+	return s.db.WithContext(ctx).
+		Model(&models.Student{}).
+		Where("student_id = ?", studentID).
+		UpdateColumn("user_id", userID).
+		Error
+}
+
 func (s *studentRepository) DeleteStudent(ctx context.Context, studentID string) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "studentRepository.DeleteStudent")
+	defer span.Finish()
+
 	return s.db.WithContext(ctx).Where("student_id = ?", studentID).Delete(&models.Student{}).Error
 }
 
-// GetOptions retrieves various options for students
 func (s *studentRepository) GetOptions(ctx context.Context) (*dtos.OptionDTO, error) {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "studentRepository.GetOptions")
+	defer span.Finish()
+
 	optionDTO := &dtos.OptionDTO{}
 
 	optionMap := map[string]*[]*dtos.Option{
@@ -103,7 +146,7 @@ func (s *studentRepository) GetOptions(ctx context.Context) (*dtos.OptionDTO, er
 	}
 
 	for key, model := range modelMap {
-		if err := s.db.Model(model).Select("id, name").Find(optionMap[key]).Error; err != nil {
+		if err := s.db.WithContext(ctx).Model(model).Find(optionMap[key]).Error; err != nil {
 			return nil, err
 		}
 	}

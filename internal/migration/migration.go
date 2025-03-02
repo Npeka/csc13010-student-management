@@ -9,12 +9,13 @@ import (
 
 var allModels = []interface{}{
 	// student management models
-	&models.User{},
 	&models.Gender{},
 	&models.Program{},
 	&models.Faculty{},
 	&models.Course{},
 	&models.Status{},
+	&models.Role{},
+	&models.User{},
 	&models.Student{},
 
 	// audit log model
@@ -28,11 +29,13 @@ func Migrate(db *gorm.DB) {
 		log.Fatalf("Error migrating models: %v", err)
 	}
 
-	autoMigrateStudent(db)
+	seedStaticData(db) // Giới tính, chương trình, khoa, khóa học, trạng thái, vai trò
+	seedUsers(db)      // Users trước
+	seedStudents(db)
 
 	log.Println("Migration completed")
 }
 
-func autoMigrateTable[T any](db *gorm.DB, tableName string, data []T) {
-	db.Table(tableName).Create(&data)
-}
+// func autoMigrateTable[T any](db *gorm.DB, tableName string, data []T) {
+// 	db.Table(tableName).Create(&data)
+// }

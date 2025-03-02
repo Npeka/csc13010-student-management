@@ -3,8 +3,15 @@ MODULE_NAME=$(name)
 MODULE_DIR=internal/$(PROJECT_NAME)/$(MODULE_NAME)
 MODULE_INTERFACE=$(shell powershell -Command "'$(name)'.Substring(0,1).ToUpper()+'$(name)'.Substring(1)")
 
+.PHONY: connect
 connect:
 	curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d @/initdb/debezium-postgres.json
+
+.PHONY: reset
+reset:
+	docker-compose down -v
+	docker-compose up -d
+	make run
 
 # 
 

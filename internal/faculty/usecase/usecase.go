@@ -6,7 +6,7 @@ import (
 	"github.com/csc13010-student-management/internal/faculty"
 	"github.com/csc13010-student-management/internal/models"
 	"github.com/csc13010-student-management/pkg/logger"
-	"go.uber.org/zap"
+	"github.com/opentracing/opentracing-go"
 )
 
 type facultyUsecase struct {
@@ -25,41 +25,45 @@ func NewFacultyUsecase(
 }
 
 func (fu *facultyUsecase) GetFaculties(ctx context.Context) ([]*models.Faculty, error) {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "facultyUsecase.GetFaculties")
+	defer span.Finish()
+
 	faculties, err := fu.fr.GetFaculties(ctx)
 	if err != nil {
-		fu.lg.Error("Failed to get faculties", zap.Error(err))
 		return nil, err
 	}
-	fu.lg.Info("Successfully fetched faculties")
 	return faculties, nil
 }
 
 func (fu *facultyUsecase) CreateFaculty(ctx context.Context, faculty *models.Faculty) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "facultyUsecase.CreateFaculty")
+	defer span.Finish()
+
 	err := fu.fr.CreateFaculty(ctx, faculty)
 	if err != nil {
-		fu.lg.Error("Failed to create faculty", zap.Error(err))
 		return err
 	}
-	fu.lg.Info("Successfully created faculty")
 	return nil
 }
 
 func (fu *facultyUsecase) UpdateFaculty(ctx context.Context, faculty *models.Faculty) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "facultyUsecase.UpdateFaculty")
+	defer span.Finish()
+
 	err := fu.fr.UpdateFaculty(ctx, faculty)
 	if err != nil {
-		fu.lg.Error("Failed to update faculty", zap.Error(err))
 		return err
 	}
-	fu.lg.Info("Successfully updated faculty")
 	return nil
 }
 
 func (fu *facultyUsecase) DeleteFaculty(ctx context.Context, id uint) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "facultyUsecase.DeleteFaculty")
+	defer span.Finish()
+
 	err := fu.fr.DeleteFaculty(ctx, id)
 	if err != nil {
-		fu.lg.Error("Failed to delete faculty", zap.Error(err))
 		return err
 	}
-	fu.lg.Info("Successfully deleted faculty")
 	return nil
 }

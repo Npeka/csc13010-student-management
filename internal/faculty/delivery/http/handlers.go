@@ -7,8 +7,9 @@ import (
 	"github.com/csc13010-student-management/internal/faculty"
 	"github.com/csc13010-student-management/internal/models"
 	"github.com/csc13010-student-management/pkg/logger"
+	"github.com/csc13010-student-management/pkg/response"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
+	"github.com/opentracing/opentracing-go"
 )
 
 type facultyHandlers struct {
@@ -28,81 +29,85 @@ func NewFacultyHandlers(
 
 func (fh *facultyHandlers) GetFaculties() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		fh.lg.Info("GetFaculties called")
-		faculties, err := fh.fu.GetFaculties(c.Request.Context())
+		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "faculty.GetFaculties")
+		defer span.Finish()
+
+		faculties, err := fh.fu.GetFaculties(ctx)
 		if err != nil {
-			fh.lg.Error("Error getting faculties", zap.Error(err))
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			logger.ErrResponseWithLog(c, fh.lg, err)
+			response.Error(c, http.StatusInternalServerError)
 			return
 		}
 
-		fh.lg.Info("GetFaculties successful")
-		c.JSON(http.StatusOK, faculties)
+		response.Success(c, response.ErrCodeSuccess, faculties)
 	}
 }
 
 func (fh *facultyHandlers) CreateFaculty() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		fh.lg.Info("GetFaculties called")
+		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "faculty.CreateFaculty")
+		defer span.Finish()
+
 		var faculty models.Faculty
 		if err := c.ShouldBindJSON(&faculty); err != nil {
-			fh.lg.Error("Error binding JSON", zap.Error(err))
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			logger.ErrResponseWithLog(c, fh.lg, err)
+			response.Error(c, http.StatusBadRequest)
 			return
 		}
 
-		err := fh.fu.CreateFaculty(c.Request.Context(), &faculty)
+		err := fh.fu.CreateFaculty(ctx, &faculty)
 		if err != nil {
-			fh.lg.Error("Error creating faculty", zap.Error(err))
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			logger.ErrResponseWithLog(c, fh.lg, err)
+			response.Error(c, http.StatusInternalServerError)
 			return
 		}
 
-		fh.lg.Info("CreateFaculty successful")
-		c.JSON(http.StatusOK, faculty)
+		response.Success(c, response.ErrCodeSuccess, faculty)
 	}
 }
 
 func (fh *facultyHandlers) UpdateFaculty() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		fh.lg.Info("UpdateFaculty called")
+		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "faculty.UpdateFaculty")
+		defer span.Finish()
+
 		var faculty models.Faculty
 		if err := c.ShouldBindJSON(&faculty); err != nil {
-			fh.lg.Error("Error binding JSON", zap.Error(err))
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			logger.ErrResponseWithLog(c, fh.lg, err)
+			response.Error(c, http.StatusBadRequest)
 			return
 		}
 
-		err := fh.fu.UpdateFaculty(c.Request.Context(), &faculty)
+		err := fh.fu.UpdateFaculty(ctx, &faculty)
 		if err != nil {
-			fh.lg.Error("Error updating faculty", zap.Error(err))
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			logger.ErrResponseWithLog(c, fh.lg, err)
+			response.Error(c, http.StatusInternalServerError)
 			return
 		}
 
-		fh.lg.Info("UpdateFaculty successful")
-		c.JSON(http.StatusOK, faculty)
+		response.Success(c, response.ErrCodeSuccess, faculty)
 	}
 }
 
 func (s *facultyHandlers) DeleteFaculty() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		s.lg.Info("DeleteFaculty called")
+		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "faculty.DeleteFaculty")
+		defer span.Finish()
+
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
-			s.lg.Error("Invalid faculty ID", zap.Error(err))
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid faculty ID"})
+			logger.ErrResponseWithLog(c, s.lg, err)
+			response.Error(c, http.StatusBadRequest)
 			return
 		}
 
-		err = s.fu.DeleteFaculty(c.Request.Context(), uint(id))
+		err = s.fu.DeleteFaculty(ctx, uint(id))
 		if err != nil {
-			s.lg.Error("Error deleting faculty", zap.Error(err))
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			logger.ErrResponseWithLog(c, s.lg, err)
+			response.Error(c, http.StatusInternalServerError)
 			return
 		}
 
-		s.lg.Info("DeleteFaculty successful")
-		c.JSON(http.StatusOK, gin.H{"message": "Faculty deleted successfully"})
+		response.Success(c, response.ErrCodeSuccess, nil)
 	}
 }

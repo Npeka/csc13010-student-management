@@ -38,6 +38,9 @@ const (
 	ErrInternalServer = 500
 
 	// Success code
+	OkSuccess = 200
+
+	// Success code
 	ErrCodeSuccess = 0
 )
 
@@ -65,6 +68,9 @@ var msg = map[int]struct {
 	ErrCodeSuccess:    {httpCode: 200, message: "Success"},
 
 	ErrUserExist: {httpCode: 400, message: "User is already exist"},
+
+	OkSuccess:     {httpCode: 200, message: "Success"},
+	ErrBadRequest: {httpCode: 400, message: "Bad request"},
 
 	ErrOTPNotExists: {httpCode: 400, message: "OTP not exists"},
 }

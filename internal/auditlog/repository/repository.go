@@ -20,7 +20,7 @@ func NewAuditLogRepository(db *gorm.DB) auditlog.IAuditLogRepository {
 
 // GetAuditLogs implements auditlog.IAuditLogRepository.
 func (a *auditLogRepository) GetAuditLogs(ctx context.Context) ([]*models.AuditLog, error) {
-	span, ctx := opentracing.StartSpanFromContext(ctx, "auditlog.GetAuditLogs")
+	span, ctx := opentracing.StartSpanFromContext(ctx, "auditlogRepository.GetAuditLogs")
 	defer span.Finish()
 
 	var auditLogs []*models.AuditLog
@@ -33,7 +33,7 @@ func (a *auditLogRepository) GetAuditLogs(ctx context.Context) ([]*models.AuditL
 
 // GetModelAuditLogs implements auditlog.IAuditLogRepository.
 func (a *auditLogRepository) GetModelAuditLogs(ctx context.Context, table_name string, record_id string) ([]*models.AuditLog, error) {
-	span, ctx := opentracing.StartSpanFromContext(ctx, "auditlog.GetModelAuditLogs")
+	span, ctx := opentracing.StartSpanFromContext(ctx, "auditlogRepository.GetModelAuditLogs")
 	defer span.Finish()
 
 	var auditLogs []*models.AuditLog

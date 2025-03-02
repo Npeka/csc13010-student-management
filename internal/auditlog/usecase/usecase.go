@@ -25,7 +25,7 @@ func NewAuditLogUsecase(
 }
 
 func (a *auditlogUsecase) GetAuditLogs(ctx context.Context) ([]*models.AuditLog, error) {
-	span, ctx := opentracing.StartSpanFromContext(ctx, "auditlog.GetAuditLogs")
+	span, ctx := opentracing.StartSpanFromContext(ctx, "auditlogUsecase.GetAuditLogs")
 	defer span.Finish()
 
 	auditlogs, err := a.ar.GetAuditLogs(ctx)
@@ -37,7 +37,7 @@ func (a *auditlogUsecase) GetAuditLogs(ctx context.Context) ([]*models.AuditLog,
 }
 
 func (a *auditlogUsecase) GetModelAuditLogs(ctx context.Context, model string, model_id string) ([]*models.AuditLog, error) {
-	span, ctx := opentracing.StartSpanFromContext(ctx, "auditlog.GetModelAuditLogs")
+	span, ctx := opentracing.StartSpanFromContext(ctx, "auditlogUsecase.GetModelAuditLogs")
 	defer span.Finish()
 
 	auditlogs, err := a.ar.GetModelAuditLogs(ctx, model, model_id)

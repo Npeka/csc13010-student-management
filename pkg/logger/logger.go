@@ -108,3 +108,10 @@ func LogResponseError(ctx *gin.Context, logger *LoggerZap, err error) {
 		zap.Error(err),
 	)
 }
+
+func LoggerFuncError(logger *LoggerZap, err error) {
+	logger.Error(
+		"LoggerFuncError",
+		zap.Error(err),
+	)
+}

@@ -1,13 +1,8 @@
 package crypto
 
-import (
-	"crypto/sha256"
-	"encoding/hex"
-)
+import "golang.org/x/crypto/bcrypt"
 
-func GetHash(key string) string {
-	hash := sha256.New()
-	hash.Write([]byte(key))
-	hashBytes := hash.Sum(nil)
-	return hex.EncodeToString(hashBytes)
+func GetHash(password string) string {
+	hashed, _ := bcrypt.GenerateFromPassword([]byte(password), 8)
+	return string(hashed)
 }

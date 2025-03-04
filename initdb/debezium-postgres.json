@@ -13,6 +13,7 @@
     "schema.history.internal.kafka.bootstrap.servers": "kafka:29092",
     "schema.history.internal.kafka.topic": "schema-changes.student_management",
     "slot.name": "debezium_slot",
-    "publication.name": "debezium_pub"
+    "publication.name": "debezium_pub",
+    "include.before.state": "true"
   }
 }

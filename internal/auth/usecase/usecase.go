@@ -3,6 +3,8 @@ package usecase
 import (
 	"context"
 	"encoding/json"
+	"log"
+	"sync"
 
 	"github.com/casbin/casbin/v2"
 	"github.com/csc13010-student-management/internal/auth"
@@ -12,6 +14,7 @@ import (
 	"github.com/csc13010-student-management/pkg/logger"
 	"github.com/csc13010-student-management/pkg/utils/crypto"
 	"github.com/csc13010-student-management/pkg/utils/jwt"
+	"github.com/google/uuid"
 	"github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 	"github.com/segmentio/kafka-go"
@@ -38,61 +41,84 @@ func NewAuthUsecase(
 	}
 }
 
-// Register implements auth.IAuthUsecase.
 func (au *authUsecase) Register(ctx context.Context, registerReq *dtos.UserRegisterRequestDTO) error {
 	span, ctx := opentracing.StartSpanFromContext(ctx, "authUsecase.Register")
 	defer span.Finish()
 
-	// check if user already exists
-	userExists, err := au.ar.FindByUsername(ctx, registerReq.Username)
-	if err != nil {
-		return err
-	}
-	if userExists != nil {
-		return errors.New("authUsecase.Register: user already exists")
-	}
+	var wg sync.WaitGroup
+	// var mu sync.Mutex // Để tránh race condition khi ghi dữ liệu
+	// var userExists *models.User
+	var roleExists *models.Role
+	var errRole error
 
-	// check if role exists
-	roleExists, err := au.ar.FindRoleByName(ctx, registerReq.Role)
-	if err != nil {
-		return errors.Wrap(err, "authUsecase.Register.FindRoleByName")
+	// Tìm user
+	// wg.Add(1)
+	// go func() {
+	// 	defer wg.Done()
+	// 	userExists, errUser = au.ar.FindByUsername(ctx, registerReq.Username)
+	// }()
+
+	roleExists, errRole = au.ar.FindRoleByName(ctx, registerReq.Role)
+
+	// wg.Wait() // Chờ cả 2 truy vấn hoàn thành
+
+	// if errUser != nil {
+	// 	return errors.Wrap(errUser, "authUsecase.Register.FindByUsername")
+	// }
+	// if userExists != nil {
+	// 	return errors.New("authUsecase.Register: user already exists")
+	// }
+
+	if errRole != nil {
+		return errors.Wrap(errRole, "authUsecase.Register.FindRoleByName")
 	}
 	if roleExists == nil {
 		return errors.New("authUsecase.Register: role not found")
 	}
 
-	// create user
-	hashedPassword := crypto.GetHash(registerReq.Password)
+	// Tạo user
 	user := &models.User{
+		ID:       uuid.New(),
 		Username: registerReq.Username,
-		Password: hashedPassword,
+		Password: crypto.GetHash(registerReq.Password),
 		RoleId:   roleExists.ID,
 	}
+
 	userCreated, err := au.ar.CreateUser(ctx, user)
 	if err != nil {
-		return errors.New("authUsecase.Register: error creating user")
+		return errors.Wrap(err, "authUsecase.Register.CreateUser")
 	}
 	if userCreated == nil {
 		return errors.New("authUsecase.Register: user not created")
 	}
 
-	// add role for user
-	_, err = au.e.AddRoleForUser(user.Username, models.RoleUser)
-	if err != nil {
-		return errors.Wrap(err, "authUsecase.Register.AddRoleForUser")
-	}
+	// Thêm role cho user (có thể chạy song song với publish event)
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		if _, err := au.e.AddRoleForUser(user.Username, models.RoleUser); err != nil {
+			log.Printf("❌ Lỗi AddRoleForUser: %v", err)
+		}
+	}()
 
-	// publish user created event
-	userCreatedEventJSON, err := json.Marshal(events.UserCreatedEvent{
-		UserID:   userCreated.ID,
-		Username: userCreated.Username,
-	})
-	if err != nil {
-		return errors.Wrap(err, "authUsecase.Register.MarshalUserCreatedEvent")
-	}
-	if err := au.kw.WriteMessages(ctx, kafka.Message{Value: userCreatedEventJSON}); err != nil {
-		return errors.Wrap(err, "authUsecase.Register.WriteMessages")
-	}
+	// Publish event
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		userCreatedEventJSON, err := json.Marshal(events.UserCreatedEvent{
+			UserID:   userCreated.ID,
+			Username: userCreated.Username,
+		})
+		if err != nil {
+			log.Printf("❌ Lỗi MarshalUserCreatedEvent: %v", err)
+			return
+		}
+		if err := au.kw.WriteMessages(ctx, kafka.Message{Value: userCreatedEventJSON}); err != nil {
+			log.Printf("❌ Lỗi WriteMessages: %v", err)
+		}
+	}()
+
+	wg.Wait()
 
 	return nil
 }

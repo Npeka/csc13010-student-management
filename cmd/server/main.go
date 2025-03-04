@@ -2,6 +2,8 @@ package main
 
 import (
 	"log"
+	"net/http"
+	_ "net/http/pprof"
 
 	"github.com/csc13010-student-management/internal/initialize"
 	"github.com/csc13010-student-management/internal/migration"
@@ -9,6 +11,10 @@ import (
 )
 
 func main() {
+	go func() {
+		log.Println(http.ListenAndServe("localhost:6060", nil))
+	}()
+
 	cfg := initialize.LoadConfig()
 	lg := initialize.NewLogger(cfg.Logger)
 	pg := initialize.NewPostgres(cfg.Postgres)

@@ -15,16 +15,16 @@ func main() {
 		log.Println(http.ListenAndServe("localhost:6060", nil))
 	}()
 
-	cfg := initialize.LoadConfig()
-	lg := initialize.NewLogger(cfg.Logger)
-	pg := initialize.NewPostgres(cfg.Postgres)
-	rd := initialize.NewRedis(cfg.Redis)
+	cf := initialize.LoadConfig()
+	lg := initialize.NewLogger(cf.Logger)
+	pg := initialize.NewPostgres(cf)
+	rd := initialize.NewRedis(cf.Redis)
 	ef := initialize.NewCasbinEnforcer(pg)
-	initialize.NewKafkaTopics(cfg.Kafka)
+	initialize.NewKafkaTopics(cf.Kafka)
 
 	migration.Migrate(pg)
 
-	server := server.NewServer(cfg, lg, pg, rd, ef)
+	server := server.NewServer(cf, lg, pg, rd, ef)
 	if err := server.Run(); err != nil {
 		log.Fatal(err)
 	}

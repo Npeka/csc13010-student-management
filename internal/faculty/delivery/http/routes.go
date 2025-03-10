@@ -8,5 +8,6 @@ import (
 func MapFacultyHandlers(ftGroup *gin.RouterGroup, h faculty.IFacultyHandlers) {
 	ftGroup.GET("/", h.GetFaculties())
 	ftGroup.POST("/", h.CreateFaculty())
+	ftGroup.PUT("/:id", h.UpdateFaculty())
 	ftGroup.DELETE("/:id", h.DeleteFaculty())
 }

@@ -34,7 +34,7 @@ func (fh *facultyHandlers) GetFaculties() gin.HandlerFunc {
 
 		faculties, err := fh.fu.GetFaculties(ctx)
 		if err != nil {
-			logger.ErrResponseWithLog(c, fh.lg, err)
+			logger.LogResponseError(c, fh.lg, err)
 			response.Error(c, http.StatusInternalServerError)
 			return
 		}
@@ -50,14 +50,14 @@ func (fh *facultyHandlers) CreateFaculty() gin.HandlerFunc {
 
 		var faculty models.Faculty
 		if err := c.ShouldBindJSON(&faculty); err != nil {
-			logger.ErrResponseWithLog(c, fh.lg, err)
+			logger.LogResponseError(c, fh.lg, err)
 			response.Error(c, http.StatusBadRequest)
 			return
 		}
 
 		err := fh.fu.CreateFaculty(ctx, &faculty)
 		if err != nil {
-			logger.ErrResponseWithLog(c, fh.lg, err)
+			logger.LogResponseError(c, fh.lg, err)
 			response.Error(c, http.StatusInternalServerError)
 			return
 		}
@@ -71,16 +71,24 @@ func (fh *facultyHandlers) UpdateFaculty() gin.HandlerFunc {
 		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "faculty.UpdateFaculty")
 		defer span.Finish()
 
-		var faculty models.Faculty
-		if err := c.ShouldBindJSON(&faculty); err != nil {
-			logger.ErrResponseWithLog(c, fh.lg, err)
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			logger.LogResponseError(c, fh.lg, err)
 			response.Error(c, http.StatusBadRequest)
 			return
 		}
 
-		err := fh.fu.UpdateFaculty(ctx, &faculty)
+		var faculty models.Faculty
+		if err := c.ShouldBindJSON(&faculty); err != nil {
+			logger.LogResponseError(c, fh.lg, err)
+			response.Error(c, http.StatusBadRequest)
+			return
+		}
+
+		faculty.ID = uint(id)
+		err = fh.fu.UpdateFaculty(ctx, &faculty)
 		if err != nil {
-			logger.ErrResponseWithLog(c, fh.lg, err)
+			logger.LogResponseError(c, fh.lg, err)
 			response.Error(c, http.StatusInternalServerError)
 			return
 		}
@@ -96,14 +104,14 @@ func (s *facultyHandlers) DeleteFaculty() gin.HandlerFunc {
 
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
-			logger.ErrResponseWithLog(c, s.lg, err)
+			logger.LogResponseError(c, s.lg, err)
 			response.Error(c, http.StatusBadRequest)
 			return
 		}
 
 		err = s.fu.DeleteFaculty(ctx, uint(id))
 		if err != nil {
-			logger.ErrResponseWithLog(c, s.lg, err)
+			logger.LogResponseError(c, s.lg, err)
 			response.Error(c, http.StatusInternalServerError)
 			return
 		}

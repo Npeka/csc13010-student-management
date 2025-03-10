@@ -15,26 +15,42 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { memo } from "react";
 
-export const TableAuditlog = () => {
-  const { data, isLoading, error } = useGetAuditLogsQuery();
+export default function LogsPage() {
+  return (
+    <>
+      <PageTitle title="Logs" />
+      <TableAuditlog />
+    </>
+  );
+}
 
+const TableAuditlog = memo(() => {
+  const { data, isLoading } = useGetAuditLogsQuery();
   if (isLoading) return <Skeleton className="h-60 w-full" />;
-  if (error)
-    return <p className="text-center text-red-500">Failed to load data</p>;
+  return <TableDataAuditlog data={data?.data || []} />;
+});
 
-  return <TableDataAuditlog data={data || []} />;
-};
-
-const TableDataAuditlog = ({ data }: { data: AuditLog[] }) => {
+const TableDataAuditlog = memo(({ data }: { data: AuditLog[] }) => {
   const columns: ColumnDef<AuditLog>[] = [
     { header: "ID", accessorKey: "id" },
     { header: "Table Name", accessorKey: "table_name" },
     { header: "Record ID", accessorKey: "record_id" },
     {
+      header: "Old Record",
+      accessorKey: "old_record",
+      cell: ({ row }) => <JsonDialog jsonData={row.original.old_record} />,
+    },
+    {
+      header: "New Record",
+      accessorKey: "new_record",
+      cell: ({ row }) => <JsonDialog jsonData={row.original.new_record} />,
+    },
+    {
       header: "Changed Fields",
       accessorKey: "changed_fields",
-      cell: ({ row }) => <JsonDialog jsonData={row.original.changed_fields} />,
+      cell: ({ row }) => <JsonDialog jsonData={row.original.field_changes} />,
     },
     {
       header: "Action",
@@ -54,19 +70,6 @@ const TableDataAuditlog = ({ data }: { data: AuditLog[] }) => {
       ),
     },
     {
-      header: "Changed By",
-      accessorKey: "changed_by",
-      cell: ({ row }) => (
-        <Badge
-          variant={
-            row.original.changed_by === "ADMIN" ? "secondary" : "default"
-          }
-        >
-          {row.original.changed_by}
-        </Badge>
-      ),
-    },
-    {
       header: "Created At",
       accessorKey: "created_at",
       cell: ({ row }) =>
@@ -80,20 +83,10 @@ const TableDataAuditlog = ({ data }: { data: AuditLog[] }) => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Audit Logs</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <TableData table={table} />
-      </CardContent>
-    </Card>
-  );
-};
+  return <TableData table={table} />;
+});
 
-// Component hiển thị JSON trong popup
-const JsonDialog = ({ jsonData }: { jsonData: string }) => {
+const JsonDialog = memo(({ jsonData }: { jsonData: string }) => {
   let parsedData;
   try {
     parsedData = JSON.parse(jsonData);
@@ -118,13 +111,4 @@ const JsonDialog = ({ jsonData }: { jsonData: string }) => {
       </DialogContent>
     </Dialog>
   );
-};
-
-export default function LogsPage() {
-  return (
-    <>
-      <PageTitle title="Logs" />
-      <TableAuditlog />
-    </>
-  );
-}
+});

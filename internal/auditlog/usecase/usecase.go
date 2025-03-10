@@ -47,3 +47,14 @@ func (a *auditlogUsecase) GetModelAuditLogs(ctx context.Context, model string, m
 
 	return auditlogs, nil
 }
+
+func (a *auditlogUsecase) CreateAuditLog(ctx context.Context, auditlog *models.AuditLog) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "auditlogUsecase.CreateAuditLog")
+	defer span.Finish()
+
+	if err := a.ar.CreateAuditLog(ctx, auditlog); err != nil {
+		return err
+	}
+
+	return nil
+}

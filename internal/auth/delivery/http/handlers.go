@@ -26,7 +26,6 @@ func NewAuthHandlers(
 	}
 }
 
-// Register implements auth.IAuthHandlers.
 func (a *authHandlers) Register() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "auth.Register")
@@ -50,7 +49,6 @@ func (a *authHandlers) Register() gin.HandlerFunc {
 	}
 }
 
-// Login implements auth.IAuthHandlers.
 func (a *authHandlers) Login() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "auth.Login")
@@ -74,13 +72,11 @@ func (a *authHandlers) Login() gin.HandlerFunc {
 	}
 }
 
-// Logout implements auth.IAuthHandlers.
 func (a *authHandlers) Logout() gin.HandlerFunc {
 	return func(c *gin.Context) {
 	}
 }
 
-// Refresh implements auth.IAuthHandlers.
 func (a *authHandlers) Refresh() gin.HandlerFunc {
 	return func(c *gin.Context) {
 	}

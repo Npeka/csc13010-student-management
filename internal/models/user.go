@@ -2,6 +2,8 @@ package models
 
 import (
 	"time"
+
+	"github.com/google/uuid"
 )
 
 const (
@@ -17,11 +19,9 @@ type Role struct {
 }
 
 type User struct {
-	ID        uint      `gorm:"primaryKey;autoIncrement;not null" json:"id"`
+	ID        uuid.UUID `gorm:"primaryKey;type:uuid;default:uuid_generate_v4()" json:"id"`
 	Username  string    `gorm:"type:varchar(255);uniqueIndex;not null" json:"username"`
 	Password  string    `gorm:"type:varchar(255);not null" json:"-"`
-	RoleId    uint      `gorm:"not null" json:"role_id"`
-	Role      Role      `gorm:"foreignKey:RoleId" json:"role,omitempty"`
 	CreatedAt time.Time `gorm:"type:timestamp; default:CURRENT_TIMESTAMP"`
 	UpdatedAt time.Time `gorm:"type:timestamp; default:CURRENT_TIMESTAMP"`
 }

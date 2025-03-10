@@ -303,9 +303,9 @@ To view the coverage of a specific file, you can use:
 go tool cover -func=coverage.out
 ```
 
-### Screenshots
+# Screenshots
 
-## Screenshots
+## Screenshots v3.0
 
 Below are some screenshots of the Student Management System:
 
@@ -358,18 +358,11 @@ _Audit Log for Actions_: Audit log records when creating/updating/deleting, etc.
 _Test Coverage - Faculty Handlers_: Demo test coverage for handlers of faculty.
 _Test Coverage - Selection test_: this is all test you can see.
 
-<!-- Below are some screenshots of the Student Management System:
+## Screenshots v4.0
 
-| Add Student                                 | Logging                             |
-| ------------------------------------------- | ----------------------------------- |
-| ![Add Student](screenshots/add-student.png) | ![Logging](screenshots/logging.png) |
+| Toggle Rules Enforcement                                 | Export Confirmation Documents                               |
+| -------------------------------------------------------- | ----------------------------------------------------------- |
+| ![Toggle Rules Enforcement](screenshots/v4.0/config.png) | ![Export Confirmation Documents](screenshots/v4.0/cert.png) |
 
-| Manage Categories                                       | Search                            |
-| ------------------------------------------------------- | --------------------------------- |
-| ![Manage Categories](screenshots/manage-categories.png) | ![Search](screenshots/search.png) |
-
-| Student List                                  | Import json                                 |
-| --------------------------------------------- | ------------------------------------------- |
-| ![Student List](screenshots/student-list.png) | ![Import json](screenshots/import-json.png) | -->
-
----
+_Toggle Rules Enforcement_: Enable or disable the application of specific rules.
+_Export Confirmation Documents_: Export student status confirmation documents in at least two formats: HTML, Markdown.

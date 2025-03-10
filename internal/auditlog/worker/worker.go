@@ -3,6 +3,7 @@ package worker
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"reflect"
 
 	"github.com/csc13010-student-management/internal/auditlog"
@@ -106,9 +107,24 @@ func createAuditLog(data events.DebeziumEvent, changedFields map[string]interfac
 	oldRecordJSON, _ := json.Marshal(data.Payload.Before)
 	newRecordJSON, _ := json.Marshal(data.Payload.After)
 
+	var recordID uint
+	if action == models.ActionDelete {
+		if id, ok := data.Payload.Before["id"].(float64); ok {
+			recordID = uint(id)
+		} else {
+			fmt.Println("ERROR: Missing ID in Before for DELETE operation")
+		}
+	} else {
+		if id, ok := data.Payload.After["id"].(float64); ok {
+			recordID = uint(id)
+		} else {
+			fmt.Println("ERROR: Missing ID in After for CREATE/UPDATE operation")
+		}
+	}
+
 	return &models.AuditLog{
 		TableName:    data.Payload.Source.Table,
-		RecordID:     uint(data.Payload.After["id"].(float64)),
+		RecordID:     recordID,
 		Action:       action,
 		OldRecord:    string(oldRecordJSON),
 		NewRecord:    string(newRecordJSON),

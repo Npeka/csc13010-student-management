@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Giấy Xác Nhận Sinh Viên</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 40px;
+      }
+      h2 {
+        text-align: center;
+      }
+      .info {
+        margin-bottom: 20px;
+      }
+      .signature {
+        margin-top: 40px;
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>GIẤY XÁC NHẬN TÌNH TRẠNG SINH VIÊN</h2>
+    <p><strong>Trường: </strong>{{ .University }}</p>
+    <p><strong>Địa chỉ: </strong>{{ .Address }}</p>
+    <p>
+      <strong>Điện thoại: </strong>{{ .Phone }} | <strong>Email: </strong>{{
+      .Email }}
+    </p>
+
+    <h3>1. Thông tin sinh viên:</h3>
+    <p><strong>Họ và tên:</strong> {{ .Student.FullName }}</p>
+    <p><strong>Mã số sinh viên:</strong> {{ .Student.StudentID }}</p>
+    <p><strong>Ngày sinh:</strong> {{ .Student.BirthDate }}</p>
+    <p><strong>Giới tính:</strong> {{ .Student.Gender }}</p>
+    <p><strong>Khoa:</strong> {{ .Student.Faculty }}</p>
+    <p><strong>Chương trình:</strong> {{ .Student.Program }}</p>
+    <p><strong>Tình trạng:</strong> {{ .Student.Status }}</p>
+
+    <h3>2. Xác nhận</h3>
+    <p>Giấy xác nhận này có hiệu lực đến ngày: {{ .ValidUntil }}</p>
+
+    <div class="signature">
+      <p><strong>Trưởng phòng đào tạo</strong></p>
+      <p>(Ký tên, đóng dấu)</p>
+    </div>
+  </body>
+</html>

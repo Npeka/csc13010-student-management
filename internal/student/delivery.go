@@ -10,4 +10,5 @@ type IStudentHandlers interface {
 	UpdateStudent() gin.HandlerFunc
 	DeleteStudent() gin.HandlerFunc
 	GetOptions() gin.HandlerFunc
+	Export() gin.HandlerFunc
 }

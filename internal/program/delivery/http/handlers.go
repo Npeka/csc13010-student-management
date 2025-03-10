@@ -34,7 +34,7 @@ func (ph *programHandlers) GetPrograms() gin.HandlerFunc {
 
 		programs, err := ph.pu.GetPrograms(ctx)
 		if err != nil {
-			logger.ErrResponseWithLog(c, ph.lg, err)
+			logger.LogResponseError(c, ph.lg, err)
 			response.Error(c, http.StatusInternalServerError)
 			return
 		}
@@ -57,7 +57,7 @@ func (ph *programHandlers) CreateProgram() gin.HandlerFunc {
 
 		err := ph.pu.CreateProgram(ctx, &program)
 		if err != nil {
-			logger.ErrResponseWithLog(c, ph.lg, err)
+			logger.LogResponseError(c, ph.lg, err)
 			response.Error(c, http.StatusInternalServerError)
 			return
 		}
@@ -71,16 +71,24 @@ func (ph *programHandlers) UpdateProgram() gin.HandlerFunc {
 		span, ctx := opentracing.StartSpanFromContext(c.Request.Context(), "program.UpdateProgram")
 		defer span.Finish()
 
-		var program models.Program
-		if err := c.ShouldBindJSON(&program); err != nil {
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
 			logger.ErrResponseWithLog(c, ph.lg, err)
 			response.Error(c, http.StatusBadRequest)
 			return
 		}
 
-		err := ph.pu.UpdateProgram(ctx, &program)
+		var program models.Program
+		if err := c.ShouldBindJSON(&program); err != nil {
+			logger.LogResponseError(c, ph.lg, err)
+			response.Error(c, http.StatusBadRequest)
+			return
+		}
+
+		program.ID = uint(id)
+		err = ph.pu.UpdateProgram(ctx, &program)
 		if err != nil {
-			logger.ErrResponseWithLog(c, ph.lg, err)
+			logger.LogResponseError(c, ph.lg, err)
 			response.Error(c, http.StatusInternalServerError)
 			return
 		}

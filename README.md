@@ -62,6 +62,15 @@ Each student record contains the following details:
 
 - **Next.js and Shadcn UI** – Implement the web interface using Next.js and Shadcn UI for a responsive and modern user experience.
 
+### Version 4.0 Enhancements
+
+- **Notification System** – Send emails/SMS to students regarding status changes.
+- **Deletion Time Restriction** – Allow deletion of students only within a configurable time frame from creation, e.g., 30 minutes.
+- **Toggle Rules Enforcement** – Enable/disable the application of specific rules.
+- **Branding** – Display the university logo or name on all screens (at least one).
+- **Data Deletion** – Allow deletion of faculties, student statuses, and programs if there are no data dependencies.
+- **Export Confirmation Documents** – Export student status confirmation documents in at least two formats: **HTML, Markdown**.
+
 ## Folder Structure
 
 The project follows the principles of Clean Architecture, ensuring separation of concerns and maintainability. Below is an overview of the folder structure:

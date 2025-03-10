@@ -1,18 +1,12 @@
 "use client";
 import { appApi } from "@/services/config";
-import {
-  Student,
-  StudentResponseDTO,
-  OptionDTO,
-  Faculty,
-  Program,
-  Status,
-} from "@/types/student";
+import { Faculty } from "@/types/student";
+import { Response } from "@/types/response";
 
 const facultyApi = appApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getFaculties: builder.query<Faculty[], void>({
+    getFaculties: builder.query<Response<Faculty[]>, void>({
       query: () => ({
         url: "/api/v1/faculties/",
         method: "GET",
@@ -20,11 +14,20 @@ const facultyApi = appApi.injectEndpoints({
       providesTags: ["Faculty"],
     }),
 
-    createFaculty: builder.mutation<Faculty, Faculty>({
+    createFaculty: builder.mutation<Response<Faculty>, Faculty>({
       query: (faculty) => ({
         url: "/api/v1/faculties/",
         method: "POST",
         body: faculty,
+      }),
+      invalidatesTags: ["Faculty"],
+    }),
+
+    updateFaculty: builder.mutation<Response<Faculty>, Faculty>({
+      query: (faculty) => ({
+        url: `/api/v1/faculties/${faculty.id}`,
+        method: "PUT",
+        body: { name: faculty.name },
       }),
       invalidatesTags: ["Faculty"],
     }),
@@ -42,5 +45,6 @@ const facultyApi = appApi.injectEndpoints({
 export const {
   useGetFacultiesQuery,
   useCreateFacultyMutation,
+  useUpdateFacultyMutation,
   useDeleteFacultyMutation,
 } = facultyApi;

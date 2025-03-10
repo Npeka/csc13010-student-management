@@ -5,11 +5,11 @@ export interface Student {
   gender: string;
   faculty: string;
   course: string;
-  program: number;
+  program: string;
   address: string;
   email: string;
   phone: string;
-  status: number;
+  status: string;
 }
 
 export interface StudentResponseDTO {

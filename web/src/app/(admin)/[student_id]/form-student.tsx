@@ -26,14 +26,14 @@ const formSchema = z.object({
   student_id: z.string().nonempty("Student ID is required"),
   full_name: z.string().min(2, "Name must be at least 2 characters"),
   birth_date: z.string().nonempty("Birth date is required"),
-  gender_id: z.string().nonempty("Gender is required"),
-  faculty_id: z.string().nonempty("Faculty is required"),
-  course_id: z.string().nonempty("Course is required"),
-  program_id: z.string().nonempty("Program is required"),
+  gender: z.string().nonempty("Gender is required"),
+  faculty: z.string().nonempty("Faculty is required"),
+  course: z.string().nonempty("Course is required"),
+  program: z.string().nonempty("Program is required"),
   address: z.string().optional(),
   email: z.string().email("Invalid email"),
   phone: z.string().regex(/^\d{10,11}$/, "Invalid phone number"),
-  status_id: z.string().nonempty("Status is required"),
+  status: z.string().nonempty("Status is required"),
 });
 
 export const FormStudent = ({
@@ -48,11 +48,11 @@ export const FormStudent = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       ...student,
-      gender_id: String(student.gender_id),
-      faculty_id: String(student.faculty_id),
-      course_id: String(student.course_id),
-      program_id: String(student.program_id),
-      status_id: String(student.status_id),
+      gender: student.gender,
+      faculty: student.faculty,
+      course: student.course,
+      program: student.program,
+      status: student.status,
     },
   });
 
@@ -61,11 +61,12 @@ export const FormStudent = ({
       id: student.student_id,
       student: {
         ...values,
-        gender_id: Number(values.gender_id),
-        faculty_id: Number(values.faculty_id),
-        course_id: Number(values.course_id),
-        program_id: Number(values.program_id),
-        status_id: Number(values.status_id),
+        address: values.address || "",
+        gender: values.gender,
+        faculty: values.faculty,
+        course: values.course,
+        program: values.program,
+        status: values.status,
       },
     });
   };
@@ -124,7 +125,7 @@ export const FormStudent = ({
           {/* Gender */}
           <FormField
             control={form.control}
-            name="gender_id"
+            name="gender"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Gender</FormLabel>
@@ -153,7 +154,7 @@ export const FormStudent = ({
           {/* Faculty */}
           <FormField
             control={form.control}
-            name="faculty_id"
+            name="faculty"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Faculty</FormLabel>
@@ -180,7 +181,7 @@ export const FormStudent = ({
           {/* Course */}
           <FormField
             control={form.control}
-            name="course_id"
+            name="course"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Course</FormLabel>
@@ -209,7 +210,7 @@ export const FormStudent = ({
           {/* Program */}
           <FormField
             control={form.control}
-            name="program_id"
+            name="program"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Program</FormLabel>
@@ -236,7 +237,7 @@ export const FormStudent = ({
           {/* Status */}
           <FormField
             control={form.control}
-            name="status_id"
+            name="status"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Status</FormLabel>

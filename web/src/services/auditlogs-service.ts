@@ -1,11 +1,12 @@
 "use client";
 import { appApi } from "@/services/config";
 import { AuditLog } from "@/types/auditlog";
+import { Response } from "@/types/response";
 
 const auditlogApi = appApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getAuditLogs: builder.query<AuditLog[], void>({
+    getAuditLogs: builder.query<Response<AuditLog[]>, void>({
       query: () => "/api/v1/auditlogs/",
     }),
 

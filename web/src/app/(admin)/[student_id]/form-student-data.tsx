@@ -15,7 +15,7 @@ export const FormStudentData = ({ student_id }: { student_id: string }) => {
 
   return (
     <div>
-      <FormStudent student={student} options={options} />
+      <FormStudent student={student.data} options={options.data} />
     </div>
   );
-}
+};

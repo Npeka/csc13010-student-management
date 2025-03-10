@@ -1,18 +1,12 @@
 "use client";
 import { appApi } from "@/services/config";
-import {
-  Student,
-  StudentResponseDTO,
-  OptionDTO,
-  Faculty,
-  Program,
-  Status,
-} from "@/types/student";
+import { Student, StudentResponseDTO, OptionDTO } from "@/types/student";
+import { Response } from "@/types/response";
 
 const studentApi = appApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getAllStudents: builder.query<StudentResponseDTO[], void>({
+    getAllStudents: builder.query<Response<Student[]>, void>({
       query: () => ({
         url: "/api/v1/students/",
         method: "GET",
@@ -20,15 +14,15 @@ const studentApi = appApi.injectEndpoints({
       providesTags: ["Student", "FileProcessor"],
     }),
 
-    getStudentById: builder.query<StudentResponseDTO, string>({
+    getStudentById: builder.query<Response<Student>, string>({
       query: (id) => ({
-        url: `/api/v1/students/${id}`,
+        url: `/api/v1/students/full/${id}`,
         method: "GET",
       }),
       providesTags: ["Student"],
     }),
 
-    createStudent: builder.mutation<StudentResponseDTO, Student>({
+    createStudent: builder.mutation<Response<Student>, Student>({
       query: (student) => ({
         url: "/api/v1/students",
         method: "POST",
@@ -38,7 +32,7 @@ const studentApi = appApi.injectEndpoints({
     }),
 
     updateStudent: builder.mutation<
-      StudentResponseDTO,
+      Response<Student>,
       { id: string; student: Student }
     >({
       query: ({ id, student }) => ({
@@ -57,7 +51,7 @@ const studentApi = appApi.injectEndpoints({
       invalidatesTags: ["Student"],
     }),
 
-    getStudentOptions: builder.query<OptionDTO, void>({
+    getStudentOptions: builder.query<Response<OptionDTO>, void>({
       query: () => ({
         url: "/api/v1/students/options",
         method: "GET",

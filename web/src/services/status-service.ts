@@ -1,11 +1,12 @@
 "use client";
 import { appApi } from "@/services/config";
 import { Status } from "@/types/student";
+import { Response } from "@/types/response";
 
 const statusApi = appApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getStatuses: builder.query<Status[], void>({
+    getStatuses: builder.query<Response<Status[]>, void>({
       query: () => ({
         url: "/api/v1/statuses/",
         method: "GET",
@@ -13,11 +14,20 @@ const statusApi = appApi.injectEndpoints({
       providesTags: ["Status"],
     }),
 
-    createStatus: builder.mutation<Status, Status>({
+    createStatus: builder.mutation<Response<Status>, Status>({
       query: (status) => ({
         url: "/api/v1/statuses/",
         method: "POST",
         body: status,
+      }),
+      invalidatesTags: ["Status"],
+    }),
+
+    updateStatus: builder.mutation<Response<Status>, Status>({
+      query: (status) => ({
+        url: `/api/v1/statuses/${status.id}`,
+        method: "PUT",
+        body: { name: status.name },
       }),
       invalidatesTags: ["Status"],
     }),
@@ -35,5 +45,6 @@ const statusApi = appApi.injectEndpoints({
 export const {
   useGetStatusesQuery,
   useCreateStatusMutation,
+  useUpdateStatusMutation,
   useDeleteStatusMutation,
 } = statusApi;

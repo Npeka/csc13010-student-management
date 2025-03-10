@@ -1,14 +1,16 @@
 package migration
 
 import (
+	"context"
+
 	"github.com/csc13010-student-management/internal/models"
+	"github.com/csc13010-student-management/internal/student"
 	"gorm.io/gorm"
 )
 
-func seedStudents(db *gorm.DB) {
+func SeedStudents(db *gorm.DB, su student.IStudentUsecase) {
 	students := []models.Student{
 		{
-			UserID:    func(u uint) *uint { return &u }(1),
 			StudentID: "22127180",
 			FullName:  "Nguyen Phuc Khang",
 			BirthDate: "2004-10-19",
@@ -22,7 +24,6 @@ func seedStudents(db *gorm.DB) {
 			StatusID:  1,
 		},
 		{
-			UserID:    func(u uint) *uint { return &u }(2),
 			StudentID: "22127108",
 			FullName:  "Huynh Yen Ngoc",
 			BirthDate: "2004-11-08",
@@ -36,7 +37,6 @@ func seedStudents(db *gorm.DB) {
 			StatusID:  1,
 		},
 		{
-			UserID:    func(u uint) *uint { return &u }(3),
 			StudentID: "22127419",
 			FullName:  "Nguyen Minh Toan",
 			BirthDate: "2004-04-19",
@@ -51,5 +51,7 @@ func seedStudents(db *gorm.DB) {
 		},
 	}
 
-	db.Table("students").Create(&students)
+	for _, student := range students {
+		su.CreateStudent(context.Background(), &student)
+	}
 }

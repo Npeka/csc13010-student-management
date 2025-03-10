@@ -11,6 +11,7 @@ import (
 	models "github.com/csc13010-student-management/internal/models"
 	dtos "github.com/csc13010-student-management/internal/student/dtos"
 	gomock "github.com/golang/mock/gomock"
+	uuid "github.com/google/uuid"
 )
 
 // MockIStudentRepository is a mock of IStudentRepository interface.
@@ -34,6 +35,20 @@ func NewMockIStudentRepository(ctrl *gomock.Controller) *MockIStudentRepository 
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockIStudentRepository) EXPECT() *MockIStudentRepositoryMockRecorder {
 	return m.recorder
+}
+
+// BatchUpdateUserIDs mocks base method.
+func (m *MockIStudentRepository) BatchUpdateUserIDs(ctx context.Context, userIDs map[string]uuid.UUID) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "BatchUpdateUserIDs", ctx, userIDs)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// BatchUpdateUserIDs indicates an expected call of BatchUpdateUserIDs.
+func (mr *MockIStudentRepositoryMockRecorder) BatchUpdateUserIDs(ctx, userIDs interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BatchUpdateUserIDs", reflect.TypeOf((*MockIStudentRepository)(nil).BatchUpdateUserIDs), ctx, userIDs)
 }
 
 // CreateStudent mocks base method.
@@ -79,10 +94,10 @@ func (mr *MockIStudentRepositoryMockRecorder) DeleteStudent(ctx, student_id inte
 }
 
 // GetFullInfoStudentByStudentID mocks base method.
-func (m *MockIStudentRepository) GetFullInfoStudentByStudentID(ctx context.Context, student_id string) (*dtos.StudentDTO, error) {
+func (m *MockIStudentRepository) GetFullInfoStudentByStudentID(ctx context.Context, student_id string) (*dtos.StudentResponseDTO, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetFullInfoStudentByStudentID", ctx, student_id)
-	ret0, _ := ret[0].(*dtos.StudentDTO)
+	ret0, _ := ret[0].(*dtos.StudentResponseDTO)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -124,10 +139,10 @@ func (mr *MockIStudentRepositoryMockRecorder) GetStudentByStudentID(ctx, student
 }
 
 // GetStudents mocks base method.
-func (m *MockIStudentRepository) GetStudents(ctx context.Context) ([]*models.Student, error) {
+func (m *MockIStudentRepository) GetStudents(ctx context.Context) ([]*dtos.StudentResponseDTO, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetStudents", ctx)
-	ret0, _ := ret[0].([]*models.Student)
+	ret0, _ := ret[0].([]*dtos.StudentResponseDTO)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -153,7 +168,7 @@ func (mr *MockIStudentRepositoryMockRecorder) UpdateStudent(ctx, student interfa
 }
 
 // UpdateUserIDByUsername mocks base method.
-func (m *MockIStudentRepository) UpdateUserIDByUsername(ctx context.Context, student_id string, user_id uint) error {
+func (m *MockIStudentRepository) UpdateUserIDByUsername(ctx context.Context, student_id string, user_id uuid.UUID) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateUserIDByUsername", ctx, student_id, user_id)
 	ret0, _ := ret[0].(error)

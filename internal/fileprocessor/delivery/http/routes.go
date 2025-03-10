@@ -8,5 +8,4 @@ import (
 func MapfileProcessingHandlers(fpGroup *gin.RouterGroup, fh fileprocessor.IFileProcessorHandlers) {
 	fpGroup.POST("/import", fh.ImportFile())
 	fpGroup.GET("/export", fh.ExportFile())
-	// fpGroup.GET("/certificate/:student_id", fh.ExportStudentCertificate())
 }

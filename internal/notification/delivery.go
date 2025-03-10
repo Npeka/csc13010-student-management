@@ -1,3 +1,3 @@
-package notification 
- 
-type INotificationHandlers interface {} 
+package notification
+
+type INotificationHandlers interface{}

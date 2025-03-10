@@ -5,6 +5,10 @@
 package mocks
 
 import (
+	context "context"
+	reflect "reflect"
+
+	models "github.com/csc13010-student-management/internal/models"
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -29,4 +33,19 @@ func NewMockINotificationRepository(ctrl *gomock.Controller) *MockINotificationR
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockINotificationRepository) EXPECT() *MockINotificationRepositoryMockRecorder {
 	return m.recorder
+}
+
+// GetStatuses mocks base method.
+func (m *MockINotificationRepository) GetStatuses(ctx context.Context, statuses []uint) ([]*models.Status, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetStatuses", ctx, statuses)
+	ret0, _ := ret[0].([]*models.Status)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetStatuses indicates an expected call of GetStatuses.
+func (mr *MockINotificationRepositoryMockRecorder) GetStatuses(ctx, statuses interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetStatuses", reflect.TypeOf((*MockINotificationRepository)(nil).GetStatuses), ctx, statuses)
 }

@@ -107,6 +107,9 @@ csc13010-student-management/
 │   │   ├── handlers.go                 # HTTP handlers for audit log module (interface)
 │   │   ├── usecase.go                  # Business logic for audit log module (interface)
 │   │
+│   ├── auth/                           # Authentication module for handling user
+│   ├── config/                         # Configuration module
+│   ├── event/                          # Event models for communicating between modules 
 │   ├── faculty/                        # Faculty Management Module
 │   ├── fileprocessor/                  # File processing (Import/Export CSV, JSON)
 │   ├── initialize/                     # Module initialization (Dependency Injection)
@@ -114,8 +117,8 @@ csc13010-student-management/
 │   ├── models/                         # Contains application model definitions
 │   ├── notification/                   # Notification Module (Email, SMS, Web Push)
 │   ├── program/                        # Program Management Module
-│   ├── server/                         # Initializes HTTP server with Gin and integrates modules
-│   ├── status/                         # Status Management Module
+│   ├── server/                         # Initializes HTTP server with Gin and integrates
+│   ├── status/                         # Status monitoring and reporting module
 │   ├── student/                        # Student Management Module
 │
 ├── requirements/                       # System requirements (docs, specs, etc.)

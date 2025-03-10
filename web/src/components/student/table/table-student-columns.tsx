@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Column } from "@tanstack/react-table";
-import { Option, OptionDTO, StudentResponseDTO } from "@/types/student";
+import { Option, OptionDTO, Student } from "@/types/student";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,7 +22,7 @@ import { useDeleteStudentMutation } from "@/services/student-service";
 import { useRouter } from "next/navigation";
 
 export const StudentColumns = ({ options }: { options?: OptionDTO }) => {
-  const columns: ColumnDef<StudentResponseDTO>[] = [
+  const columns: ColumnDef<Student>[] = [
     { header: "ID", accessorKey: "id" },
     { header: "Full Name", accessorKey: "full_name" },
     {
@@ -60,7 +60,7 @@ const createFilterColumn = (
     !filterValue || row.getValue(columnId) === filterValue,
 });
 
-const ActionMenu = ({ student }: { student: StudentResponseDTO }) => (
+const ActionMenu = ({ student }: { student: Student }) => (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
       <Button variant="ghost" className="h-8 w-8 p-0">
@@ -72,59 +72,59 @@ const ActionMenu = ({ student }: { student: StudentResponseDTO }) => (
       <DropdownMenuLabel>Actions</DropdownMenuLabel>
       <ActionEditDropdown student_id={student.student_id} />
       <ActionDeleteDropdown student_id={student.student_id} />
-      {/* <ActionExportCertificateDropdown
+      <ActionExportCertificateDropdown
         student_id={student.student_id}
-        format="pdf"
-        text="PDF Cert"
+        format="html"
+        text="HTML Cert"
       />
       <ActionExportCertificateDropdown
         student_id={student.student_id}
-        format="docx"
-        text="DOCX Cert"
-      /> */}
+        format="md"
+        text="Markdown Cert"
+      />
     </DropdownMenuContent>
   </DropdownMenu>
 );
 
-// const ActionExportCertificateDropdown = ({
-//   student_id,
-//   format,
-//   text,
-// }: {
-//   student_id: string;
-//   format: "pdf" | "docx";
-//   text?: string;
-// }) => {
-//   const handleExport = async (format: "pdf" | "docx") => {
-//     try {
-//       const response = await fetch(
-//         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/v1/students/certificate/${student_id}?format=${format}`
-//       );
+const ActionExportCertificateDropdown = ({
+  student_id,
+  format,
+  text,
+}: {
+  student_id: string;
+  format: "html" | "md";
+  text?: string;
+}) => {
+  const handleExport = async (format: "html" | "md") => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/v1/students/${student_id}/export?ext=${format}`
+      );
 
-//       if (!response.ok) throw new Error("Failed to fetch file");
+      if (!response.ok) throw new Error("Failed to fetch file");
 
-//       const blob = await response.blob();
-//       const url = URL.createObjectURL(blob);
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
 
-//       const a = document.createElement("a");
-//       a.href = url;
-//       a.download = `certificate_${student_id}.${format}`;
-//       document.body.appendChild(a);
-//       a.click();
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `certificate_${student_id}.${format}`;
+      document.body.appendChild(a);
+      a.click();
 
-//       URL.revokeObjectURL(url);
-//       document.body.removeChild(a);
-//     } catch (error) {
-//       console.error("Download error:", error);
-//     }
-//   };
+      URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error("Download error:", error);
+    }
+  };
 
-//   return (
-//     <DropdownMenuItem onClick={() => handleExport(format)}>
-//       {text || `Download as ${format.toUpperCase()}`}
-//     </DropdownMenuItem>
-//   );
-// };
+  return (
+    <DropdownMenuItem onClick={() => handleExport(format)}>
+      {text || `Download as ${format.toUpperCase()}`}
+    </DropdownMenuItem>
+  );
+};
 
 const ActionEditDropdown = ({ student_id }: { student_id: string }) => {
   const router = useRouter();

@@ -15,7 +15,7 @@ import {
   VisibilityState,
   type Table,
 } from "@tanstack/react-table";
-import { OptionDTO, StudentResponseDTO } from "@/types/student";
+import { OptionDTO, Student } from "@/types/student";
 import { StudentColumns } from "./table-student-columns";
 import {
   DropdownMenu,
@@ -45,7 +45,7 @@ export const StudentTable = ({
   data,
   options,
 }: {
-  data: StudentResponseDTO[];
+  data: Student[];
   options: OptionDTO;
 }) => {
   const [sorting, setSorting] = useState<SortingState>([]);

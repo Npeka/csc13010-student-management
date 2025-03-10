@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { TableData } from "@/components/admin/table/table.data";
 import {
   getCoreRowModel,
@@ -7,28 +8,23 @@ import {
 } from "@tanstack/react-table";
 import {
   useGetProgramsQuery,
+  useUpdateProgramMutation,
   useDeleteProgramMutation,
 } from "@/services/program-service";
 import { Program } from "@/types/student";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
+import { ActionCell, EditModal } from "./table-ui";
 
 export const TableProgram = () => {
   const { data, isLoading } = useGetProgramsQuery();
-
   if (isLoading || !data) return <div>Loading...</div>;
-
-  return <TableDataProgram data={data} />;
+  return <TableDataProgram data={data.data} />;
 };
 
 const TableDataProgram = ({ data }: { data: Program[] }) => {
+  const [editProgram, setEditProgram] = useState<Program | null>(null);
+  const [updateProgram] = useUpdateProgramMutation();
+  const [deleteProgram] = useDeleteProgramMutation();
+
   const columns: ColumnDef<Program>[] = [
     { header: "Name", accessorKey: "name" },
     {
@@ -36,7 +32,11 @@ const TableDataProgram = ({ data }: { data: Program[] }) => {
       accessorKey: "action",
       cell: ({ row }) => (
         <div className="float-right mr-2">
-          <ActionCell program={row.original} />,
+          <ActionCell
+            item={row.original}
+            onEdit={setEditProgram}
+            onDelete={(id) => deleteProgram(id)}
+          />
         </div>
       ),
     },
@@ -48,34 +48,15 @@ const TableDataProgram = ({ data }: { data: Program[] }) => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  return <TableData table={table} />;
-};
-
-const ActionCell = ({ program }: { program: Program }) => (
-  <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <Button variant="ghost" className="h-8 w-8 p-0">
-        <span className="sr-only">Open menu</span>
-        <MoreHorizontal className="h-4 w-4" />
-      </Button>
-    </DropdownMenuTrigger>
-    <DropdownMenuContent align="end">
-      <DropdownMenuLabel>Actions</DropdownMenuLabel>
-      <ActionDeleteDropdown programId={String(program.id)} />
-    </DropdownMenuContent>
-  </DropdownMenu>
-);
-
-const ActionDeleteDropdown = ({ programId }: { programId: string }) => {
-  const [deleteProgram] = useDeleteProgramMutation();
-
   return (
-    <DropdownMenuItem
-      onClick={() => {
-        deleteProgram(programId);
-      }}
-    >
-      Delete
-    </DropdownMenuItem>
+    <>
+      <TableData table={table} />
+      <EditModal
+        item={editProgram}
+        setItem={setEditProgram}
+        fields={[{ key: "name", label: "Name of Program" }]}
+        onSave={(updatedProgram) => updateProgram(updatedProgram)}
+      />
+    </>
   );
 };

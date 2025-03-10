@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { TableData } from "@/components/admin/table/table.data";
 import {
   getCoreRowModel,
@@ -7,28 +8,23 @@ import {
 } from "@tanstack/react-table";
 import {
   useGetStatusesQuery,
+  useUpdateStatusMutation,
   useDeleteStatusMutation,
 } from "@/services/status-service";
 import { Status } from "@/types/student";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
+import { ActionCell, EditModal } from "./table-ui";
 
 export const TableStatus = () => {
   const { data, isLoading } = useGetStatusesQuery();
-
   if (isLoading || !data) return <div>Loading...</div>;
-
-  return <TableDataStatus data={data} />;
+  return <TableDataStatus data={data.data} />;
 };
 
 const TableDataStatus = ({ data }: { data: Status[] }) => {
+  const [editStatus, setEditStatus] = useState<Status | null>(null);
+  const [updateStatus] = useUpdateStatusMutation();
+  const [deleteStatus] = useDeleteStatusMutation();
+
   const columns: ColumnDef<Status>[] = [
     { header: "Name", accessorKey: "name" },
     {
@@ -36,7 +32,11 @@ const TableDataStatus = ({ data }: { data: Status[] }) => {
       accessorKey: "action",
       cell: ({ row }) => (
         <div className="float-right mr-2">
-          <ActionCell status={row.original} />
+          <ActionCell
+            item={row.original}
+            onEdit={setEditStatus}
+            onDelete={(id) => deleteStatus(id)}
+          />
         </div>
       ),
     },
@@ -48,34 +48,15 @@ const TableDataStatus = ({ data }: { data: Status[] }) => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  return <TableData table={table} />;
-};
-
-const ActionCell = ({ status }: { status: Status }) => (
-  <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <Button variant="ghost" className="h-8 w-8 p-0">
-        <span className="sr-only">Open menu</span>
-        <MoreHorizontal className="h-4 w-4" />
-      </Button>
-    </DropdownMenuTrigger>
-    <DropdownMenuContent align="end">
-      <DropdownMenuLabel>Actions</DropdownMenuLabel>
-      <ActionDeleteDropdown statusId={String(status.id)} />
-    </DropdownMenuContent>
-  </DropdownMenu>
-);
-
-const ActionDeleteDropdown = ({ statusId }: { statusId: string }) => {
-  const [deleteStatus] = useDeleteStatusMutation();
-
   return (
-    <DropdownMenuItem
-      onClick={() => {
-        deleteStatus(statusId);
-      }}
-    >
-      Delete
-    </DropdownMenuItem>
+    <>
+      <TableData table={table} />
+      <EditModal
+        item={editStatus}
+        setItem={setEditStatus}
+        fields={[{ key: "name", label: "Name of Status" }]}
+        onSave={(updatedStatus) => updateStatus(updatedStatus)}
+      />
+    </>
   );
 };

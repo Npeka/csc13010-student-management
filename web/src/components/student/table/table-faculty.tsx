@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { TableData } from "@/components/admin/table/table.data";
 import {
   getCoreRowModel,
@@ -7,28 +8,23 @@ import {
 } from "@tanstack/react-table";
 import {
   useGetFacultiesQuery,
+  useUpdateFacultyMutation,
   useDeleteFacultyMutation,
 } from "@/services/faculty-service";
 import { Faculty } from "@/types/student";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
+import { ActionCell, EditModal } from "./table-ui";
 
 export const TableFaculty = () => {
   const { data, isLoading } = useGetFacultiesQuery();
-
   if (isLoading || !data) return <div>Loading...</div>;
-
-  return <TableDataFaculty data={data} />;
+  return <TableDataFaculty data={data.data} />;
 };
 
 const TableDataFaculty = ({ data }: { data: Faculty[] }) => {
+  const [editFaculty, setEditFaculty] = useState<Faculty | null>(null);
+  const [updateFaculty] = useUpdateFacultyMutation();
+  const [deleteFaculty] = useDeleteFacultyMutation();
+
   const columns: ColumnDef<Faculty>[] = [
     { header: "Name", accessorKey: "name" },
     {
@@ -36,7 +32,11 @@ const TableDataFaculty = ({ data }: { data: Faculty[] }) => {
       accessorKey: "action",
       cell: ({ row }) => (
         <div className="float-right mr-2">
-          <ActionCell faculty={row.original} />,
+          <ActionCell
+            item={row.original}
+            onEdit={setEditFaculty}
+            onDelete={(id) => deleteFaculty(id)}
+          />
         </div>
       ),
     },
@@ -48,34 +48,15 @@ const TableDataFaculty = ({ data }: { data: Faculty[] }) => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  return <TableData table={table} />;
-};
-
-const ActionCell = ({ faculty }: { faculty: Faculty }) => (
-  <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <Button variant="ghost" className="h-8 w-8 p-0">
-        <span className="sr-only">Open menu</span>
-        <MoreHorizontal className="h-4 w-4" />
-      </Button>
-    </DropdownMenuTrigger>
-    <DropdownMenuContent align="end">
-      <DropdownMenuLabel>Actions</DropdownMenuLabel>
-      <ActionDeleteDropdown facultyId={String(faculty.id)} />
-    </DropdownMenuContent>
-  </DropdownMenu>
-);
-
-const ActionDeleteDropdown = ({ facultyId }: { facultyId: string }) => {
-  const [deleteFaculty] = useDeleteFacultyMutation();
-
   return (
-    <DropdownMenuItem
-      onClick={() => {
-        deleteFaculty(facultyId);
-      }}
-    >
-      Delete
-    </DropdownMenuItem>
+    <>
+      <TableData table={table} />
+      <EditModal
+        item={editFaculty}
+        setItem={setEditFaculty}
+        fields={[{ key: "name", label: "Name of Faculty" }]}
+        onSave={(updatedFaculty) => updateFaculty(updatedFaculty)}
+      />
+    </>
   );
 };

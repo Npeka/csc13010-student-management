@@ -66,6 +66,11 @@ const adminItems = [
     url: "/logs",
     icon: CreditCard,
   },
+  {
+    title: "Settings",
+    url: "/settings",
+    icon: Settings,
+  },
 ];
 
 interface AppSidebarProps {

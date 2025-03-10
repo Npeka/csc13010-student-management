@@ -1,9 +1,7 @@
 package events
 
-import "github.com/google/uuid"
-
-type StudentCreatedEvent struct {
-	UserID   uuid.UUID `json:"user_id"`
-	Username string    `json:"username"`
-	Role     string    `json:"role"`
+type CreateUserEvent struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Role     string `json:"role"`
 }

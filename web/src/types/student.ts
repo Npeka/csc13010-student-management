@@ -2,14 +2,14 @@ export interface Student {
   student_id: string;
   full_name: string;
   birth_date: string;
-  gender_id: number;
-  faculty_id: number;
-  course_id: number;
-  program_id: number;
-  address?: string;
+  gender: string;
+  faculty: string;
+  course: string;
+  program: number;
+  address: string;
   email: string;
   phone: string;
-  status_id: number;
+  status: number;
 }
 
 export interface StudentResponseDTO {

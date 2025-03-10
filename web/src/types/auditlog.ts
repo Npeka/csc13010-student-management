@@ -3,8 +3,10 @@ export interface AuditLog {
   table_name: string;
   record_id: number;
   action: Action;
-  changed_fields: string;
-  changed_by: Role;
+  field_changes: string;
+  old_record: string;
+  new_record: string;
+  lsn: number;
   created_at: Date;
 }
 

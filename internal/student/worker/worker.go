@@ -3,29 +3,40 @@ package worker
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/csc13010-student-management/internal/events"
-	"github.com/csc13010-student-management/internal/initialize"
 	"github.com/csc13010-student-management/internal/student"
-	kafkaUtils "github.com/csc13010-student-management/pkg/kafka"
+	kafkas "github.com/csc13010-student-management/pkg/kafka"
+	"github.com/csc13010-student-management/pkg/logger"
 	"github.com/segmentio/kafka-go"
 )
 
 type studentWorker struct {
 	su student.IStudentUsecase
+	lg *logger.LoggerZap
 }
 
 func NewStudentWorker(
 	su student.IStudentUsecase,
+	lg *logger.LoggerZap,
 ) student.IStudentWorker {
 	return &studentWorker{
 		su: su,
+		lg: lg,
 	}
 }
 
 func (sw *studentWorker) Start(kurl string) {
-	krUserCreated := kafkaUtils.NewKafkaReader(kurl, initialize.KafkaAuthUserCreated, "auth-service")
-	initialize.StartKafkaConsumer(krUserCreated, sw.HandleUserCreatedEvent)
+	krs := []kafkas.KafkaReader{
+		{
+			Topic:   events.AuthUserCreated,
+			GroupID: fmt.Sprintf("%v.g", events.AuthCreateUser),
+			Handler: sw.HandleUserCreatedEvent,
+			MaxIns:  1,
+		},
+	}
+	kafkas.StartKafkaConsumers(kurl, krs)
 }
 
 func (sw *studentWorker) HandleUserCreatedEvent(ctx context.Context, msg kafka.Message) error {

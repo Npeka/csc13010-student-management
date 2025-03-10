@@ -18,7 +18,6 @@ func NewAuthRepository(db *gorm.DB) auth.IAuthRepository {
 	return &authRepository{db: db}
 }
 
-// CreateUser implements auth.IAuthRepository.
 func (ar *authRepository) CreateUser(ctx context.Context, user *models.User) (*models.User, error) {
 	span, ctx := opentracing.StartSpanFromContext(ctx, "authRepository.CreateUser")
 	defer span.Finish()
@@ -30,7 +29,6 @@ func (ar *authRepository) CreateUser(ctx context.Context, user *models.User) (*m
 	return user, nil
 }
 
-// FindByUsername implements auth.IAuthRepository.
 func (ar *authRepository) FindByUsername(ctx context.Context, username string) (*models.User, error) {
 	span, ctx := opentracing.StartSpanFromContext(ctx, "authRepository.FindByUsername")
 	defer span.Finish()
@@ -40,14 +38,12 @@ func (ar *authRepository) FindByUsername(ctx context.Context, username string) (
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil // Không tìm thấy user, trả về nil mà không có lỗi
 		}
 		return nil, errors.Wrap(err, "authRepository.FindByUsername.First")
 	}
 	return &user, nil
 }
 
-// FindByEmail implements auth.IAuthRepository.
 func (ar *authRepository) FindByEmail(ctx context.Context, email string) (*models.User, error) {
 	span, ctx := opentracing.StartSpanFromContext(ctx, "authRepository.FindByEmail")
 	defer span.Finish()
@@ -57,14 +53,12 @@ func (ar *authRepository) FindByEmail(ctx context.Context, email string) (*model
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil // Không tìm thấy user, trả về nil mà không có lỗi
 		}
 		return nil, errors.Wrap(err, "authRepository.FindByEmail.First")
 	}
 	return &user, nil
 }
 
-// FindRoleByName implements auth.IAuthRepository.
 func (ar *authRepository) FindRoleByName(ctx context.Context, name string) (*models.Role, error) {
 	span, ctx := opentracing.StartSpanFromContext(ctx, "authRepository.FindRoleByName")
 	defer span.Finish()
@@ -74,7 +68,6 @@ func (ar *authRepository) FindRoleByName(ctx context.Context, name string) (*mod
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil // Không tìm thấy role, trả về nil mà không có lỗi
 		}
 		return nil, errors.Wrap(err, "authRepository.FindRoleByName.First")
 	}

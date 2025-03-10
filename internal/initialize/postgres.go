@@ -12,22 +12,33 @@ import (
 )
 
 // NewPostgres creates a connection to PostgreSQL with GORM
-func NewPostgres(cfg config.PostgresConfig) *gorm.DB {
-	// Connection string (DSN)
-	fmt.Println(cfg)
+func NewPostgres(cf *config.Config) *gorm.DB {
+	pgcf := cf.Postgres
+
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Ho_Chi_Minh",
-		cfg.Host, cfg.Username, cfg.Password, cfg.Dbname, cfg.Port,
+		pgcf.Host, pgcf.Username, pgcf.Password, pgcf.Dbname, pgcf.Port,
 	)
 
-	// Configure logger for GORM
+	var logLevel logger.LogLevel
+	switch cf.Server.Mode {
+	case "dev":
+		logLevel = logger.Info
+	case "test":
+		logLevel = logger.Warn
+	case "prod":
+		logLevel = logger.Error
+	default:
+		logLevel = logger.Silent
+	}
+
 	newLogger := logger.New(
-		log.New(log.Writer(), "\r\n", log.LstdFlags), // Standard logger
+		log.New(log.Writer(), "\r\n", log.LstdFlags),
 		logger.Config{
-			SlowThreshold:             time.Second, // Log queries slower than 1 second
-			LogLevel:                  logger.Info, // Log detailed information
-			IgnoreRecordNotFoundError: true,        // Ignore Record Not Found error
-			Colorful:                  true,        // Colorful output in terminal
+			SlowThreshold:             time.Second,
+			LogLevel:                  logLevel,
+			IgnoreRecordNotFoundError: true,
+			Colorful:                  cf.Server.Mode == "dev",
 		},
 	)
 
@@ -40,6 +51,16 @@ func NewPostgres(cfg config.PostgresConfig) *gorm.DB {
 		log.Fatalf("Error connecting to PostgreSQL: %v", err)
 		panic(err)
 	}
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Fatalf("Failed to get DB instance: %v", err)
+		return nil
+	}
+
+	sqlDB.SetMaxOpenConns(100)
+	sqlDB.SetMaxIdleConns(50)
+	sqlDB.SetConnMaxLifetime(30 * time.Minute)
 
 	log.Println("Connected to PostgreSQL")
 	return db

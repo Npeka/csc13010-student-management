@@ -8,5 +8,5 @@ import (
 
 type IAuthWorker interface {
 	Start(kurl string)
-	HandleStudentCreatedEvent(ctx context.Context, msg kafka.Message) error
+	HandleCreateUserEvent(ctx context.Context, msg kafka.Message) error
 }

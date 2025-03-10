@@ -42,6 +42,9 @@ const (
 
 	// Success code
 	ErrCodeSuccess = 0
+
+	// Faculty errors
+	ErrFacultyForeignKey = 70001
 )
 
 var msg = map[int]struct {
@@ -72,5 +75,6 @@ var msg = map[int]struct {
 	OkSuccess:     {httpCode: 200, message: "Success"},
 	ErrBadRequest: {httpCode: 400, message: "Bad request"},
 
-	ErrOTPNotExists: {httpCode: 400, message: "OTP not exists"},
+	ErrOTPNotExists:      {httpCode: 400, message: "OTP not exists"},
+	ErrFacultyForeignKey: {httpCode: 400, message: "Foreign key constraint error"},
 }

@@ -1,3 +1,4 @@
-package notification 
- 
-type INotificationUsecase interface {} 
+package notification
+
+type INotificationUsecase interface {
+}

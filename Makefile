@@ -7,13 +7,11 @@ MODULE_INTERFACE=$(shell powershell -Command "'$(name)'.Substring(0,1).ToUpper()
 connect:
 	curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d @initdb/debezium-postgres.json
 
-.PHONY: reset
-reset:
+.PHONY: restart
+restart:
 	docker-compose down -v
 	docker-compose up -d
 	make run
-
-# 
 
 run:
 	go run cmd/server/main.go
@@ -61,6 +59,12 @@ testgen:
 	make testgen-package name=status
 	make testgen-package name=fileprocessor
 	make testgen-package name=notification
+
+# -------------------------------------------------------------------------------------
+
+gen:
+	make testgen
+	make mockgen
 
 # -------------------------------------------------------------------------------------
 

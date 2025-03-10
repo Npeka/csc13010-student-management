@@ -5,55 +5,67 @@ import (
 
 	"github.com/casbin/casbin/v2"
 	"github.com/csc13010-student-management/config"
+	"github.com/csc13010-student-management/internal/auditlog"
 	"github.com/csc13010-student-management/internal/auth"
+	"github.com/csc13010-student-management/internal/notification"
 	"github.com/csc13010-student-management/internal/student"
 	"github.com/csc13010-student-management/pkg/logger"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 )
 
 type Server struct {
-	cfg *config.Config
-	lg  *logger.LoggerZap
-	pg  *gorm.DB
-	rd  *redis.Client
-	r   *gin.Engine
-	e   *casbin.Enforcer
-	w   *ServerWorker
+	cf *config.Config
+	lg *logger.LoggerZap
+	pg *gorm.DB
+	rd *redis.Client
+	r  *gin.Engine
+	e  *casbin.Enforcer
+	w  *ServerWorker
 }
 
 type ServerWorker struct {
-	authWorker auth.IAuthWorker
-	stdWorker  student.IStudentWorker
+	authWorker  auth.IAuthWorker
+	stdWorker   student.IStudentWorker
+	notiWorker  notification.INotificationWorker
+	auditWorker auditlog.IAuditLogWorker
 }
 
 func NewServer(
-	cfg *config.Config,
+	cf *config.Config,
 	lg *logger.LoggerZap,
 	pg *gorm.DB,
 	rd *redis.Client,
 	e *casbin.Enforcer,
 ) *Server {
 	return &Server{
-		cfg: cfg,
-		lg:  lg,
-		pg:  pg,
-		rd:  rd,
-		r:   newGinServer(cfg.Server),
-		e:   e,
-		w:   &ServerWorker{},
+		cf: cf,
+		lg: lg,
+		pg: pg,
+		rd: rd,
+		r:  newGinServer(cf.Server),
+		e:  e,
+		w:  &ServerWorker{},
 	}
 }
 
 func newGinServer(cfg config.ServerConfig) *gin.Engine {
+	var r *gin.Engine
 	if cfg.Mode == "dev" {
 		gin.SetMode(gin.DebugMode)
 		gin.ForceConsoleColor()
+		r = gin.Default()
+	} else if cfg.Mode == "release" {
+		gin.SetMode(gin.ReleaseMode)
+		gin.DisableConsoleColor()
+		r = gin.New()
+		r.Use(gin.Recovery())
 	}
 
-	r := gin.Default()
+	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
 	// Thêm CORS middleware
 	r.Use(cors.New(cors.Config{
@@ -72,9 +84,7 @@ func (s *Server) Run() error {
 	if err := s.MapHandlers(); err != nil {
 		return err
 	}
-
 	s.StartWorker()
-
-	s.r.Run(fmt.Sprintf(":%v", s.cfg.Server.Port))
+	s.r.Run(fmt.Sprintf(":%v", s.cf.Server.Port))
 	return nil
 }

@@ -34,7 +34,7 @@ func (sh *statusHandlers) GetStatuses() gin.HandlerFunc {
 
 		statuses, err := sh.su.GetStatuses(ctx)
 		if err != nil {
-			logger.ErrResponseWithLog(c, sh.lg, err)
+			logger.LogResponseError(c, sh.lg, err)
 			response.Error(c, http.StatusInternalServerError)
 			return
 		}
@@ -50,14 +50,14 @@ func (sh *statusHandlers) CreateStatus() gin.HandlerFunc {
 
 		var status models.Status
 		if err := c.ShouldBindJSON(&status); err != nil {
-			logger.ErrResponseWithLog(c, sh.lg, err)
+			logger.LogResponseError(c, sh.lg, err)
 			response.Error(c, http.StatusBadRequest)
 			return
 		}
 
 		err := sh.su.CreateStatus(ctx, &status)
 		if err != nil {
-			logger.ErrResponseWithLog(c, sh.lg, err)
+			logger.LogResponseError(c, sh.lg, err)
 			response.Error(c, http.StatusInternalServerError)
 			return
 		}
@@ -73,14 +73,14 @@ func (sh *statusHandlers) UpdateStatus() gin.HandlerFunc {
 
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
-			logger.ErrResponseWithLog(c, sh.lg, err)
+			logger.LogResponseError(c, sh.lg, err)
 			response.Error(c, http.StatusBadRequest)
 			return
 		}
 
 		var status models.Status
 		if err := c.ShouldBindJSON(&status); err != nil {
-			logger.ErrResponseWithLog(c, sh.lg, err)
+			logger.LogResponseError(c, sh.lg, err)
 			response.Error(c, http.StatusBadRequest)
 			return
 		}
@@ -88,7 +88,7 @@ func (sh *statusHandlers) UpdateStatus() gin.HandlerFunc {
 		status.ID = uint(id)
 		err = sh.su.UpdateStatus(ctx, &status)
 		if err != nil {
-			logger.ErrResponseWithLog(c, sh.lg, err)
+			logger.LogResponseError(c, sh.lg, err)
 			response.Error(c, http.StatusInternalServerError)
 			return
 		}
@@ -104,14 +104,14 @@ func (sh *statusHandlers) DeleteStatus() gin.HandlerFunc {
 
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
-			logger.ErrResponseWithLog(c, sh.lg, err)
+			logger.LogResponseError(c, sh.lg, err)
 			response.Error(c, http.StatusBadRequest)
 			return
 		}
 
 		err = sh.su.DeleteStatus(ctx, uint(id))
 		if err != nil {
-			logger.ErrResponseWithLog(c, sh.lg, err)
+			logger.LogResponseError(c, sh.lg, err)
 			response.Error(c, http.StatusInternalServerError)
 			return
 		}
